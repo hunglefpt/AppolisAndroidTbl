@@ -25,11 +25,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemClickListener;
@@ -51,6 +53,7 @@ import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
+import com.appolis.utilities.BuManagement;
 import com.appolis.utilities.CommontDialog;
 import com.appolis.utilities.DataParser;
 import com.appolis.utilities.GlobalParams;
@@ -225,6 +228,17 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 
 			}
 		});
+		try{
+			Display display = getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getSize(size);
+			int width = size.x;
+			swipeList.setOffsetLeft(width - BuManagement.convertDpToPixel(100, this));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
 		lvReceiveDetailList.setLongClickable(true);
 		swipeList.setSwipeOpenOnLongPress(false);
 	}
@@ -332,12 +346,24 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 				processScanData(message);
 			}
 			break;
-
+			
+		case GlobalParams.AC_RECEIVE_ACQUIRE_BARCODE:
+			if (resultCode == RESULT_OK) {
+				
+			} else {
+			}
+			break;
 		default:
 			break;
 		}
 	}
-
+	
+	public void closeAnimation(int position){
+		if(null != swipeList){
+			swipeList.closeAnimate(position);
+		}
+	}
+	
 	/**
 	 * handler for receiving the notifications coming from
 	 * SingleEntryApplication. Update the UI accordingly when we receive a

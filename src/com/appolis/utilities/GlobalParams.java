@@ -154,6 +154,7 @@ public final class GlobalParams {
 	public static final int AC_PUT_AWAY_LEVEL_ONE = 11;
 	public static final int AC_PUT_AWAY_LEVEL_TWO = 12;
 	public static final int AC_PUT_AWAY_BIN_LEVEL_ONE = 11;
+	public static final int AC_RECEIVE_ACQUIRE_BARCODE = 31;
 	
 	/*item for main screen*/	
 	public static final String RECEIVE = "Receive";
@@ -224,6 +225,8 @@ public final class GlobalParams {
 	public static final String UNIT_OF_MEASURE_VALUE = "UOM";
 	public static final String PICK_TXT_SEARCH_VALUE = "Scan or Select";
 	public static final String RD_TITLE_RECEIVEDETAIL_VALUE = "Receive Detail";
+	public static final String ACQUIRE_BARCODE_VALUE = "Acquire Barcode";
+	public static final String SCAN_OR_ENTER_BARCODE_VALUE = "Scan or Enter Barcode";
 	public static final String RE_LBL_RECEIVE1_VALUE = "Receive";
 	public static final String SETTINGS_BTN_CANCEL_VALUE = "Cancel";
 	public static final String RE_PO_EMPTY_MSG_VALUE = "PO list empty";
@@ -464,6 +467,8 @@ public final class GlobalParams {
 	public static final String DMG_LBL_MAXQTY_KEY = "dmg_lbl_MaxQty";
 	public static final String REST_GRD_LOT_KEY = "reST_grd_Lot";
 	public static final String MISS_LOT_MSG_KEY = "miss_lot_msg";
+	public static final String ACQUIRE_BARCODE_KEY = "acquire_Barcode";
+	public static final String SCAN_OR_ENTER_BARCODE_KEY = "scan_or_Enter_Barcode";
 	public static final String SCAN_NOTFOUND_KEY = "scan_notFound";
 	public static final String RD_INVALID_BARCODE_MSG_KEY = "rd_invalid_barcode_msg";
 	public static final String ITEM_NOT_YOUR_PO_KEY = "item_not_your_po_key";

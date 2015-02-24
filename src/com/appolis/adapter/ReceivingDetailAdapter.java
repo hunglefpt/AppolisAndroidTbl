@@ -9,7 +9,9 @@ package com.appolis.adapter;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,8 @@ import com.appolis.common.LanguagePreferences;
 import com.appolis.entities.EnPurchaseOrderInfo;
 import com.appolis.entities.EnPurchaseOrderItemInfo;
 import com.appolis.entities.EnPurchaseOrderReceiptInfo;
+import com.appolis.receiving.AcReceiveAcquireBarcode;
+import com.appolis.receiving.AcReceivingDetails;
 import com.appolis.utilities.GlobalParams;
 import com.appolis.utilities.Logger;
 import com.appolis.utilities.StringUtils;
@@ -143,6 +147,13 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 				@Override
 				public void onClick(View v) {
 					Logger.error("Appolis click aquire barcode:" + position);
+					if(context instanceof AcReceivingDetails){
+						((AcReceivingDetails)context).closeAnimation(position);
+					}
+					
+					Intent intentAcquire = new Intent(context, AcReceiveAcquireBarcode.class);
+					intentAcquire.putExtra(GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS, getItem(position));
+					((Activity)context).startActivityForResult(intentAcquire, GlobalParams.AC_RECEIVE_ACQUIRE_BARCODE);
 				}
 			});
 			

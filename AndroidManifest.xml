@@ -181,6 +181,12 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan|stateHidden" >
         </activity>
+        <activity
+            android:name="com.appolis.receiving.AcReceiveAcquireBarcode"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
     </application>
 
 </manifest>

@@ -290,6 +290,13 @@ public final class HttpFunctionFactory {
 		return functionInfo;
 	}
 	
+	public static HttpFunctionInfo putAcquireBarcode(NetParameter[] netParameters) throws Exception{
+		HttpFunctionInfo functionInfo = createPutMethod("putAcquireBarcode");
+		String params = getParamWithEncode(netParameters);
+		functionInfo.setUrl(AppPreferences.getURLFirstLogin() + "/api/uom?" + params);
+		functionInfo.setHeader(new NetParameter[] {HttpUtilities.getHeaderAuthorization()});
+		return functionInfo;
+	}
 	public static HttpFunctionInfo createNewLisecePlate( NetParameter[] netParameters) throws Exception{
 		HttpFunctionInfo functionInfo = createPutMethod("createNewLisecePlate");		
 		String params = getParam(netParameters);
@@ -426,4 +433,5 @@ public final class HttpFunctionFactory {
 		functionInfo.setHeader(new NetParameter[] {HttpUtilities.getHeaderAuthorization()});
 		return functionInfo;
 	}
+
 }

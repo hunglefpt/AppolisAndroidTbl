@@ -12,8 +12,10 @@
 
         <Button
             android:id="@+id/swipeBtAcquireBarcode"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
+            android:background="#409834"
+            android:gravity="center"
             android:padding="10dp"
             android:text="Acquire\n Barcode" />
     </LinearLayout>

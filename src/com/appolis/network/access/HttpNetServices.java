@@ -286,4 +286,10 @@ public final class HttpNetServices implements INetServices {
 		HttpFunctionInfo functionInfo = HttpFunctionFactory.createNewLisecePlate(netParameters);
 		return executer(functionInfo);
 	}
+
+	@Override
+	public String putAcquireBarcode(NetParameter[] netParameters) throws Exception{
+		HttpFunctionInfo functionInfo = HttpFunctionFactory.putAcquireBarcode(netParameters);
+		return executer(functionInfo);
+	}
 }
