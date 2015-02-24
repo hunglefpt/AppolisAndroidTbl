@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:minWidth="300dp"
+    android:gravity="center"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        
+        <TextView 
+            android:id="@+id/tv_option_dialog_lable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:gravity="start"
+            android:textColor="@color/Black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="@string/COMMON_OPTIONS"/>
+        
+        <TextView 
+            android:id="@+id/tvDialogCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="end"
+            android:padding="10dp"
+            android:background="@drawable/background_view_white_dialog"
+            android:textColor="@color/Blue18"
+            android:textSize="16sp"
+            android:text="@string/COMMON_CANCEL"/>
+    </RelativeLayout>
+	
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/Gray74"/>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:gravity="center_vertical">
+        
+        <!-- layout row1  -->
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            
+            <LinearLayout 
+                android:id="@+id/lin_layout_print"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/background_view_white_dialog"
+                android:orientation="vertical">
+                
+                <ImageView 
+                    android:id="@+id/img_print_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_print_labels"/>
+                
+                <TextView 
+                    android:id="@+id/tv_print_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="5dp"
+                    android:textColor="@color/Black14"
+                    android:text="@string/print_label"/>
+            </LinearLayout>
+            <LinearLayout 
+                android:id="@+id/lin_layout_damage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:background="@drawable/background_view_white_dialog"
+                android:orientation="vertical">
+                <ImageView 
+                    android:id="@+id/img_damage_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_damage"/>
+                
+                <TextView 
+                    android:id="@+id/tv_damage_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="5dp"
+                    android:textColor="@color/Black14"
+                    android:text="@string/damage_text"/>
+            </LinearLayout>
+            <LinearLayout 
+                android:id="@+id/lin_layout_undo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:background="@drawable/background_view_white_dialog"
+                android:orientation="vertical">
+                <ImageView 
+                    android:id="@+id/img_undo_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_undo"/>
+                
+                <TextView 
+                    android:id="@+id/tv_undo_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="5dp"
+                    android:textColor="@color/Black14"
+                    android:text="@string/un_do"/>
+            </LinearLayout>
+        </LinearLayout> <!-- layout row1:END  -->
+        
+        <!-- layout row2  -->
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+            
+            <LinearLayout 
+                android:id="@+id/lin_layout_move"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/background_view_white_dialog"
+                android:orientation="vertical">
+                
+                <ImageView 
+                    android:id="@+id/img_move_labels"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_move"/>
+                
+                <TextView 
+                    android:id="@+id/tv_move_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:padding="5dp"
+                    android:textColor="@color/Black14"
+                    android:text="@string/text_move3"/>
+            </LinearLayout>
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+            </LinearLayout>
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+            </LinearLayout>
+        </LinearLayout> <!-- layout row2:END  -->
+    </LinearLayout>
+</LinearLayout>

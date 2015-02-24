@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/bg_background_2x">
+    
+	<include 
+	    layout="@layout/cm_header_bar"/>
+	
+	<!-- layout body  -->
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="20dp"
+	    android:orientation="horizontal">
+	    
+	    <!-- Layout receive iem detail -->
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:orientation="horizontal">
+	        
+	        <ImageView 
+	            android:layout_width="32dp"
+	            android:layout_height="32dp"
+	            android:layout_marginLeft="15dp"
+	            android:layout_marginRight="15dp"
+	            android:layout_gravity="top|center_horizontal"
+	            android:src="@drawable/img_info_icon"/>
+	        
+	        <LinearLayout 
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical">
+	            
+	            <TextView
+		            android:id="@+id/tvDamageReceiveRequest"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:text="@string/job_number"
+		            android:paddingBottom="2dp"
+		            android:paddingTop="2dp"
+		            android:ellipsize="end"
+		            style="@style/textJobDetailStyleLabelLarge"/>
+	            
+	            <TextView
+		            android:id="@+id/tvDamageReceiveName"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:paddingTop="2dp"
+		            android:text="VendorABC"
+		            android:ellipsize="end"
+		            style="@style/textStyleLabelBoldLarge" />
+		        
+	            <LinearLayout 
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:gravity="center_vertical">
+		            
+		            <TextView 
+		                android:id="@+id/tvDamageReceiveLot"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:ellipsize="end"
+		                style="@style/textJobDetailStyleLabelLarge"
+		                android:text="Lot tracked"/>
+		            
+		            <TextView 
+		                android:id="@+id/tvDamageReceiveUom"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:ellipsize="end"
+		                style="@style/textJobDetailStyleLabelLarge"
+		                android:text="UOM: EA"/>
+		        </LinearLayout>
+		        
+	             <LinearLayout 
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:gravity="center_vertical">
+		            
+		            <TextView 
+		                android:id="@+id/tvDamageReceiveLocation"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:ellipsize="end"
+		                style="@style/textJobDetailStyleLabelLarge"
+		                android:text="Location: RCVStaging"/>
+		        </LinearLayout>
+	        </LinearLayout>
+	    </LinearLayout> <!-- Layout receive iem detail: END -->
+	    
+	    <!-- Layout receive iem list-->
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:layout_marginRight="15dp"
+	        android:orientation="vertical">
+	        
+	        <TextView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        style="@style/textStyleLabelBoldLarge"
+		        android:gravity="start"
+		        android:textColor="@color/Orange6"
+		        android:textStyle="bold"
+		        android:text="@string/QUANTITY_TO_DAMAGE"/>
+		    
+	        <EditText 
+	            android:id="@+id/edtQuantityToDamage"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dp"
+	            android:background="@drawable/background_edt_white"
+	            android:textColor="@color/white"
+	            android:singleLine="true"
+	            android:imeOptions="actionDone"
+	            android:numeric="decimal"
+	            android:textSize="18sp"
+	            android:text="0"/>
+	        
+	        <TextView 
+                android:id="@+id/tvDamageReceiveMaxQty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="start"
+                android:layout_marginTop="5dp"
+                style="@style/textJobDetailStyleLabelLarge"
+                android:text="Max Qty: 0"/>
+	    </LinearLayout> <!-- Layout receive iem list: END-->
+	</LinearLayout> <!-- layout body:END  -->
+	
+	<!-- Layout button -->
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:orientation="horizontal"
+        android:padding="5dip" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left" >
+
+            <Button
+                android:id="@+id/btnDamageReceiveCancel"
+                style="@style/textStyleBotton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_button_cancel_gray"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="@string/cancel" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical" >
+
+            <Button
+                android:id="@+id/btnDamageReceiveOK"
+                style="@style/textStyleBotton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_button_ok_orange"
+                android:clickable="false"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:text="@string/text_ok" />
+        </LinearLayout>
+    </LinearLayout> <!-- Layout button: END -->
+
+</LinearLayout>

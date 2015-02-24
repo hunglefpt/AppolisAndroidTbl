@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_background_2x">
+    
+	<include 
+	    layout="@layout/cm_header_bar"/>
+	
+	<LinearLayout 
+	    android:id="@+id/job_row_layout"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="3dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingBottom="2dip"
+		android:paddingRight="10dip">
+	
+	    <LinearLayout
+	        android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:orientation="vertical" >
+	        <TextView
+	            android:id="@+id/tvReceiveNumber"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="8dip"
+	            android:text="@string/job_number"
+	            android:paddingBottom="2dp"
+	            android:paddingTop="2dp"
+	            style="@style/textJobDetailStyleLabel"/>
+	
+	        <TextView
+	            android:id="@+id/tvReceiveDetailName"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="8dip"
+	            android:paddingTop="2dp"
+	            android:text="@string/none_string"
+	            style="@style/textStyleLabelBold"/>
+    	</LinearLayout>
+
+	    <ImageView
+	        android:id="@+id/img_receive_detail_info"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
+	       	android:src="@drawable/img_info_icon"
+	       	android:contentDescription="@string/none_string"
+	        />
+	</LinearLayout>
+	
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:paddingTop="8dp"
+        android:orientation="vertical">
+
+		<com.handmark.pulltorefresh.library.PullToRefreshListView
+			android:id="@+id/tv_receive_detail_list"
+			android:layout_width="fill_parent"
+			android:layout_height="0dip"
+			android:headerDividersEnabled="true"
+			android:footerDividersEnabled="true"
+			android:layout_weight="1.0"
+			android:cacheColorHint="#fff"
+			android:fastScrollEnabled="false"
+			android:background="@drawable/border_layout_setting" >
+		</com.handmark.pulltorefresh.library.PullToRefreshListView> 
+	                     
+		<LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal"
+            android:paddingTop="10dip"
+            android:paddingBottom="5dip"
+            android:paddingRight="5dip"
+            android:paddingLeft="5dip">
+            
+			<Button
+                android:id="@+id/btn_item_Add_Parts"
+                style="@style/textStyleBotton"
+                android:layout_width="fill_parent"
+                android:layout_marginRight="5dip"
+                android:layout_weight="1"
+                android:background="@drawable/add_part"
+                android:text="@string/nav_add_part_text"
+                android:visibility="invisible" />
+			<Button
+                android:id="@+id/btn_receive_detail_Cancel"
+                style="@style/textStyleBotton"
+                android:layout_width="fill_parent"
+                android:layout_marginRight="5dip"
+                android:layout_weight="1"
+                android:background="@drawable/btn_cancel"
+                android:text="@string/cancel" />
+			
+            <Button
+                 android:id="@+id/btn_receive_detail_Ok"
+                 style="@style/textStyleBotton"
+                 android:layout_width="fill_parent"
+                 android:layout_weight="1"
+                 android:background="@drawable/bt_ok_hb"
+                 android:clickable="false"
+                 android:text="@string/text_ok" />
+        </LinearLayout>
+	</LinearLayout>
+</LinearLayout>

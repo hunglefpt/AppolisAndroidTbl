@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical" >
+
+    <include layout="@layout/cm_header_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="116dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/BLANK"
+                android:scaleType="fitXY"
+                android:src="@drawable/logo_login" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="280dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/devider_login" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            android:paddingTop="24dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvScreenTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_edit_user_infomation"
+                    android:textColor="@color/OrangeAppolis"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvScreenTitleExplane"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_withoutwire_ios_edition"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tvVersion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_version"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:background="@color/OrangeAppolis" />
+
+                    <TextView
+                        android:id="@+id/tvVersionApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/APP_VERSION"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <EditText
+                        android:id="@+id/edtProfileCurrentPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_edt_white"
+                        android:hint="@string/text_current_pass"
+                        android:inputType="numberPassword"
+                        android:maxLength="4"
+                        android:paddingLeft="12dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/Black13"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal" >
+
+                    <EditText
+                        android:id="@+id/edtProfileNewPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_edt_white"
+                        android:hint="@string/text_new_pass"
+                        android:inputType="numberPassword"
+                        android:maxLength="4"
+                        android:paddingLeft="12dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/Black13"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal" >
+
+                    <EditText
+                        android:id="@+id/edtProfileReNewPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_edt_white"
+                        android:hint="@string/text_re_new_pass"
+                        android:inputType="numberPassword"
+                        android:maxLength="4"
+                        android:paddingLeft="12dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/Black13"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btn_user_profile_Cancel"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/background_button_cancel_gray"
+                    android:text="@string/text_btn_cancel"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_user_profile_Ok"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_button_ok_orange"
+                    android:text="@string/text_btn_ok"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linTip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transBlack"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="90dp"
+            android:layout_marginTop="120dp"
+            android:text="@string/ENTER_YOUR_OLD_PASSWORD_HERE"
+            android:textColor="@color/white"
+            android:textSize="28sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="240dp"
+            android:contentDescription="@string/BLANK"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow_two" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ENTER_YOUR_NEW_DIGIT_NUMERIC_PASSWORD_HERE"
+                android:textColor="@color/white"
+                android:textSize="28sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="240dp"
+                android:contentDescription="@string/BLANK"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_arrow_one" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="480dp"
+            android:layout_marginTop="36dp"
+            android:contentDescription="@string/BLANK"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow_three" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="320dp"
+            android:text="@string/VERIFY_YOUR_NEW_FOUR_DIGIT"
+            android:textColor="@color/white"
+            android:textSize="28sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="100dp"
+            android:contentDescription="@string/BLANK"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow_three" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="32dp"
+            android:text="@string/TAP_ON_THE_OK_BUTTON"
+            android:textColor="@color/white"
+            android:textSize="28sp" />
+
+        <ImageView
+            android:id="@+id/imgCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="28dp"
+            android:layout_marginTop="200dp"
+            android:contentDescription="@string/BLANK"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_cancel" />
+    </LinearLayout>
+
+</FrameLayout>

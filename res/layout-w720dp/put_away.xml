@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical" >
+
+    <include layout="@layout/header_screen" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp" >
+
+        <TextView
+            android:id="@+id/tvSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select"
+            android:textColor="@color/OrangeAppolis"
+            android:textSize="32sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_holo_light_white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/BLANK"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_search" />
+
+            <EditText
+                android:id="@+id/edtItem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_search_add_parts"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/GrayAppolis"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/imgClear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/BLANK"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_clear" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lsPutAway"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"       
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        android:cacheColorHint="@color/white"
+        android:isScrollContainer="false" >
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|right"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        android:paddingRight="8dp" >
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/background_button_cancel_gray"
+            android:text="@string/text_cancel"
+            android:textColor="@color/white"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/btnOK"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_button_ok_orange"
+            android:text="@string/text_ok"
+            android:textColor="@color/white"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</LinearLayout>

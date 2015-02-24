@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@drawable/title_detail"
+    android:orientation="vertical"
+    android:padding="0dp" >
+
+    <LinearLayout
+        android:id="@+id/lin_buton_home"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:padding="3dp" >
+
+        <ImageView
+            android:id="@+id/imgHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_back" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="wrap_content"
+        android:layout_height="55dip"
+        android:layout_toRightOf="@+id/lin_buton_home"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:paddingLeft="10dp"
+        android:text="@string/login"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/lin_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5dip"
+        android:visibility="gone"
+        android:layout_toLeftOf="@+id/lin_buton_scan"
+        android:layout_weight="6"
+        android:background="@drawable/search_bar"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imgSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="5dip"
+            android:contentDescription="@string/none_string"
+            android:src="@drawable/icon_search" />
+
+        <EditText
+            android:id="@+id/txt_cycle_search"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="55.76"
+            android:background="@android:color/transparent"
+            android:ellipsize="start"
+            android:gravity="left|bottom"
+            android:hint="@string/hint_search_cycle_count"
+            android:paddingLeft="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="#575656"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/img_clear_cycle_search"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="5dip"
+            android:layout_weight="11"
+            android:contentDescription="@string/none_string"
+            android:src="@drawable/clear_btn" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgSearchIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/lin_buton_scan"
+        android:contentDescription="@string/none_string"
+        android:src="@drawable/icon_search" />
+    <LinearLayout
+        android:id="@+id/lin_buton_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:paddingBottom="3dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="5dp"
+        android:paddingTop="3dp" >
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:src="@drawable/btn_scan" />
+    </LinearLayout>
+
+</RelativeLayout>

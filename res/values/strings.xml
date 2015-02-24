@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Appolis</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    
+<!-- //=========================================================== COMMON ============================ -->
+    <string name="COMMON_ERROR">Error</string>
+    <string name="COMMON_BACK">Back</string>
+    <string name="COMMON_SAVE">Save</string>
+    <string name="COMMON_DONE">Done</string>
+    <string name="COMMON_CANCEL">Cancel</string>
+    <string name="COMMON_OK">OK</string>
+    <string name="COMMON_COMPLETED">Completed</string>
+    <string name="COMMON_OPTIONS">Options</string>
+    
+<!-- //=========================================================== Old Appolis ============================ -->
+    <string name="login">Login</string>    
+	<string name="login_textview">Login</string>
+	<string name="pin">PIN</string>
+	<string name="site">Site</string>
+	<string name="card_reader_active">Card Reader is Active </string>
+    
+    <string name="nav_bar_text">Return Parts</string>
+    <string name="nav_add_part_text">Add Parts</string>
+    <string name="nav_add_iob_part_text">Add Job Parts</string>
+    <string name="select">Select:</string>
+	<string name="text_ok">OK</string>
+	<string name="text_cancel">Cancel</string>
+	<string name="text_options">Options</string>
+	<string name="hint_search_return_parts">Scan or Select</string>
+	<string name="hint_search_cycle_count">Scan or Select Location</string>
+	<string name="hint_search_add_parts">Scan Item or Licence Plate</string>
+	<string name="inventory_history">Inventory History</string>
+	<string name="none_string"> </string>
+	<string name="job">Job:</string>
+	
+	<string name="text_move">Move</string>
+	<string name="text_move_select_scan">Select or Scan Location to Move To</string>
+	<string name="text_transfer">Transfer:</string>
+	<string name="text_maxQty">MaxQty:</string>
+	<string name="text_uom">UOM:</string>
+	<string name="text_maxQty2">MaxQty:</string>
+	<string name="text_qty">Qty:</string>
+	<string name="text_job_title">Jobs</string>
+	<string name="text_job_detail">Job Detail</string>
+	<string name="job_part_detail">Job Part Detail</string>
+	<string name="job_number">Job Number:</string>
+	<string name="bolts">Bolts</string>
+	<string name="loc">Loc:</string>
+	<string name="LOTS">Lots:</string>
+	<string name="uom">UOM :</string>
+	<string name="qty_to_pick">Qty to Pick:</string>
+	<string name="left">Left:</string>
+	<string name="picked">Picked: </string>
+	<string name="text_job">Job:</string>
+	<string name="text_move3">Move</string>
+	<string name="managesupplies">Parts &amp; Supplies</string>
+	<string name="admin">Username</string>
+	<string name="password">Pasword</string>
+	<string name="site_url">Site</string>
+	<string name="print_label">Print Labels</string>
+	<string name="damage_text">Damage</string>
+	<string name="cancel">Cancel</string>
+	<string name="get_next_location">Get Next Location</string>
+	<string name="un_do">Undo</string>
+	<string name="short_">Short</string>
+	<string name="license_plate">License Plate:</string>
+	<string name="no_results">No Results</string>
+	<string name="txt_add_job_parts_title">Add Job Parts</string>
+	<string name="txt_job_number_title">Job Number : </string>
+    <string name="txt_job_number">ORD190991 </string>	
+    <string name="txt_add_job_parts_name">Mr. and Mrs. </string>	
+    <string name="txt_add_job_parts_item">Item: </string>	
+    <string name="value_example_item">4423556 </string>	
+	<string name="txt_add_job_parts_service">Service Part 520 32’ </string>
+    <string name="txt_add_job_parts_oh">OH: 14</string>	
+    <string name="txt_add_job_parts_lot">Lot:</string>	
+    <string name="txt_add_job_parts_uom">UOM:</string>	
+    <string name="txt_add_job_parts_qty">Qty:</string>	
+    <string name="txt_add_job_parts_reason">Reason:</string>	
+    <string name="managepart_title_header">Manage Parts &amp; Supplies</string>
+    <string name="managepart_note">Note:</string>
+    <string name="item">Item: </string>
+    <string name="lot">Lot: </string>
+    <string name="from">From: </string>
+    <string name="to">To: </string>
+    <string name="reason">Reason: </string>	
+    <string name="service_part">Service Part </string>	
+    <string name="oh">OH: </string>	
+    <string name="note_content">This part was found to have a bad switch within the internal casing connected to the lower side panel. It may be salvageable.</string>        
+    <string name="print_header">Print Option</string>
+    <string name="PLEASE_ENTER_SITE_NAME">Multiple records found for user, please enter Site Name</string>
+  	<string name="LINK_DEMO_APPOLISAPP_COM">http://demo.appolis.com/ioswebapi</string>
+  	
+  	<!-- //======================================== Main Screen ================================================ -->
+  	<string name="ARE_YOU_SURE_YOU_WANT_TO_EXIT">Are you sure you want to exit?</string>
+  	
+    <!-- //======================================== User Profile ================================================ -->
+    <string name="text_edit_user_infomation">Edit User Information</string>
+    <string name="text_withoutwire_ios_edition">WithoutWire Android Edition</string>
+    <string name="text_version">Version</string>
+    <string name="text_current_pass">Current Password</string>
+    <string name="text_new_pass">New Password</string>
+    <string name="text_re_new_pass">Re-enter New Password</string>
+    <string name="text_btn_ok">OK</string>
+    <string name="text_btn_cancel">Cancel</string>
+    <string name="USER_PROFILE">User Profile</string>
+    <string name="APP_VERSION">App Version</string>
+    <string name="URL">URL:</string>
+    
+    <!-- //=========================================================== Receiving ============================ -->
+    <string name="text_receive_lable">Receive:</string>
+    <string name="QUANTITY_TO_DAMAGE">Quantity to Damage</string>
+    
+    <!-- //=========================================================== New Appolis ============================ -->
+    <string name="SCAN_FAILE">Scan fail!</string>
+    <string name="PLEASE_SCAN_ITEM_OR_LICENSE_PLATE_TO_CONTINUE">Please scan Item or License Plate to continue.</string>
+    <string name="UNSUPPORTED_BARCODE">Unsupported barcode</string>
+    <string name="BLANK"></string>
+    <string name="WITHOUTWIRE">WithoutWire</string>
+    <string name="status">Status:</string>
+    <string name="initializingScanApi">Initiliazing ScanAPI...</string>
+    <string name="failed_to_initialize_scanapi_with_error_">Failed to initialize ScanAPI with error:</string>
+    <string name="pair">Pair to scanner</string>
+    <string name="none_paired">no bluetooth device paired</string>
+    <string name="pair_to_scanner">Pair to a Scanner</string>
+    <string name="no_bluetooth">No Bluetooth</string>
+    <string name="LIST_SOCKET">List Socket</string>
+    <string name="INVALID_URL">Invalid URL. Please try again.</string>
+    <string name="ENTER_YOUR_USER_NAME_HERE">Enter your user name here.</string>
+    <string name="ENTER_YOUR_FOUR_DIGIT_NUMERIC_CODE_HERE">Enter your 4 digit numeric code here.</string>
+    <string name="ENTER_YOUR_SITE_HERE">Enter your site here.</string>
+    <string name="USE_THESE_ARROWS_TO_SCROLL_BETWEEN_PAGES">Use these arrows to scroll between pages</string>
+    <string name="TAP_THIS_IMAGE_TO_TAKE_A_PICTURE">Tap this image to take a picture</string>
+    <string name="TAP_ANY_ICON_TO_OPEN_IT">Tap any icon to open it</string>
+    <string name="HERE_IS_WHERE_YOU_CHANGE_YOUR_PASSWORD">Here is where you change your password</string>
+    <string name="HERE_IS_WHERE_YOU_LOG_OUT_OF_WITHOUTWIRE">Here is where you log out of WithoutWire</string>
+    <string name="ENTER_YOUR_OLD_PASSWORD_HERE">Enter your old password here.</string>
+    <string name="ENTER_YOUR_NEW_DIGIT_NUMERIC_PASSWORD_HERE">Enter your new digit numeric password here.</string>
+    <string name="VERIFY_YOUR_NEW_FOUR_DIGIT">Verify your new 4 digit numeric password by re-entering it here.</string>
+    <string name="TAP_ON_THE_OK_BUTTON">Tap on the OK button to confirm your new password.</string>
+    
+    <!-- //=========================================================== Receive Inventory ============================ -->
+    <string name="SCAN_LP_TO_BEGIN">Scan LP to Begin</string>
+    <string name="LP_NUMBER">LP Number</string>
+    <string name="RECEIVE_INVENTORY">Receive Inventory</string>
+    <string name="INVALID_LICENSE_PLATE">Invalid license plate</string>
+    <string name="PO">PO: </string>
+    <string name="TOTAL_LP_RECEIVED">Total LP\'s Received: </string>
+    <string name="Qty">Qty</string>
+    <string name="OF">of</string>
+    <string name="SUBMIT_FAILE">Submit Faile!</string>
+    
+    <!-- //=========================================================== Move ============================ -->
+    <string name="LOADING_FAIL">Loading fail!</string>
+	<string name="LOT_NUMBER">Lot Number</string>
+    <string name="BIN_NUMBER">Bin Number</string>
+    <string name="QUANTITY">Quantity</string>
+    <string name="LOT_NUMBER_NOT_VALID_FOR_THIS_ITEM">Lot number not valid for this item</string>   
+    <string name="INVALID_LOCATION_SCAN">Invalid Location Scan. Please scan a valid Location.</string>
+    <string name="QTY_IS_NOT_GREATER_THAN_MAX_QTY">Qty is not greater than Max Qty</string>
+    
+    <!-- //=========================================================== Put Away ============================ -->
+    <string name="PUT_AWAY">Put Away</string>
+    <string name="PUT_AWAY_BINS">Put Away Bins</string>
+    <string name="BIN_VERTICAL_TWO_DOT">Bin:</string>
+    <string name="QTY_VERTICAL_TWO_DOT">Qty:</string>
+    <string name="SCAN_BIN">Scan Bin</string>
+    
+  	<!-- //=========================================================== Cycle Count Screen ============================ -->
+  	<string name="cycle_count_key_header">CountBinRealTime_lblSection</string>
+  	<string name="cycle_count_default_header">Cycle Count</string>
+  	<string name="cycle_count_default_error">No More Counts</string>
+  	<string name="cycle_count_default_adjustment">Cycle Count Adjustment</string>
+  	<string name="cycle_count_key_adjustment">Cycle Count Adjustment</string>
+  	<string name="cycle_count_key_error">CountBinRealTime_messageBoxNoCounts</string>
+  	<string name="cycle_count_current_location">Current Location: </string>
+  	<string name="cycle_count_space">/</string>
+  	<string name="cycle_adjustment_loc">Loc:</string>
+  	<string name="cycle_adjustment_lot">Lot:</string>
+  	<string name="cycle_adjustment_item">Item:</string>
+  	<string name="cycle_input_item">Input item here</string>
+  	<string name="cycle_adjustment_uom">UOM:</string>
+  	<string name="cycle_adjustment_qty">Qty:</string>
+  	<string name="cycle_adjustment_current_count">Current Count:</string>
+  	<string name="cycle_adjustment_changed_count">Changed Count:</string>
+  	<string name="cycle_message_exit">Would you like to complete this count?</string>
+  	<string name="cycle_dialog_option_adjustment">Cycle count Adjustment</string>
+  	<string name="cycle_dialog_option_zero_count">Zero Count</string>
+</resources>

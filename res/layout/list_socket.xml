@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_background"
+    android:orientation="vertical" >
+
+    <include layout="@layout/header_screen" />
+
+    <ListView
+        android:id="@+id/listViewScanners"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|right"
+        android:orientation="horizontal"
+        android:paddingRight="8dp" >
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/btn_cancel"
+            android:text="@string/text_cancel"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnOK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_ok"
+            android:text="@string/text_ok"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.appolis.androidtablet"
+    android:versionCode="1"
+    android:versionName="1.0.3" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:name="com.appolis.scan.SingleEntryApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.appolis.login.SplashActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.appolis.login.FirstLoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.login.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.login.SettingActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.login.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" > 
+        </activity>
+        <activity
+            android:name="com.appolis.receiverinventory.AcReceiverScanLP"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.receiving.AcRecevingList"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.scan.CaptureBarcodeCamera"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.userprofile.UserProfileActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" > 
+        </activity>
+        <activity
+            android:name="com.appolis.cyclecount.AcCycleCount"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.cyclecount.AcCycleCountLocation"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.cyclecount.AcCycleCountBinPath"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.cyclecount.AcCycleCountAdjusment"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+         <activity
+            android:name="com.appolis.cyclecount.AcCycleAdjustmentOption"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+         <activity
+            android:name="com.appolis.cyclecount.AcCycleAdjustmentOptionDetail"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.move.AcMove"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.scan.EzPairActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.receiving.AcReceivingDetails"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.receiving.AcReceiveItemDetail"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.move.AcMoveDetails"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.receiving.AcReceiveOptionDamage"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.receiving.AcReceiveOptionMove"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.appolis.putaway.AcPutAway"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.putaway.AcPutAwayDetails"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.putaway.AcPutAwayBin"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.appolis.receiverinventory.AcReceiverInventoryDetails"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+    </application>
+
+</manifest>

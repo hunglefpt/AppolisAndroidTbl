@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+    
+	<TextView 
+	    android:id="@+id/tv_location"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:textColor="@color/Black"
+	    android:textSize="16sp"
+	    android:text="Location: RCVStaging"/>
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="3dp"
+	    android:orientation="horizontal"
+	    android:gravity="center_vertical">
+	    
+	    <LinearLayout 
+	        android:id="@+id/lin_item_lot"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:orientation="horizontal">
+	        <EditText 
+	            android:id="@+id/edt_item_lot"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:minWidth="100dp"
+	            android:textColor="@color/Black"
+	            android:background="@drawable/back_ground_edt_in_listview"
+			    android:textSize="16sp"
+			    android:singleLine="true"
+			    android:ellipsize="end"
+			    android:hint="Lot#"/>
+	    </LinearLayout>
+	    
+	    <LinearLayout 
+	        android:id="@+id/lin_item_qty"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:id="@+id/tv_qty_title_lable"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textColor="@color/Black"
+			    android:textSize="18sp"
+			    android:text="QTY: "/>
+	        
+	        <EditText 
+	            android:id="@+id/edt_item_qty"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:minWidth="100dp"
+	            android:textColor="@color/Black"
+	            android:background="@drawable/back_ground_edt_in_listview"
+	            android:singleLine="true"
+			    android:ellipsize="end"
+			    android:textSize="16sp"
+			    android:numeric="decimal"
+			    android:text=""/>
+	    </LinearLayout>
+	</LinearLayout>
+</LinearLayout>

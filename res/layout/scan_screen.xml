@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/cameraPreview1"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_margin="0dp"
+        android:layout_weight="1"
+        android:background="#88888888" >
+
+        <FrameLayout
+            android:id="@+id/cameraPreview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
+
+        <View
+            android:layout_width="344dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_scan_focus" />
+
+        <TextView
+            android:id="@+id/scanText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_horizontal"
+            android:textColor="#222222"
+            android:textSize="20sp" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"     
+        android:background="@color/Black"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:background="@drawable/bg_btn_trans"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/btnInfor"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/BLANK"
+            android:scaleType="fitXY"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:visibility="gone"
+            android:src="@drawable/img_info_icon" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_background_2x"
+    android:orientation="vertical" >
+    
+    <include layout="@layout/cm_header_bar"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="25dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp" >
+	    
+	    <TextView
+	        android:id="@+id/tvLocationLabel" 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="@color/white"
+	        android:textSize="25sp"
+	        android:text="@string/cycle_count_current_location"/>
+	    
+	     <TextView 
+	        android:id="@+id/tvCurrentLocaction"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:textColor="@color/Gray13"
+	        android:textSize="22sp"/>
+	     
+	      <TextView 
+	        android:id="@+id/tvBinPath"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textStyle="bold"
+	        android:textColor="@color/Orange6"
+	        android:textSize="23sp"/>
+	</LinearLayout>
+	
+    <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:weightSum="10"
+        android:orientation="horizontal" >
+	      
+        <TextView 
+            android:id="@+id/tvLoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_weight="8"
+            android:textColor="@color/Orange6"
+            android:text="@string/cycle_adjustment_loc"/>
+        
+        <EditText 
+            android:id="@+id/txtCycleAdjustmentLoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:textSize="22sp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/edit_cycle_holo_light_white"
+            android:layout_weight= "5"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:weightSum="10"
+        android:orientation="horizontal" >
+	      
+        <TextView
+            android:id="@+id/tvItem" 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_weight="8"
+            android:textColor="@color/Orange6"
+            android:text="@string/cycle_adjustment_item"/>
+        
+        <EditText 
+            android:id="@+id/txtCycleAdjustmentItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:textSize="22sp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/edit_cycle_holo_light_white"
+            android:layout_weight= "5"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+    
+     <TextView 
+         	android:id="@+id/tvCycleItemDes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="20dp"
+            android:textSize="22sp"
+            android:textColor="@color/white"/>
+     
+      <LinearLayout
+        android:id="@+id/linLot"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:visibility="gone"
+        android:paddingLeft="10dp"
+        android:weightSum="10"
+        android:orientation="horizontal" >
+	      
+        <TextView
+            android:id="@+id/tvLot" 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_weight="8"
+            android:textColor="@color/Orange6"
+            android:text="@string/cycle_adjustment_lot"/>
+        
+        <EditText 
+            android:id="@+id/txtCycleAdjustmentLot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/edit_cycle_holo_light_white"
+            android:layout_weight= "5"
+            android:textColor="@color/white"/>
+    </LinearLayout>      
+     
+      <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:weightSum="10"
+        android:orientation="horizontal" >
+	      
+        <TextView
+            android:id="@+id/tvUOM" 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"
+            android:layout_weight="8"
+            android:textColor="@color/Orange6"
+            android:text="@string/cycle_adjustment_uom"/>
+        
+        <Spinner
+            android:id="@+id/spCycleItemUom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="8dp"
+            android:background="@drawable/spinner"
+            android:layout_weight= "5"
+            android:textColor="@color/Black"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:weightSum="10"
+        android:orientation="horizontal" >
+	      
+        <TextView
+            android:id="@+id/tvQty"  
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_weight="8"
+            android:textColor="@color/Orange6"
+            android:text="@string/cycle_adjustment_qty"/>
+        
+        <EditText 
+            android:id="@+id/txtCycleAdjustmentQty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:maxLength="14"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:numeric="decimal"
+            android:imeOptions="actionDone"
+            android:background="@drawable/edit_text_holo_light_white"
+            android:layout_weight= "5"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:orientation="horizontal" >
+	      
+        <TextView
+            android:id="@+id/tvCycleCurrentCount" 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_weight="12"
+            android:textColor="@color/white"
+            android:text="@string/cycle_adjustment_current_count"/>
+        
+         <TextView 
+            android:id="@+id/tvCycleItemCurrentCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:paddingLeft="40dp"
+            android:textSize="22sp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:orientation="horizontal" >
+	      
+        <TextView
+            android:id="@+id/tvCycleChangedCount"  
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_weight="12"
+            android:textColor="@color/white"
+            android:text="@string/cycle_adjustment_changed_count" />
+        
+         <TextView 
+            android:id="@+id/tvCycleItemChangedCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"	
+            android:paddingLeft="40dp"
+            android:textSize="22sp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:weightSum="2"
+        android:gravity="bottom"
+        android:paddingBottom="20dp"
+        android:orientation="horizontal" >
+       
+         <LinearLayout
+	        android:layout_width="match_parent" 
+	        android:layout_height="fill_parent"
+	        android:gravity="bottom|left"
+	        android:layout_weight="1"
+	        android:orientation="horizontal" >
+	        
+             <Button 
+                 android:id="@+id/btnCycleAdjCancel"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="20dp"
+                 android:paddingLeft="30dp"
+                 android:paddingRight="30dp"
+                 android:textColor="@color/white"
+                 android:text="@string/COMMON_CANCEL"
+                 android:background="@drawable/background_button_cancel_gray"/>
+          
+         </LinearLayout>
+         
+          <LinearLayout
+	        android:layout_width="match_parent" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="1"
+	        android:gravity="bottom|right"
+	        android:orientation="horizontal" >
+                
+             <Button 
+                 android:id="@+id/btnCycleAdjOk"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/COMMON_OK"
+                 android:enabled="false"
+                 android:layout_marginRight="20dp"
+                 android:textColor="@color/white"
+                 android:paddingLeft="45dp"
+                 android:paddingRight="45dp"
+                 android:background="@drawable/background_button_ok_orange"/>
+         </LinearLayout>
+      </LinearLayout>
+    
+</LinearLayout>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_background_2x"
+    android:orientation="vertical" >
+    
+    <include layout="@layout/cm_header_bar"/>
+	
+	<LinearLayout 
+	   android:paddingLeft="25dp" 
+       android:layout_width="fill_parent"
+	   android:layout_height="wrap_content"
+	   android:gravity="center_vertical"
+	   android:layout_weight="0.5"
+	   android:orientation="horizontal" >
+	   
+	    <TextView
+	        android:id="@+id/tvCycleSelect" 
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content" 
+	        android:text="@string/select"
+	        android:textSize="22sp"
+	        android:textStyle="bold"
+	        android:layout_gravity="center_vertical"
+	        android:layout_marginTop="10dp"
+	        android:textColor="@color/Orange4" />
+	       
+		
+		<LinearLayout 
+		    android:layout_weight="6"
+	        android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:background="@drawable/edit_cycle_holo_light_white"
+		    android:orientation="horizontal"
+		    android:layout_marginTop="5dip"
+		    android:layout_marginLeft="20dip"
+		    android:layout_marginRight="5dip">
+		    
+		    <ImageView 
+	            android:id="@+id/imgSearch"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/icon_search"
+	            android:layout_marginLeft="5dip"
+	            android:layout_gravity="left|center_vertical"
+	            android:contentDescription="@string/none_string" />
+	           
+        	<EditText
+            	android:id="@+id/txt_cycle_search" 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:background="@android:color/transparent"
+	            android:layout_weight="0.9"
+	            android:paddingLeft="10dp"
+	            android:gravity="left|bottom"
+	            android:textSize="18dp"
+	            android:layout_gravity="center"
+	            android:ellipsize="start"
+	            android:hint="@string/hint_search_cycle_count"
+	            android:textColorHint="#575656"
+	            android:textColor="@color/white"
+	            android:textStyle="bold"/>
+	            
+        	<ImageView 
+	            android:id="@+id/img_clear_cycle_search"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_weight="11"
+	            android:scaleType="fitXY"
+	            android:src="@drawable/ic_clear"
+	            android:layout_marginRight="5dip"
+	            android:layout_gravity="center|right"
+	            android:contentDescription="@string/none_string"  />
+	          
+    	</LinearLayout>
+    	
+		<LinearLayout 
+		    android:layout_weight="6"
+	        android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_marginTop="5dip"
+		    android:layout_marginLeft="5dip"
+		    android:layout_marginRight="5dip">
+		    
+		</LinearLayout>
+   </LinearLayout>
+   	
+   <ListView
+       android:id="@+id/lvCycleCountList"
+       android:layout_width="fill_parent"
+       android:layout_height="0dp"
+       android:layout_weight="4"
+       android:layout_marginBottom="10dp"
+       android:layout_marginLeft="7dp"
+       android:layout_marginRight="5dp"
+       android:cacheColorHint="#fff"
+       android:isScrollContainer="false" >
+
+    </ListView>
+    
+   <LinearLayout
+       android:id="@+id/lnCycleLocationButton"
+       android:layout_width="fill_parent"
+       android:layout_height="0dp"
+       android:orientation="horizontal"
+       android:layout_marginBottom="15dp"
+       android:layout_weight="1"
+       android:visibility="invisible"
+       android:gravity="bottom" >
+		
+	 <LinearLayout
+	   android:layout_width="fill_parent"
+       android:layout_height="match_parent"
+       android:orientation="horizontal"
+       android:layout_marginBottom="15dp"
+       android:layout_weight="1"
+       android:paddingLeft="15dp"
+       android:gravity="bottom" >
+        	
+	   		<Button
+	           android:id="@+id/btnBack"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:background="@drawable/btn_ok"
+	           android:textColor="@color/whiteD8"
+	           android:layout_marginLeft="7dp"
+	           android:layout_marginRight="10dp"
+	           android:text="@string/COMMON_BACK" />
+       </LinearLayout>
+       
+	 <LinearLayout
+	   android:layout_width="fill_parent"
+       android:layout_height="match_parent"
+       android:orientation="horizontal"
+       android:layout_marginBottom="15dp"
+       android:paddingRight="15dp"
+       android:layout_weight="1"
+       android:gravity="bottom|right" >
+	   		
+       <Button
+           android:id="@+id/btnOption"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:background="@drawable/btn_cancel"
+           android:textColor="@color/whiteD8"
+           android:text="@string/COMMON_OPTIONS" />
+       
+        </LinearLayout>
+   </LinearLayout>
+</LinearLayout>
