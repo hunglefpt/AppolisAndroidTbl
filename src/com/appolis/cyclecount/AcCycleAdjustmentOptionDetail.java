@@ -551,6 +551,12 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		}
 	}
 	
+//	private ObjectCountCycleCurrent convertFromDetailToCycleCurrent() {
+//		ObjectCountCycleCurrent current = new ObjectCountCycleCurrent();
+//		current.set_itemNumber(itemDetail.get_itemNumber());
+//		current.set_lotNumber(itemDetail.get_LotNumber());
+//	}
+	
 	/**
 	 * Show message on dialog
 	 * @param message

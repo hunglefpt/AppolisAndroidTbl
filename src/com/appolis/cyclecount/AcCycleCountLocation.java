@@ -287,9 +287,9 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 							.getCycleCountCurrentList(netParameter);
 					binList = DataParser.getCycleCountCurrentList(data);
 					
-					if (null == binList || binList.size() == 0) {
+					/*if (null == binList || binList.size() == 0) {
 						result = 1;
-					}
+					}*/
 
 				} catch (Exception e) {
 					result = 2;
@@ -315,7 +315,9 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 					lvCycleCountList.setAdapter(cycleCountCurrentAdapter);
 					cycleCountCurrentAdapter.notifyDataSetChanged();
 					//default get index for zero count : 0
-					objectCurrentSelected = binList.get(0);
+					if(binList != null && binList.size() > 0) {
+						objectCurrentSelected = binList.get(0);
+					}
 				} else if (result == 1) {
 					setResult(RESULT_OK);
 					AcCycleCountLocation.this.finish();
@@ -693,12 +695,13 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 
 		// check barcode is in list data ?
 		private boolean checkBarcodeInList() {
-			for (ObjectCountCycleCurrent objectCountCycleCurrent : binList) {
-				if (objectCountCycleCurrent.get_itemNumber().equalsIgnoreCase(
-						barcode))
-					return true;
+			if(bin != null && binList.size() > 0) {
+				for (ObjectCountCycleCurrent objectCountCycleCurrent : binList) {
+					if (objectCountCycleCurrent.get_itemNumber().equalsIgnoreCase(
+							barcode))
+						return true;
+				}
 			}
-
 			return false;
 		}
 	}
@@ -816,7 +819,9 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 				case 0: // if it is Lot
 					//find single Item after second scan by lot
 					ObjectCountCycleCurrent countCycleCurrent = getBarcodeInListFromLot();
-					startActivityCycleAdjustment(countCycleCurrent);
+					if(countCycleCurrent != null) {
+						startActivityCycleAdjustment(countCycleCurrent);
+					}
 					break;
 					
 				case 3:// error scan
@@ -948,12 +953,13 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		 * 
 		 * */
 		private ObjectCountCycleCurrent getLPFromItemNumber() {
-			for (ObjectCountCycleCurrent objectCountCycleCurrent : binList) {
-				if (objectCountCycleCurrent.get_itemNumber().equalsIgnoreCase(
-						objectCycleLp.get_binNumber()))
-					return objectCountCycleCurrent;
+			if(binList != null && binList.size() > 0) {
+				for (ObjectCountCycleCurrent objectCountCycleCurrent : binList) {
+					if (objectCountCycleCurrent.get_itemNumber().equalsIgnoreCase(
+							objectCycleLp.get_binNumber()))
+						return objectCountCycleCurrent;
+				}
 			}
-
 			return null;
 		}
 	}
@@ -1057,14 +1063,15 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		private List<ObjectCountCycleCurrent> getListItem(
 				ObjectCycleItem objectCycleItem) {
 			List<ObjectCountCycleCurrent> cycleCurrents = new ArrayList<>();
-
-			for (ObjectCountCycleCurrent countCycleCurrent : binList) {
-				if (countCycleCurrent.get_itemNumber().equalsIgnoreCase(
-						objectCycleItem.get_itemNumber())) {
-					cycleCurrents.add(countCycleCurrent);
+			
+			if(binList != null && binList.size() > 0) {
+				for (ObjectCountCycleCurrent countCycleCurrent : binList) {
+					if (countCycleCurrent.get_itemNumber().equalsIgnoreCase(
+							objectCycleItem.get_itemNumber())) {
+						cycleCurrents.add(countCycleCurrent);
+					}
 				}
 			}
-
 			return cycleCurrents;
 		}
 	}
