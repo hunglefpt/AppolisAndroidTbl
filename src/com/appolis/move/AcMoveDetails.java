@@ -766,7 +766,12 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				try {
 					NetParameter[] netParameter = new NetParameter[4];
-					netParameter[0] = new NetParameter("itemNumber", URLEncoder.encode(barCode, GlobalParams.UTF_8));
+					if (StringUtils.isNotBlank(itemNumber.get_LotNumber())) {					
+						netParameter[0] = new NetParameter("itemNumber", URLEncoder.encode(itemNumber.get_itemNumber(), GlobalParams.UTF_8));
+					} else {
+						netParameter[0] = new NetParameter("itemNumber", URLEncoder.encode(barCode, GlobalParams.UTF_8));
+					}
+					
 					netParameter[1] = new NetParameter("lotnumber", URLEncoder.encode(edtLotValue.getEditableText().toString(), GlobalParams.UTF_8));
 					netParameter[2] = new NetParameter("uom", uom);
 					netParameter[3] = new NetParameter("binNumber", edt_move_from.getEditableText().toString());
