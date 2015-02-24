@@ -25,6 +25,7 @@ import com.appolis.common.LanguagePreferences;
 import com.appolis.entities.ObjectInstanceRealTimeBin;
 import com.appolis.utilities.GlobalParams;
 
+
 /**
  * 
  * @author hoangnh11
