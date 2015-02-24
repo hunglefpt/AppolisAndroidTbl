@@ -171,7 +171,7 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				try {
 					NetParameter[] netParameter = new NetParameter[1];
-					netParameter[0] = new NetParameter("LPNumber", edtLp.getEditableText().toString());
+					netParameter[0] = new NetParameter("LPNumber", edtLp.getEditableText().toString().trim());
 					data = HttpNetServices.Instance.getLPNumber(netParameter);
 					po = DataParser.getLPNumber(data);		
 					Logger.error(data);
