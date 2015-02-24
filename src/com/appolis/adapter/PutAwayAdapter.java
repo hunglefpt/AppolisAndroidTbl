@@ -91,6 +91,7 @@ public class PutAwayAdapter extends BaseAdapter{
 			} else {
 				holder.tvLotNumber.setText(mActivity.getResources().getString(R.string.LOTS)
 						+ GlobalParams.SPACE + items.get_lotNumber());
+				holder.tvLotNumber.setVisibility(View.VISIBLE);
 			}
 		}
 		

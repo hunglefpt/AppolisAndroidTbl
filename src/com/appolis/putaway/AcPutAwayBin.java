@@ -383,7 +383,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 							Utilities.showPopUp(AcPutAwayBin.this, null,
 									getLanguage(GlobalParams.PLEASE_SCAN_BIN_OR_LP,
 											GlobalParams.PLEASE_SCAN_BIN_OR_LP));
-						} else if (enBarcodeExistences.getBinOnlyCount() != 0) {
+						} else if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
 							intent = new Intent(AcPutAwayBin.this, AcPutAwayDetails.class);
 							intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
 							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
