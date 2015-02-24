@@ -584,6 +584,15 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcMoveDetails.this,
 								R.layout.custom_spinner_item, listUom);
 						spn_Move_UOM.setAdapter(uomAdapter);
+						
+						int checkIndexUOM = 0;						
+						for (int i = 0; i < enUom.size(); i++) {
+							if (itemNumber.get_uomTypeID() == enUom.get(i).getUomId()) {
+								checkIndexUOM = i;
+							}
+						}
+						
+						spn_Move_UOM.setSelection(checkIndexUOM);
 						spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
 							
 							@Override
