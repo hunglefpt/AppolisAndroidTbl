@@ -603,8 +603,10 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * Create reveal animation
      *
      * @param view      affected view
-     * @param swap      If will change state. If "false" returns to the original position
-     * @param swapRight If swap is true, this parameter tells if movement is toward right or left
+     * @param swap      If will change state. If "false" returns to the original
+     *                  position
+     * @param swapRight If swap is true, this parameter tells if movement is toward
+     *                  right or left
      * @param position  list position
      */
     private void generateRevealAnimate(final View view, final boolean swap, final boolean swapRight, final int position) {
@@ -618,27 +620,46 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 moveTo = swapRight ? (int) (viewWidth - rightOffset) : (int) (-viewWidth + leftOffset);
             }
         }
+        final boolean aux = !opened.get(position);
+        if(swap) {
+            opened.set(position, aux);
+            openedRight.set(position, swapRight);
+        }
 
-        animate(view)
-                .translationX(moveTo)
-                .setDuration(animationTime)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        swipeListView.resetScrolling();
-                        if (swap) {
-                            boolean aux = !opened.get(position);
-                            opened.set(position, aux);
-                            if (aux) {
-                                swipeListView.onOpened(position, swapRight);
-                                openedRight.set(position, swapRight);
-                            } else {
-                                swipeListView.onClosed(position, openedRight.get(position));
-                            }
-                        }
-                        resetCell();
+        animate(view).translationX(moveTo).setDuration(animationTime).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                swipeListView.resetScrolling();
+
+                if (swap) {
+                    if (aux) {
+                        swipeListView.onOpened(position, swapRight);
+                    } else {
+                        swipeListView.onClosed(position, openedRight.get(position));
                     }
-                });
+                }
+                // if (aux || !swap) {
+                // resetCell();
+                // }
+            }
+        });
+    }
+    
+    /**
+     * Close all opened items
+     */
+
+    void closeOtherOpenedItems() {
+        if (opened != null && downPosition != SwipeListView.INVALID_POSITION) {
+            int start = swipeListView.getFirstVisiblePosition();
+            int end = swipeListView.getLastVisiblePosition();
+            for (int i = start; i <= end; i++) {
+                if (opened.get(i) && i != downPosition) {
+                    closeAnimate(swipeListView.getChildAt(i - start).findViewById(swipeFrontView), i);
+                }
+            }
+        }
+
     }
 
     private void resetCell() {
@@ -796,6 +817,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                         break;
                     }
                 }
+                closeOtherOpenedItems();
                 view.onTouchEvent(motionEvent);
                 return true;
             }

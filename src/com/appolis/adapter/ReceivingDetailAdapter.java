@@ -148,7 +148,7 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 				public void onClick(View v) {
 					Logger.error("Appolis click aquire barcode:" + position);
 					if(context instanceof AcReceivingDetails){
-						((AcReceivingDetails)context).closeAnimation(position);
+						((AcReceivingDetails)context).closeAnimation();
 					}
 					
 					Intent intentAcquire = new Intent(context, AcReceiveAcquireBarcode.class);

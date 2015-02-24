@@ -358,9 +358,10 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		}
 	}
 	
-	public void closeAnimation(int position){
+	public void closeAnimation(){
 		if(null != swipeList){
-			swipeList.closeAnimate(position);
+			//swipeList.closeAnimate(position);
+			swipeList.closeOpenedItems();
 		}
 	}
 	
