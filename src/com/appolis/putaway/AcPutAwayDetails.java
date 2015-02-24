@@ -183,7 +183,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		bundle = this.getBundle();
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
-		tvHeader.setText(getLanguage(GlobalParams.PUTAWAY_TITLE_PUTAWAY, GlobalParams.PUT_AWAY));
+		tvHeader.setText(getLanguage(GlobalParams.PUTAWAY_TITLE_PUTAWAY, GlobalParams.MOVE));
 		imgHome = (ImageView) findViewById(R.id.imgHome);
 		imgHome.setVisibility(View.VISIBLE);
 		imgScan = (ImageView) findViewById(R.id.img_main_menu_scan_barcode);

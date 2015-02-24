@@ -7,6 +7,8 @@
  */
 package com.appolis.move;
 
+import java.net.URLEncoder;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -238,9 +240,10 @@ public class AcMove extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				try {
 					NetParameter[] netParameter = new NetParameter[1];
-					netParameter[0] = new NetParameter("barcode", edtItem.getEditableText().toString());
+					netParameter[0] = new NetParameter("barcode", 
+							URLEncoder.encode(edtItem.getEditableText().toString().trim(), GlobalParams.UTF_8));
 					data = HttpNetServices.Instance.getBarcode(netParameter);
-					enBarcodeExistences = DataParser.getBarcode(data);					
+					enBarcodeExistences = DataParser.getBarcode(data);
 					result = GlobalParams.TRUE;
 				} catch (AppolisException e) {
 					result = GlobalParams.FALSE;
@@ -280,17 +283,17 @@ public class AcMove extends Activity implements OnClickListener{
 						} else if (enBarcodeExistences.getItemOnlyCount() != 0								
 								|| enBarcodeExistences.getUOMBarcodeCount() != 0) {							
 							intent = new Intent(AcMove.this, AcMoveDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString());
+							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
 							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
 							startActivity(intent);
 						} else if (enBarcodeExistences.getItemIdentificationCount() != 0) {
 							intent = new Intent(AcMove.this, AcMoveDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString());
+							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
 							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
 							startActivity(intent);
 						} else if (enBarcodeExistences.getLPCount() != 0) {
 							intent = new Intent(AcMove.this, AcMoveDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString());
+							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
 							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.TRUE);
 							startActivity(intent);
 						} else {

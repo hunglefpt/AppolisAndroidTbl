@@ -450,7 +450,8 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				try {
 					NetParameter[] netParameter = new NetParameter[1];
-					netParameter[0] = new NetParameter("barcode", barCode);
+					netParameter[0] = new NetParameter("barcode", 
+							URLEncoder.encode(barCode, GlobalParams.UTF_8));
 					data = HttpNetServices.Instance.getLpByBarcode(netParameter);
 					enLPNumber = DataParser.getBinLPNumber(data);
 					Logger.error(data);					
@@ -534,19 +535,20 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				try {
 					NetParameter[] netParameter = new NetParameter[1];
-					netParameter[0] = new NetParameter("barcode", barCode);
+					netParameter[0] = new NetParameter("barcode", URLEncoder.encode(barCode, GlobalParams.UTF_8));
 					data = HttpNetServices.Instance.getItemBarcode(netParameter);
 					itemNumber = DataParser.getItemNumber(data);
 					Logger.error(data);
 					
 					if (StringUtils.isNotBlank(itemNumber.get_LotNumber())) {
 						NetParameter[] netParameterUOM = new NetParameter[1];
-						netParameterUOM[0] = new NetParameter("itemNumber", itemNumber.get_itemNumber());
+						netParameterUOM[0] = new NetParameter("itemNumber", 
+								URLEncoder.encode(itemNumber.get_itemNumber(), GlobalParams.UTF_8));
 						dataUOM = HttpNetServices.Instance.getUOMItemNumber(netParameterUOM);
 						enUom =  DataParser.getUom(dataUOM);
 					} else {
 						NetParameter[] netParameterUOM = new NetParameter[1];
-						netParameterUOM[0] = new NetParameter("itemNumber", barCode);
+						netParameterUOM[0] = new NetParameter("itemNumber", URLEncoder.encode(barCode, GlobalParams.UTF_8));
 						dataUOM = HttpNetServices.Instance.getUOMItemNumber(netParameterUOM);
 						enUom =  DataParser.getUom(dataUOM);
 					}
@@ -755,7 +757,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				try {
 					NetParameter[] netParameter = new NetParameter[4];
-					netParameter[0] = new NetParameter("itemNumber", barCode);
+					netParameter[0] = new NetParameter("itemNumber", URLEncoder.encode(barCode, GlobalParams.UTF_8));
 					netParameter[1] = new NetParameter("lotnumber", URLEncoder.encode(edtLotValue.getEditableText().toString(), GlobalParams.UTF_8));
 					netParameter[2] = new NetParameter("uom", uom);
 					netParameter[3] = new NetParameter("binNumber", edt_move_from.getEditableText().toString());
@@ -997,7 +999,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				try {
 					NetParameter[] netParameter = new NetParameter[4];
-					netParameter[0] = new NetParameter("itemNumber", barCode);
+					netParameter[0] = new NetParameter("itemNumber", URLEncoder.encode(barCode, GlobalParams.UTF_8));
 					netParameter[1] = new NetParameter("lotnumber", URLEncoder.encode(edtLotValue.getEditableText().toString().trim(), GlobalParams.UTF_8));
 					netParameter[2] = new NetParameter("uom", uom);
 					netParameter[3] = new NetParameter("binNumber", edt_move_from.getEditableText().toString());
