@@ -10,10 +10,14 @@ package com.appolis.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appolis.androidtablet.R;
@@ -44,7 +48,7 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 	private String lotTracked;
 	
 	public ReceivingDetailAdapter(Context context, ArrayList<EnPurchaseOrderItemInfo> list, EnPurchaseOrderInfo enPurchaseOrderInfo) {
-		super(context, R.layout.receive_detail_item);
+		super(context, R.layout.receive_detail_item_with_swipe);
 		this.context = context;
 		this.listPurchaseOrderInfos = list;
 		this.enPurchaseOrderInfo = enPurchaseOrderInfo;
@@ -95,15 +99,17 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 		TextView tvReceiveItemLotWeight;
 		TextView tvReceiveItemExpDate;
 		TextView tvReceiveItemDamaged;
+		Button swipeBtAcquireBarcode;
+		LinearLayout linItemFront;
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		ReceivingDetailHolder receivedetailHolder;
 		
 		if(null == convertView){
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.receive_detail_item, null);
+			convertView = inflater.inflate(R.layout.receive_detail_item_with_swipe, null);
 			receivedetailHolder = new ReceivingDetailHolder();
 			receivedetailHolder.tvReceiveItemNumber = (TextView) convertView.findViewById(R.id.tv_receive_item_number);
 			receivedetailHolder.tvReceiveItemWeight = (TextView) convertView.findViewById(R.id.tv_receive_item_weight);
@@ -113,6 +119,8 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 			receivedetailHolder.tvReceiveItemLotWeight = (TextView) convertView.findViewById(R.id.tv_receive_item_lot_weight);
 			receivedetailHolder.tvReceiveItemExpDate = (TextView) convertView.findViewById(R.id.tv_receive_item_exp_date);
 			receivedetailHolder.tvReceiveItemDamaged = (TextView) convertView.findViewById(R.id.tv_damaged);
+			receivedetailHolder.swipeBtAcquireBarcode = (Button) convertView.findViewById(R.id.swipeBtAcquireBarcode);
+			receivedetailHolder.linItemFront = (LinearLayout) convertView.findViewById(R.id.front);
 			convertView.setTag(receivedetailHolder);
 		} else {
 			receivedetailHolder = (ReceivingDetailHolder) convertView.getTag();
@@ -130,9 +138,15 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 			if(null != item.get_itemDesc() && StringUtils.isNotBlank(item.get_itemNumber())){
 				receivedetailHolder.tvReceiveItemNumber.setText(item.get_itemDesc() + " - " + item.get_itemNumber());
 			}
+			receivedetailHolder.swipeBtAcquireBarcode.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Logger.error("Appolis click aquire barcode:" + position);
+				}
+			});
 			
 			receivedetailHolder.tvReceiveItemWeight.setText(String.format("%.2f", item.get_quantityOrdered()));
-
 			ArrayList<EnPurchaseOrderReceiptInfo> listReceptInfo = item.get_receipts();
 			String lotNumber = "";
 			String expDate = "";
@@ -179,9 +193,11 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 			if(item.get_quantityReceived() > 0){
 				receivedetailHolder.tvReceiveItemLotWeight.setText(String.format("%.2f", item.get_quantityReceived() ));
 				convertView.setBackgroundColor(context.getResources().getColor(R.color.Gray91));
+				receivedetailHolder.linItemFront.setBackgroundColor(context.getResources().getColor(R.color.Gray91));
 			} else {
 				receivedetailHolder.tvReceiveItemLotWeight.setText("");
 				convertView.setBackgroundColor(context.getResources().getColor(R.color.white));
+				receivedetailHolder.linItemFront.setBackgroundColor(context.getResources().getColor(R.color.white));
 			}
 			
 			if(item.get_quantityDamaged() > 0){

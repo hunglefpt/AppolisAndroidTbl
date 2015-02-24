@@ -14,7 +14,6 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.conn.ConnectTimeoutException;
@@ -34,11 +33,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +54,7 @@ import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.CommontDialog;
 import com.appolis.utilities.DataParser;
 import com.appolis.utilities.GlobalParams;
+import com.appolis.utilities.Logger;
 import com.appolis.utilities.StringUtils;
 import com.appolis.utilities.Utilities;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -181,19 +179,25 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		receivingDetailAdapter = new ReceivingDetailAdapter(this,
 				listEnPurchaseOrderItemInfo, enPurchaseOrderInfos);
 		lvReceiveDetailList.setAdapter(receivingDetailAdapter);
-		/*List<String> listOption = new ArrayList<String>();
-		listOption.add("Add");
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, listOption);
-		swipeList.setAdapter(adapter);*/
 		swipeList.setSwipeListViewListener(new BaseSwipeListViewListener() {
 			@Override
 			public void onClickFrontView(final int position) {
-				// do something here on Frontview click
+				Logger.error("Appolis: AcReceivingDetails #onClickFrontView: " + position);
+				EnPurchaseOrderItemInfo item = receivingDetailAdapter
+						.getItem(position - 1);
+				Intent itemDetailsIntent = new Intent(AcReceivingDetails.this,
+						AcReceiveItemDetail.class);
+				itemDetailsIntent.putExtra(
+						GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS, item);
+				itemDetailsIntent.putExtra(GlobalParams.PARAM_EN_PURCHASE_ORDER_INFOS,
+						enPurchaseOrderInfos);
+				startActivityForResult(itemDetailsIntent,
+						GlobalParams.AC_RECEIVING_ITEM_DETAILS_ACTIVITY);
 			}
 
 			@Override
 			public void onClickBackView(final int position) {
-				// do something here on Backview click
+				Logger.error("Appolis: AcReceivingDetails #onClickBackView: " + position);
 			}
 
 			@Override
