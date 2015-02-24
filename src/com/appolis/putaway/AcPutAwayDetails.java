@@ -466,16 +466,18 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							
 							@Override
 							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.length() > 0 && Double.parseDouble(s.toString())
-										> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-									Utilities.showPopUp(AcPutAwayDetails.this, null, 
-											getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
-									et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-//									et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//											enUom.get(0).getSignificantDigits())});
+								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 								} else {
-									
-								}
+									if (s.length() > 0 && Double.parseDouble(s.toString())
+											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+										Utilities.showPopUp(AcPutAwayDetails.this, null, 
+												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
+//										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+//												enUom.get(0).getSignificantDigits())});
+									}
+								}								
 							}
 							
 							@Override
@@ -596,16 +598,20 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							
 							@Override
 							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.length() > 0 && Double.parseDouble(s.toString())
-										> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-									Utilities.showPopUp(AcPutAwayDetails.this, null, 
-											getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
-									et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-//									et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//											enUom.get(0).getSignificantDigits())});
+								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 								} else {
-									
-								}
+									if (s.length() > 0 && Double.parseDouble(s.toString())
+											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+										Utilities.showPopUp(AcPutAwayDetails.this, null, 
+												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
+//										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+//												enUom.get(0).getSignificantDigits())});
+									} else {
+										
+									}
+								}								
 							}
 							
 							@Override
@@ -771,16 +777,18 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							
 							@Override
 							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.length() > 0 && Double.parseDouble(s.toString())
-										> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-									Utilities.showPopUp(AcPutAwayDetails.this, null, 
-											getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
-									et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-									et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-											enUom.get(0).getSignificantDigits())});
+								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 								} else {
-									
-								}
+									if (s.length() > 0 && Double.parseDouble(s.toString())
+											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+										Utilities.showPopUp(AcPutAwayDetails.this, null, 
+												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												enUom.get(0).getSignificantDigits())});
+									}
+								}								
 							}
 							
 							@Override
@@ -935,16 +943,20 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							
 							@Override
 							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.length() > 0 && Double.parseDouble(s.toString()) 
-										> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-									Utilities.showPopUp(AcPutAwayDetails.this, null, 
-											getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
-									et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
-									et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-											itemNumber.get_significantDigits())});
+								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 								} else {
-									
-								}
+									if (s.length() > 0 && Double.parseDouble(s.toString()) 
+											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+										Utilities.showPopUp(AcPutAwayDetails.this, null, 
+												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												itemNumber.get_significantDigits())});
+									} else {
+										
+									}
+								}								
 							}
 							
 							@Override
