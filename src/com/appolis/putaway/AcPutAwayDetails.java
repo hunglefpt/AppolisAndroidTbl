@@ -45,6 +45,7 @@ import com.appolis.entities.EnBinTransfer;
 import com.appolis.entities.EnItemNumber;
 import com.appolis.entities.EnItemPODetails;
 import com.appolis.entities.EnLPNumber;
+import com.appolis.entities.EnPassPutAway;
 import com.appolis.entities.EnPutAway;
 import com.appolis.entities.EnUom;
 import com.appolis.login.MainActivity;
@@ -89,19 +90,20 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private EnPutAway passPutAway;
+	private EnPassPutAway enPassPutAway;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		setContentView(R.layout.move_details_layout);
-		initLayout();
+		initLayout();		
 		if (bundle.containsKey(GlobalParams.BARCODE_MOVE)) {
 			barCode = bundle.getString(GlobalParams.BARCODE_MOVE);
 			checkLP = bundle.getString(GlobalParams.CHECK_LP_OR_NOT_LP);
 			checkBin = bundle.getString(GlobalParams.CHECK_BIN_OR_NOT_BIN);
 			passPutAway = (EnPutAway) bundle.getSerializable(GlobalParams.PUT_AWAY_BIN_DATA);
-			
+			enPassPutAway = (EnPassPutAway) bundle.getSerializable(GlobalParams.PUT_PASS_AWAY_BIN_DATA);		
 			if (bundle.containsKey(GlobalParams.LOT_NUMBER) && bundle.containsKey(GlobalParams.BIN_NUMBER)
 					&& bundle.containsKey(GlobalParams.QTY_NUMBER)) {
 				lotNumber = bundle.getString(GlobalParams.LOT_NUMBER);
@@ -131,7 +133,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 					}
 				});
 				
-			} else if (checkBin.equalsIgnoreCase(GlobalParams.TRUE)) {
+			} else if (checkBin.equalsIgnoreCase(GlobalParams.TRUE)) {				
 				GetBinDataAsyncTask getBinDataAsyncTask = new GetBinDataAsyncTask();
 				getBinDataAsyncTask.execute();
 				
@@ -427,14 +429,45 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
 					if (enLPNumber != null) {
-						tvTransfer.setText(passPutAway.get_itemNumber());
-						tvItemDescription.setText(passPutAway.get_itemDesc());
 						edt_move_from.setEnabled(false);
 						edt_move_from.setBackgroundResource(R.color.transparent);
-						edt_move_from.setText(passPutAway.get_binNumber());
-						tvmaxQty.setText(String.valueOf(passPutAway.get_qty()));
-						ArrayList<String> listUom = new ArrayList<String>();						
-						listUom.add(passPutAway.get_uomDescription());
+						ArrayList<String> listUom = new ArrayList<String>();
+						spn_Move_UOM.setEnabled(false);
+						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
+						et_move_qty.setEnabled(true);
+						
+						if (passPutAway.get_itemDesc() != null) {
+							tvTransfer.setText(passPutAway.get_itemNumber());
+							tvItemDescription.setText(passPutAway.get_itemDesc());
+							edt_move_from.setText(passPutAway.get_binNumber());
+							tvmaxQty.setText(String.valueOf(passPutAway.get_qty()));
+							listUom.add(passPutAway.get_uomDescription());
+							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(passPutAway.get_lotNumber());
+							} else {
+								linLot.setVisibility(View.INVISIBLE);
+							}
+							et_move_qty.setText(String.valueOf(passPutAway.get_qty()));
+						} else {
+							tvTransfer.setText(enPassPutAway.getItemNumber());
+							tvItemDescription.setText(enPassPutAway.getItemDescription());
+							edt_move_from.setText("RcvBin1");
+							tvmaxQty.setText(String.valueOf(enPassPutAway.getQuantityOnHand()));
+							listUom.add(enPassPutAway.getUomDescription());
+							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(enPassPutAway.getLotNumber());
+							} else {
+								linLot.setVisibility(View.INVISIBLE);
+							}
+							et_move_qty.setText(String.valueOf(enPassPutAway.getQuantityOnHand()));
+						}
+						
 						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
 								R.layout.custom_spinner_false, listUom);
 						spn_Move_UOM.setAdapter(uomAdapter);
@@ -449,19 +482,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							public void onNothingSelected(AdapterView<?> arg0) {
 							}
 						});
-						spn_Move_UOM.setEnabled(false);
-						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
-						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
-							linLot.setVisibility(View.VISIBLE);
-							edtLotValue.setEnabled(false);
-							edtLotValue.setBackgroundResource(R.color.transparent);
-							edtLotValue.setText(passPutAway.get_lotNumber());
-						} else {
-							linLot.setVisibility(View.INVISIBLE);
-						}
 						
-						et_move_qty.setEnabled(true);					
-						et_move_qty.setText(String.valueOf(passPutAway.get_qty()));
 						et_move_qty.addTextChangedListener(new TextWatcher() {
 							
 							@Override
@@ -557,16 +578,47 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.dismiss();
 			// If not cancel by user
 			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enLPNumber != null) {
-						tvTransfer.setText(passPutAway.get_itemNumber());
-						tvItemDescription.setText(passPutAway.get_itemDesc());
+				if (result.equals(GlobalParams.TRUE)) {					
+					if (enLPNumber != null) {					
 						edt_move_from.setEnabled(false);
 						edt_move_from.setBackgroundResource(R.color.transparent);
-						edt_move_from.setText(passPutAway.get_binNumber());
-						tvmaxQty.setText(String.valueOf(passPutAway.get_qty()));
-						ArrayList<String> listUom = new ArrayList<String>();						
-						listUom.add(passPutAway.get_uomDescription());
+						ArrayList<String> listUom = new ArrayList<String>();
+						spn_Move_UOM.setEnabled(false);
+						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
+						et_move_qty.setEnabled(true);
+						
+						if (passPutAway.get_itemDesc() != null) {							
+							tvTransfer.setText(passPutAway.get_itemNumber());
+							tvItemDescription.setText(passPutAway.get_itemDesc());
+							edt_move_from.setText(passPutAway.get_binNumber());
+							tvmaxQty.setText(String.valueOf(passPutAway.get_qty()));
+							listUom.add(passPutAway.get_uomDescription());
+							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(passPutAway.get_lotNumber());
+							} else {
+								linLot.setVisibility(View.INVISIBLE);
+							}
+							et_move_qty.setText(String.valueOf(passPutAway.get_qty()));
+						} else {							
+							tvTransfer.setText(enPassPutAway.getItemNumber());
+							tvItemDescription.setText(enPassPutAway.getItemDescription());
+							edt_move_from.setText("Manufbin1");
+							tvmaxQty.setText(String.valueOf(enPassPutAway.getQuantityOnHand()));
+							listUom.add(enPassPutAway.getUomDescription());
+							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(enPassPutAway.getLotNumber());
+							} else {
+								linLot.setVisibility(View.INVISIBLE);
+							}
+							et_move_qty.setText(String.valueOf(enPassPutAway.getQuantityOnHand()));
+						}						
+						
 						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
 								R.layout.custom_spinner_false, listUom);
 						spn_Move_UOM.setAdapter(uomAdapter);
@@ -580,20 +632,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							@Override
 							public void onNothingSelected(AdapterView<?> arg0) {
 							}
-						});
-						spn_Move_UOM.setEnabled(false);
-						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
-						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
-							linLot.setVisibility(View.VISIBLE);
-							edtLotValue.setEnabled(false);
-							edtLotValue.setBackgroundResource(R.color.transparent);
-							edtLotValue.setText(passPutAway.get_lotNumber());
-						} else {
-							linLot.setVisibility(View.INVISIBLE);
-						}
+						});	
 						
-						et_move_qty.setEnabled(true);						
-						et_move_qty.setText(String.valueOf(passPutAway.get_qty()));
 						et_move_qty.addTextChangedListener(new TextWatcher() {
 							
 							@Override
@@ -699,7 +739,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
-					if (enPutaway != null) {
+					if (enPutaway != null) {						
 						tvTransfer.setText(enPutaway.getItemNumber());
 						tvItemDescription.setText(enPutaway.getItemDescription());
 						ArrayList<String> listUom = new ArrayList<String>();

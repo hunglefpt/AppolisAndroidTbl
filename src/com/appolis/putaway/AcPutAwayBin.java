@@ -34,6 +34,7 @@ import com.appolis.androidtablet.R;
 import com.appolis.common.AppolisException;
 import com.appolis.common.LanguagePreferences;
 import com.appolis.entities.EnBarcodeExistences;
+import com.appolis.entities.EnPassPutAway;
 import com.appolis.entities.EnPutAway;
 import com.appolis.entities.EnPutAwayBin;
 import com.appolis.network.NetParameter;
@@ -71,6 +72,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	private TextView tvSelect;
 	private int checkPos = -1;
 	private EnPutAway passPutAway;
+	private EnPassPutAway enPassPutAway;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,14 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	@SuppressWarnings("unchecked")
 	private void intLayout() {
 		passPutAway = new EnPutAway();
+		enPassPutAway = new EnPassPutAway();
 		enBarcodeExistences = new EnBarcodeExistences();	
 		bundle = this.getBundle();
 		enPutAwayBin = new ArrayList<>();
 		enPutAwayBin = ((ArrayList<EnPutAwayBin>) bundle.getSerializable(GlobalParams.PUT_AWAY_BIN));
 		itemNumber = bundle.getString(GlobalParams._ITEMNUMBER);
 		passPutAway = (EnPutAway) bundle.getSerializable(GlobalParams.PUT_AWAY_BIN_DATA);
+		enPassPutAway = (EnPassPutAway) bundle.getSerializable(GlobalParams.PUT_PASS_AWAY_BIN_DATA);
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		tvHeader.setText(GlobalParams.PUT_AWAY_BINS);
@@ -389,6 +393,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
 							intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.TRUE);
 							intent.putExtra(GlobalParams.PUT_AWAY_BIN_DATA, passPutAway);
+							intent.putExtra(GlobalParams.PUT_PASS_AWAY_BIN_DATA, enPassPutAway);
 							startActivity(intent);
 						} else {
 							Utilities.showPopUp(AcPutAwayBin.this, null,

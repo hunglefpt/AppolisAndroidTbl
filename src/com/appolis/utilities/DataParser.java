@@ -17,6 +17,7 @@ import com.appolis.entities.EnItemNumber;
 import com.appolis.entities.EnItemPODetails;
 import com.appolis.entities.EnLPNumber;
 import com.appolis.entities.EnPO;
+import com.appolis.entities.EnPassPutAway;
 import com.appolis.entities.EnPurchaseOrderInfo;
 import com.appolis.entities.EnPurchaseOrderReceiptInfo;
 import com.appolis.entities.EnPutAway;
@@ -193,6 +194,19 @@ public final class DataParser {
 		Type collectionType = new TypeToken<ArrayList<EnPutAway>>() {}.getType();
 		
 		ArrayList<EnPutAway> details = gson.fromJson(jsonData, collectionType);
+		return details;
+	}
+	
+	public static EnPassPutAway getEnPutAway(String jsonData) throws JsonSyntaxException {
+		
+		if (StringUtils.isBlank(jsonData)) {
+			return null;
+		}
+		
+		Gson gson = new Gson();
+		Type collectionType = new TypeToken<EnPassPutAway>() {}.getType();
+		
+		EnPassPutAway details = gson.fromJson(jsonData, collectionType);
 		return details;
 	}
 	

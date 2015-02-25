@@ -546,6 +546,7 @@ public final class GlobalParams {
 	public static final String LP_NUMBER = "LP NUMBER";
 	public static final String PUT_AWAY_BIN = "PUT AWAY BIN";
 	public static final String PUT_AWAY_BIN_DATA = "PUT AWAY BIN DATA";
+	public static final String PUT_PASS_AWAY_BIN_DATA = "PUT PASS AWAY BIN DATA";
 	public static final String _ITEMNUMBER = "_itemNumber";
 	
 	/* MoveScreen */

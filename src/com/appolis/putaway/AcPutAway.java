@@ -35,6 +35,7 @@ import com.appolis.common.AppolisException;
 import com.appolis.common.LanguagePreferences;
 import com.appolis.entities.EnBarcodeExistences;
 import com.appolis.entities.EnItemNumber;
+import com.appolis.entities.EnPassPutAway;
 import com.appolis.entities.EnPutAway;
 import com.appolis.entities.EnPutAwayBin;
 import com.appolis.login.LoginActivity;
@@ -75,6 +76,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 	private ArrayList<EnPutAway> listPutAway;
 	private EnPutAway passPutAway;
 	private EnItemNumber itemNumber;
+	private EnPassPutAway enPassPutAway; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 		listPutAway = new ArrayList<>();
 		passPutAway = new EnPutAway();
 		itemNumber = new EnItemNumber();
+		enPassPutAway = new EnPassPutAway();
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		tvHeader.setText(getLanguage(GlobalParams.PUTAWAY_TITLE_PUTAWAY, GlobalParams.PUT_AWAY));
@@ -527,7 +530,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 	 * @author hoangnh11
 	 */
 	class CheckItemLotNumberAsyncTask extends AsyncTask<Void, Void, String> {
-		String data, _barCode;
+		String data, _barCode, dataTwo;
 		Intent intent;
 		
 		private CheckItemLotNumberAsyncTask(String barCode){
@@ -554,6 +557,12 @@ public class AcPutAway extends Activity implements OnClickListener {
 					data = HttpNetServices.Instance.getItemBarcode(netParameter);
 					itemNumber = DataParser.getItemNumber(data);
 					Logger.error(data);
+					
+					NetParameter[] netParameterTwo = new NetParameter[1];
+					netParameterTwo[0] = new NetParameter("barcode", _barCode);
+					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
+					enPassPutAway = DataParser.getEnPutAway(dataTwo);
+					Logger.error(dataTwo);
 					
 					result = "true";
 				} catch (AppolisException e) {
@@ -596,7 +605,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 	 * @author hoangnh11
 	 */
 	class GetLPDataAsyncTask extends AsyncTask<Void, Void, String> {
-		String data, _barCode, _bin;	
+		String data, _barCode, _bin, dataTwo;	
 		Intent intent;
 		
 		private GetLPDataAsyncTask(String barCode, String bin){
@@ -623,6 +632,13 @@ public class AcPutAway extends Activity implements OnClickListener {
 					netParameter[0] = new NetParameter("licensePlateNumber", _barCode);
 					data = HttpNetServices.Instance.getLpByBarcode(netParameter);
 					Logger.error(data);
+					
+					NetParameter[] netParameterTwo = new NetParameter[1];
+					netParameterTwo[0] = new NetParameter("barcode", _barCode);
+					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
+					enPassPutAway = DataParser.getEnPutAway(dataTwo);
+					Logger.error(dataTwo);					
+					
 					result = GlobalParams.TRUE;
 				} catch (AppolisException e) {
 					result = GlobalParams.FALSE;
@@ -727,8 +743,8 @@ public class AcPutAway extends Activity implements OnClickListener {
 					intent = new Intent(AcPutAway.this, AcPutAwayBin.class);
 					intent.putExtra(GlobalParams.PUT_AWAY_BIN, enPutAwayBin);
 					intent.putExtra(GlobalParams.PUT_AWAY_BIN_DATA, passPutAway);
-					startActivity(intent);
-					
+					intent.putExtra(GlobalParams.PUT_PASS_AWAY_BIN_DATA, enPassPutAway);
+					startActivity(intent);			
 				} else {
 					String msg = languagePrefs.getPreferencesString
 							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
