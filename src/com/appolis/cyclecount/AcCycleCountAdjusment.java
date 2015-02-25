@@ -97,6 +97,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 	private double countConverted;
 	private boolean isUpdateCycleCount;
 	private boolean isBinPath;
+	private boolean isExistInList;
 	
 	private LanguagePreferences languagePrefs;
 	
@@ -111,6 +112,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		bin = (ObjectInstanceRealTimeBin) intent.getSerializableExtra("BinCycleCount");
 		isBinPath = intent.getBooleanExtra("isLp", false);
 		isUpdateCycleCount = (boolean) intent.getBooleanExtra("isUpdateCycleCount", false);
+		isExistInList = (boolean) intent.getBooleanExtra("isExistInList", false);
 		newBinNumber = intent.getStringExtra("newBinNumber");
 		countConverted = objCurrentPre.get_count();
 		changeCount = objCurrentPre.get_count();
@@ -193,6 +195,9 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 			
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				if(arg0.toString().contains(GlobalParams.DOT) && arg0.length() == 1) {
+					txtCycleAdjustmentQty.setText(GlobalParams.BLANK);
+				}
 			}
 			
 			@Override
@@ -522,7 +527,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 
 		Context context;
 		ProgressDialog progressDialog;
-		String data;
+		String data = "";
 		NetParameter []netParameters;
 		
 		public LoadTrackAsyn(Context mContext) {
@@ -564,8 +569,13 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 							 String locationPath[] = path.split("/");
 							 if(locationPath.length > 0) {
 								 if(locationPath[locationPath.length - 1].equalsIgnoreCase(newBinNumber)) {
-									 netParameters = new NetParameter[4];
-									 netParameters[0] = new NetParameter("cycleCountItemInstanceID", String.valueOf(objCurrentPre.get_cycleCountItemInstanceID()));
+									 if(!isExistInList) {
+										 netParameters = new NetParameter[4];
+										 netParameters[0] = new NetParameter("cycleCountItemInstanceID", String.valueOf(objCurrentPre.get_cycleCountItemInstanceID()));
+									 } else {
+										 netParameters = new NetParameter[9];
+										 netParameters[0] = new NetParameter("cycleCountInstanceID", String.valueOf(AcCycleCount.cycleCountInstanceID));
+									 }
 								 } else {
 									 netParameters = new NetParameter[9];
 									 netParameters[0] = new NetParameter("cycleCountInstanceID", String.valueOf(objCurrentPre.get_cycleCountInstanceID()));
@@ -593,9 +603,16 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 						netParameters[7] = new NetParameter("gtinNumber", "");
 						netParameters[8] = new NetParameter("originalGs1Barcode", "");
 					}
-					data = HttpNetServices.Instance.updateCycleCountItem(netParameters);
+					if(isUpdateCycleCount) { 
+						data = HttpNetServices.Instance.updateCycleCountItem(netParameters);
+					} else {
+						if(AcCycleCount.isPhysicalInventoryCycleCount) {
+							data = HttpNetServices.Instance.updateCycleCountItem(netParameters);
+						}
+					}
 				} catch (Exception e) {
 					result = 1;
+					e.printStackTrace();
 				}
 			}
 			return result;
@@ -619,7 +636,11 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 							setResult(RESULT_OK);
 							AcCycleCountAdjusment.this.finish();
 						} else {
-							Utilities.dialogShow(dataMessage, AcCycleCountAdjusment.this);
+							Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
+									+ dataMessage);
+							//Utilities.dialogShow(dataMessage, AcCycleCountAdjusment.this);
+							setResult(RESULT_OK);
+							AcCycleCountAdjusment.this.finish();
 						}
 					} else {
 						setResult(RESULT_OK);
@@ -627,18 +648,22 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 					}
 					
 				} else {
-					String msgs = languagePrefs.getPreferencesString("error",
+					/*String msgs = languagePrefs.getPreferencesString("error",
 							"error");
-					CommontDialog.showErrorDialog(context, msgs, null);
+					CommontDialog.showErrorDialog(context, msgs, null);*/
 					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
 							+ result);
+					setResult(RESULT_OK);
+					AcCycleCountAdjusment.this.finish();
 				}
 			} else {
-				String msgs = languagePrefs.getPreferencesString("error",
+				/*String msgs = languagePrefs.getPreferencesString("error",
 						"error");
-				CommontDialog.showErrorDialog(context, msgs, null);
+				CommontDialog.showErrorDialog(context, msgs, null);*/
 				Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
 						+ result);
+				setResult(RESULT_OK);
+				AcCycleCountAdjusment.this.finish();
 			}
 		}
 	} 

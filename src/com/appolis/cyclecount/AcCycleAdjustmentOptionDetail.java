@@ -384,7 +384,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 					ObjectCountCycleCurrent current = getCountCycleCurrent();
 					//check item exist in the first list
 					if(current != null) {
-						startActivityCycleAdjustment(current);
+						startActivityCycleAdjustment(current, false);
 					} else {
 						Utilities.showPopUp(context, null, 
 								languagePrefs.getPreferencesString(GlobalParams.ERRORINVALIDLOTNUMFORITEM, 
@@ -508,10 +508,13 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 								ObjectCountCycleCurrent current = getCountCycleCurrent();
 								//check item exist in the first list
 								if(current != null) {
-									startActivityCycleAdjustment(current);
+									startActivityCycleAdjustment(current, false);
 								} else {
-									Utilities.showPopUp(context, null, languagePrefs.getPreferencesString(GlobalParams.REPLENISH_ITEMMATCHERROR_KEY, 
-											GlobalParams.REPLENISH_ITEMMATCHERROR_VALUE));
+									/*Utilities.showPopUp(context, null, languagePrefs.getPreferencesString(GlobalParams.REPLENISH_ITEMMATCHERROR_KEY, 
+											GlobalParams.REPLENISH_ITEMMATCHERROR_VALUE));*/
+									//fix 13124
+									current = convertFromDetailToCycleCurrent();
+									startActivityCycleAdjustment(current, true);
 								}
 								
 							} else {
@@ -527,10 +530,13 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 							ObjectCountCycleCurrent current = getCountCycleCurrent();
 							//check item exist in the first list
 							if(current != null) {
-								startActivityCycleAdjustment(current);
+								startActivityCycleAdjustment(current, false);
 							} else {
-								Utilities.showPopUp(context, null, languagePrefs.getPreferencesString(GlobalParams.REPLENISH_ITEMMATCHERROR_KEY, 
-										GlobalParams.REPLENISH_ITEMMATCHERROR_VALUE));
+								/*Utilities.showPopUp(context, null, languagePrefs.getPreferencesString(GlobalParams.REPLENISH_ITEMMATCHERROR_KEY, 
+								GlobalParams.REPLENISH_ITEMMATCHERROR_VALUE));*/
+								//fix 13124
+								current = convertFromDetailToCycleCurrent();
+								startActivityCycleAdjustment(current, true);
 							}
 						}
 					} else {
@@ -551,11 +557,18 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		}
 	}
 	
-//	private ObjectCountCycleCurrent convertFromDetailToCycleCurrent() {
-//		ObjectCountCycleCurrent current = new ObjectCountCycleCurrent();
-//		current.set_itemNumber(itemDetail.get_itemNumber());
-//		current.set_lotNumber(itemDetail.get_LotNumber());
-//	}
+	private ObjectCountCycleCurrent convertFromDetailToCycleCurrent() {
+		ObjectCountCycleCurrent current = new ObjectCountCycleCurrent();
+		current.set_itemNumber(itemDetail.get_itemNumber());
+		current.set_lotNumber(itemDetail.get_LotNumber());
+		current.set_itemDesc(itemDetail.get_itemDescription());
+		current.set_lotTrackingInd(itemDetail.is_LotTrackingInd());
+		current.set_lpInd(false);
+		current.set_itemID(itemDetail.get_itemID());
+		current.set_count(0);
+		current.set_uomDescription(itemDetail.get_uomDescription());
+		return current;
+	}
 	
 	/**
 	 * Show message on dialog
@@ -632,7 +645,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 	 * Start activity
 	 * @param currentSelected
 	 */
-	private void startActivityCycleAdjustment(ObjectCountCycleCurrent currentSelected) {
+	private void startActivityCycleAdjustment(ObjectCountCycleCurrent currentSelected, boolean isExistInList) {
 		if(isLocationScreen) {
 			path = bin.get_binNumber();
 		}
@@ -645,6 +658,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		intentCycleAdjustment.putExtra("isUpdateCycleCount", false);
 		intentCycleAdjustment.putExtra("isLp", false);
 		intentCycleAdjustment.putExtra("newBinNumber", newLocation);
+		intentCycleAdjustment.putExtra("isExistInList", isExistInList);
 		startActivityForResult(intentCycleAdjustment,
 				GlobalParams.AC_CYCLE_COUNT_ADJUSMENT_ACTIVITY);
 	}

@@ -74,6 +74,8 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	private ObjectCycleCount objectCycleCount;
 	private List<ObjectInstanceRealTimeBin> binList;
 	private LanguagePreferences languagePrefs;
+	public static boolean isPhysicalInventoryCycleCount;
+	public static int cycleCountInstanceID;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -254,7 +256,8 @@ public class AcCycleCount extends Activity implements OnClickListener,
 
 					if (null != objectCycleCount) {
 						binList = objectCycleCount.get_countInstanceRealTimeBin();
-						
+						isPhysicalInventoryCycleCount = objectCycleCount.is_physicalInventoryCycleCount();
+						cycleCountInstanceID = objectCycleCount.get_cycleCountInstanceID();
 						if (null == binList || binList.size() == 0) {
 							result = 1;
 						}
