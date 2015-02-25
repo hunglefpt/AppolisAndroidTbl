@@ -1068,7 +1068,12 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		enBinTransfer.setIsLicensePlate(itemNumber.is_licensePlateInd());
 		enBinTransfer.setItemNumber(tvTransfer.getText().toString());
 		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());
-		enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));
+		if (StringUtils.isNotBlank(et_move_qty.getEditableText().toString())) {
+			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));
+		} else {
+			et_move_qty.setText("0");
+			enBinTransfer.setQuantity(0);
+		}
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");
 		enBinTransfer.setUomDescription(uom);

@@ -648,8 +648,6 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 //										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 //												enUom.get(0).getSignificantDigits())});
-									} else {
-										
 									}
 								}								
 							}
@@ -993,8 +991,6 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												itemNumber.get_significantDigits())});
-									} else {
-										
 									}
 								}								
 							}
@@ -1231,8 +1227,13 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		enBinTransfer.setFromBinNumber(edt_move_from.getEditableText().toString());
 		enBinTransfer.setIsLicensePlate(itemNumber.is_licensePlateInd());
 		enBinTransfer.setItemNumber(tvTransfer.getText().toString());
-		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());
-		enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));
+		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());		
+		if (StringUtils.isNotBlank(et_move_qty.getEditableText().toString())) {
+			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));
+		} else {
+			et_move_qty.setText("0");
+			enBinTransfer.setQuantity(0);
+		}
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");
 		enBinTransfer.setUomDescription(uom);
