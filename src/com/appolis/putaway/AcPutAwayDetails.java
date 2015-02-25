@@ -497,6 +497,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 //										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 //												enUom.get(0).getSignificantDigits())});
+									} else {
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												itemNumber.get_significantDigits())});
 									}
 								}								
 							}
@@ -648,6 +651,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 //										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 //												enUom.get(0).getSignificantDigits())});
+									} else {
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												itemNumber.get_significantDigits())});
 									}
 								}								
 							}
@@ -825,6 +831,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												enUom.get(0).getSignificantDigits())});
+									} else {
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												itemNumber.get_significantDigits())});
 									}
 								}								
 							}
@@ -991,7 +1000,10 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												itemNumber.get_significantDigits())});
-									}
+									} else {
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												itemNumber.get_significantDigits())});
+									}									
 								}								
 							}
 							

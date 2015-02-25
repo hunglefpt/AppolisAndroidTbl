@@ -818,7 +818,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						et_move_qty.addTextChangedListener(new TextWatcher() {
 							
 							@Override
-							public void onTextChanged(CharSequence s, int start, int before, int count) {
+							public void onTextChanged(CharSequence s, int start, int before, int count) {							
 								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
 									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 								} else {
@@ -827,10 +827,11 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 										Utilities.showPopUp(AcMoveDetails.this, null,
 												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
 										et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
+									} else {
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												itemNumber.get_significantDigits())});
 									}
-								}								
+								}
 							}
 							
 							@Override
