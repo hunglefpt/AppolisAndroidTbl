@@ -123,6 +123,8 @@
 				android:footerDividersEnabled="true"
 				android:layout_weight="1.0"
 				android:cacheColorHint="@null"
+				android:divider="@color/Gray42"
+        		android:dividerHeight="1dp"
 				android:fastScrollEnabled="true"
 				android:isScrollContainer="false"
 				android:background="@drawable/border_layout_setting">
