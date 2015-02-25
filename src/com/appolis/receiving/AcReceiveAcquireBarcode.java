@@ -11,13 +11,13 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.conn.ConnectTimeoutException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -31,25 +31,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.appolis.androidtablet.R;
-import com.appolis.common.AppolisException;
 import com.appolis.common.ErrorCode;
 import com.appolis.common.LanguagePreferences;
 import com.appolis.entities.EnPurchaseOrderItemInfo;
 import com.appolis.entities.EnUom;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
-import com.appolis.receiving.AcReceiveOptionMove.GetDataAsyncTask;
 import com.appolis.scan.CaptureBarcodeCamera;
-import com.appolis.utilities.BuManagement;
 import com.appolis.utilities.CommontDialog;
 import com.appolis.utilities.DataParser;
 import com.appolis.utilities.GlobalParams;
@@ -63,6 +60,7 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 	private TextView tvHeader;
 	private TextView tvAcquireScanOrEnterBarCode;
 	private TextView tvItemName;
+	private TextView tvItemTitle;
 	private TextView tvItemDescription;
 	private EditText edtBarcodeValue;
 	private Spinner spnMoveUOM;
@@ -95,9 +93,10 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 	/**
 	 * initial layout of screen
 	 */
-	private void initLayout(){
+	@SuppressLint("DefaultLocale") private void initLayout(){
 		linBack = (LinearLayout) findViewById(R.id.lin_buton_home);
-		linBack.setVisibility(View.GONE);
+		linBack.setVisibility(View.VISIBLE);
+		linBack.setOnClickListener(this);
 		linScan = (LinearLayout) findViewById(R.id.lin_buton_scan);
 		linScan.setOnClickListener(this);
 		linScan.setVisibility(View.VISIBLE);
@@ -108,13 +107,19 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 		tvAcquireScanOrEnterBarCode = (TextView) findViewById(R.id.tvAcquireScanOrEnterBarCode);
 		tvAcquireScanOrEnterBarCode.setText(languagePrefs.getPreferencesString(
 				GlobalParams.SCAN_OR_ENTER_BARCODE_KEY, GlobalParams.SCAN_OR_ENTER_BARCODE_VALUE));
+		tvItemTitle = (TextView) findViewById(R.id.tvTitleItemName);
+		tvItemTitle.setText(languagePrefs.getPreferencesString(
+				GlobalParams.ITEM_KEY, GlobalParams.ITEM_VALUE).toUpperCase() + ": ");
+		
 		tvItemName = (TextView) findViewById(R.id.tvItemName);
 		tvItemDescription = (TextView) findViewById(R.id.tvItemDescription);
 		edtBarcodeValue =(EditText) findViewById(R.id.edtBarcodeValue);
 		spnMoveUOM = (Spinner) findViewById(R.id.spn_Acquire_UOM);
 		btCancel = (Button) findViewById(R.id.btnCancel);
+		btCancel.setText(languagePrefs.getPreferencesString(GlobalParams.CANCEL, GlobalParams.CANCEL));
 		btCancel.setOnClickListener(this);
 		btOk = (Button) findViewById(R.id.btnOK);
+		btOk.setText(languagePrefs.getPreferencesString(GlobalParams.ADD_KEY, GlobalParams.ADD_VALUE));
 		btOk.setOnClickListener(this);
 		
 		edtBarcodeValue.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -176,6 +181,11 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.lin_buton_home:
+			Utilities.hideKeyboard(this);
+			this.finish();
+			break;
+			
 		case R.id.lin_buton_scan:
 			Intent intentScan = new Intent(this, CaptureBarcodeCamera.class);
 			startActivityForResult(intentScan,

@@ -85,5 +85,6 @@
     <color name="blueSky1">#214c85</color>
     <color name="greyDF">#dfdfdf</color>
     <color name="green">#33CC33</color>
-
+	<color name="Green1">#31B81C</color>
+	<color name="Green2">#1D850D</color>
 </resources>

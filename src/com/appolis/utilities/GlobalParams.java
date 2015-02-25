@@ -228,6 +228,8 @@ public final class GlobalParams {
 	public static final String ACQUIRE_BARCODE_VALUE = "Acquire Barcode";
 	public static final String SCAN_OR_ENTER_BARCODE_VALUE = "Scan or Enter Barcode";
 	public static final String RE_LBL_RECEIVE1_VALUE = "Receive";
+	public static final String ADD_VALUE = "Add";
+	public static final String ITEM_VALUE = "Item";
 	public static final String SETTINGS_BTN_CANCEL_VALUE = "Cancel";
 	public static final String RE_PO_EMPTY_MSG_VALUE = "PO list empty";
 	public static final String DMG_LBL_LOCATION_VALUE = "Location";
@@ -316,6 +318,8 @@ public final class GlobalParams {
 	public static final String LOCATION = "Location";
 	public static final String RID_GRD_LOT = "rid_grd_Lot";
 	public static final String RID_GRD_QTY = "rid_grd_Qty";
+	public static final String ADD_KEY = "Add";
+	public static final String ITEM_KEY = "Item";
 	public static final String RID_LBL_PRINTLABELS = "rid_lbl_PrintLabels";
 	public static final String PID_LBL_GETNEXTLOCATION = "pid_lbl_GetNextLocation";
 	public static final String PID_LBL_UNDO_KEY = "pid_lbl_Undo";
