@@ -34,6 +34,7 @@ import com.appolis.androidtablet.R;
 import com.appolis.common.AppolisException;
 import com.appolis.common.LanguagePreferences;
 import com.appolis.entities.EnBarcodeExistences;
+import com.appolis.entities.EnItemNumber;
 import com.appolis.entities.EnPutAway;
 import com.appolis.entities.EnPutAwayBin;
 import com.appolis.login.LoginActivity;
@@ -73,6 +74,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 	private TextView tvSelect;
 	private ArrayList<EnPutAway> listPutAway;
 	private EnPutAway passPutAway;
+	private EnItemNumber itemNumber;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 		enBarcodeExistences = new EnBarcodeExistences();	
 		listPutAway = new ArrayList<>();
 		passPutAway = new EnPutAway();
+		itemNumber = new EnItemNumber();
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		tvHeader.setText(getLanguage(GlobalParams.PUTAWAY_TITLE_PUTAWAY, GlobalParams.PUT_AWAY));
@@ -486,11 +489,13 @@ public class AcPutAway extends Activity implements OnClickListener {
 							}
 							
 							startActivity(intent);
-						} else if ((enBarcodeExistences.getItemOnlyCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())
-								|| (enBarcodeExistences.getItemIdentificationCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())
+						} else if ((enBarcodeExistences.getItemOnlyCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())								
 								|| (enBarcodeExistences.getUOMBarcodeCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())) {					
 							GetLPDataAsyncTask getLPDataAsyncTask = new GetLPDataAsyncTask(_barCode, _bin);
 							getLPDataAsyncTask.execute();
+						} else if (enBarcodeExistences.getItemIdentificationCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins()) {
+							CheckItemLotNumberAsyncTask checkItemLotNumberAsyncTask = new CheckItemLotNumberAsyncTask(_barCode);
+							checkItemLotNumberAsyncTask.execute();
 						} else if (enBarcodeExistences.getLPCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins()) {		
 							GetLPDataAsyncTask getLPDataAsyncTask = new GetLPDataAsyncTask(_barCode, _bin);
 							getLPDataAsyncTask.execute();
@@ -512,6 +517,75 @@ public class AcPutAway extends Activity implements OnClickListener {
 					}
 				} else {
 					Utilities.showPopUp(AcPutAway.this, null, GlobalParams.INVALID_SCAN);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Validate Lot number
+	 * @author hoangnh11
+	 */
+	class CheckItemLotNumberAsyncTask extends AsyncTask<Void, Void, String> {
+		String data, _barCode;
+		Intent intent;
+		
+		private CheckItemLotNumberAsyncTask(String barCode){
+			_barCode = barCode;		
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(AcPutAway.this);
+			dialog.setMessage(GlobalParams.LOADING_DATA);
+			dialog.show();
+			dialog.setCancelable(false); 
+			dialog.setCanceledOnTouchOutside(false);
+		}
+		
+		@Override
+		protected String doInBackground(Void... params) {
+			String result;
+			if (!isCancelled()) {
+				try {
+					NetParameter[] netParameter = new NetParameter[1];
+					netParameter[0] = new NetParameter("barcode",
+							URLEncoder.encode(_barCode.trim(), GlobalParams.UTF_8));
+					data = HttpNetServices.Instance.getItemBarcode(netParameter);
+					itemNumber = DataParser.getItemNumber(data);
+					Logger.error(data);
+					
+					result = "true";
+				} catch (AppolisException e) {
+					result = "false";
+				} catch (Exception e) {
+					result = "false";
+				}
+			} else {
+				result = "false";
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			dialog.dismiss();
+			// If not cancel by user
+			if (!isCancelled()) {
+				if (result.equals("true")) {
+					if (itemNumber != null && itemNumber.get_LotNumber() != null 
+							&& StringUtils.isNotBlank(itemNumber.get_LotNumber())) {
+						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(itemNumber.get_itemNumber(),
+								GlobalParams.BLANK_CHARACTER);
+						getPutAwayBinAsyncTask.execute();
+					} else {
+						Utilities.showPopUp(AcPutAway.this, null,
+								getLanguage(GlobalParams.INVALID_SCAN,	GlobalParams.INVALID_SCAN));
+					}
+				} else {
+					String msg = languagePrefs.getPreferencesString
+							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
+					Utilities.showPopUp(AcPutAway.this, null, msg);	
 				}
 			}
 		}
