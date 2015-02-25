@@ -77,6 +77,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 	private ArrayList<EnReceivingInfo> listReceiveInfo = new ArrayList<EnReceivingInfo>();
 	private ReceivingListAdapter receivingListAdapter = null;
 	private LanguagePreferences languagePrefs;
+	private int checkPos = -1;
 	
 	//text multiple language
 	private String strLoading;
@@ -217,10 +218,15 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 	@Override
 	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {
 		Logger.info("AcRecevingList #onItemClick:" + position);
-		EnReceivingInfo enReceivingInfo = receivingListAdapter.getItem(position-1);
-		Intent intentReceiveDeail = new Intent(AcRecevingList.this, AcReceivingDetails.class);
-		intentReceiveDeail.putExtra(GlobalParams.PARAM_EN_RECIVING_INFO_PO_NUMBER, enReceivingInfo.get_poNumber());
-		startActivityForResult(intentReceiveDeail, GlobalParams.AC_RECEIVING_DETAILS_ACTIVITY);
+		if (checkPos == position) {
+			checkPos = -1;
+		} else {
+			EnReceivingInfo enReceivingInfo = receivingListAdapter.getItem(position-1);
+			Intent intentReceiveDeail = new Intent(AcRecevingList.this, AcReceivingDetails.class);
+			intentReceiveDeail.putExtra(GlobalParams.PARAM_EN_RECIVING_INFO_PO_NUMBER, enReceivingInfo.get_poNumber());
+			startActivityForResult(intentReceiveDeail, GlobalParams.AC_RECEIVING_DETAILS_ACTIVITY);
+			checkPos = position;
+		}
 	}
 	
 	@Override

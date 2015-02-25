@@ -88,7 +88,8 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 	private ReceivingDetailAdapter receivingDetailAdapter;
 	private EnItemLotInfo enItemLotInfo;
 	private LanguagePreferences languagePrefs;
-
+	private int checkPos = -1;
+	
 	// multiple language
 	private String strTextOk;
 	private String strTextCancel;
@@ -316,16 +317,21 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 	public void onItemClick(android.widget.AdapterView<?> parentView,
 			View view, int position, long id) {
 		Log.e("Appolis", "AcReceivingDetails #onItemClick: " + position);
-		EnPurchaseOrderItemInfo item = receivingDetailAdapter
-				.getItem(position - 1);
-		Intent itemDetailsIntent = new Intent(AcReceivingDetails.this,
-				AcReceiveItemDetail.class);
-		itemDetailsIntent.putExtra(
-				GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS, item);
-		itemDetailsIntent.putExtra(GlobalParams.PARAM_EN_PURCHASE_ORDER_INFOS,
-				enPurchaseOrderInfos);
-		startActivityForResult(itemDetailsIntent,
-				GlobalParams.AC_RECEIVING_ITEM_DETAILS_ACTIVITY);
+		if (checkPos == position) {
+			checkPos = -1;
+		} else {
+			EnPurchaseOrderItemInfo item = receivingDetailAdapter
+					.getItem(position - 1);
+			Intent itemDetailsIntent = new Intent(AcReceivingDetails.this,
+					AcReceiveItemDetail.class);
+			itemDetailsIntent.putExtra(
+					GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS, item);
+			itemDetailsIntent.putExtra(GlobalParams.PARAM_EN_PURCHASE_ORDER_INFOS,
+					enPurchaseOrderInfos);
+			startActivityForResult(itemDetailsIntent,
+					GlobalParams.AC_RECEIVING_ITEM_DETAILS_ACTIVITY);
+			checkPos = position;
+		}
 	};
 
 	@Override

@@ -86,6 +86,8 @@
         android:layout_height="fill_parent"
         android:background="#fff"
         android:cacheColorHint="#fff"
+        android:divider="@color/Gray42"
+        android:dividerHeight="0.5dp"
         android:isScrollContainer="false" >
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
