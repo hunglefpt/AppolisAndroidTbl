@@ -495,11 +495,22 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										Utilities.showPopUp(AcPutAwayDetails.this, null, 
 												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-//										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//												enUom.get(0).getSignificantDigits())});
+										
+										if (passPutAway.get_itemDesc() != null) {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													enPassPutAway.getSignificantDigits())});
+										}										
 									} else {
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												itemNumber.get_significantDigits())});
+										if (passPutAway.get_itemDesc() != null) {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													enPassPutAway.getSignificantDigits())});
+										}
 									}
 								}								
 							}
@@ -649,11 +660,22 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										Utilities.showPopUp(AcPutAwayDetails.this, null, 
 												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-//										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//												enUom.get(0).getSignificantDigits())});
+										
+										if (passPutAway.get_itemDesc() != null) {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													enPassPutAway.getSignificantDigits())});
+										}
 									} else {
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												itemNumber.get_significantDigits())});
+										if (passPutAway.get_itemDesc() != null) {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													enPassPutAway.getSignificantDigits())});
+										}
 									}
 								}								
 							}
@@ -1242,9 +1264,11 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());		
 		if (StringUtils.isNotBlank(et_move_qty.getEditableText().toString())) {
 			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));
+			btnOK.setEnabled(true);
 		} else {
 			et_move_qty.setText("0");
 			enBinTransfer.setQuantity(0);
+			btnOK.setEnabled(false);
 		}
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");
