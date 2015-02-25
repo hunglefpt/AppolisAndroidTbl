@@ -96,8 +96,9 @@
        android:layout_marginLeft="7dp"
        android:layout_marginRight="5dp"
        android:cacheColorHint="#fff"
+       android:divider="@color/Gray42"
+       android:dividerHeight="0.5dp"
        android:isScrollContainer="false" >
-
     </ListView>
     
    <LinearLayout
