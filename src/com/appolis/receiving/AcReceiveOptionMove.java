@@ -32,7 +32,9 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -170,8 +172,26 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 		spnMoveUOM = (Spinner) findViewById(R.id.spn_Move_UOM);
 		edtLotValue = (EditText) findViewById(R.id.edtLotValue);
 		edtMoveFrom = (EditText) findViewById(R.id.edt_move_from);
+		
 		edtMoveQty = (EditText) findViewById(R.id.et_move_qty);
+		edtMoveQty.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if(null != s && s.length() == 1 && s.toString().equalsIgnoreCase(".")){
+					edtMoveQty.setText("");
+					s = "";
+				}
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 		edtMoveQty.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(enPurchaseOrderItemInfo.get_significantDigits())});
+		
 		edtMoveTo = (EditText) findViewById(R.id.et_move_to);
 		btMoveOk =(Button) findViewById(R.id.btnOK);
 		btMoveOk.setText(languagePrefs.getPreferencesString(GlobalParams.OK, GlobalParams.OK));

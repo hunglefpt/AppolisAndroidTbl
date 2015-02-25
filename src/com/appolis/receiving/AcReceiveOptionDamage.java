@@ -133,6 +133,11 @@ public class AcReceiveOptionDamage extends Activity implements OnClickListener{
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int end, int cont) {
+				if(null != s && s.length() == 1 && s.toString().equalsIgnoreCase(".")){
+					edtQuantityToReceive.setText("");
+					s = "";
+				}
+				
 				if(null == s || StringUtils.isBlank(s.toString())){
 					btnDamageReceiveOK.setEnabled(false);
 				} else {

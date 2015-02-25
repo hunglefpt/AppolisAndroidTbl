@@ -40,7 +40,6 @@ public class DecimalDigitsInputFilter extends DigitsKeyListener {
         if (len == 0) {
             return source;
         }
-
         int dlen = dest.length();
 
         // Find the position of the decimal .

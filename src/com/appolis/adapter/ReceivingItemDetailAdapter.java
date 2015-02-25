@@ -275,13 +275,19 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
 					int viewPosition = (int) receiptInfoHolder.tvLocation.getTag();
-					Log.e("Appolis", "edtItemQty.addTextChangedListener:" + viewPosition + "*Text:" + s.toString());
+
+					if(null != s && s.length() == 1 && s.toString().equalsIgnoreCase(".")){
+						receiptInfoHolder.edtItemQty.setText("");
+						s = "";
+					}
+					
 					if(viewPosition != getCount() -1){
 						return;
 					}
+					
 					EnPurchaseOrderReceiptInfo receipt = (EnPurchaseOrderReceiptInfo) receiptInfoHolder.edtItemQty.getTag();
 					double value;
-					if(StringUtils.isNotBlank(s.toString())){
+					if(null != s && !(s.toString().equalsIgnoreCase(""))){
 						value = Double.parseDouble(s.toString());
 					} else {
 						value = 0;
