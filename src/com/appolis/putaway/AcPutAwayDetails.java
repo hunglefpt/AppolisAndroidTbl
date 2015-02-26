@@ -640,28 +640,28 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 //								linLot.setVisibility(View.INVISIBLE);
 //							}
 //							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-//						}	
+//						}
+						
+						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
+								R.layout.custom_spinner_false, listUom);
+						spn_Move_UOM.setAdapter(uomAdapter);
+						spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
 							
-						try {
-							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
-									R.layout.custom_spinner_false, listUom);
-							spn_Move_UOM.setAdapter(uomAdapter);
-							spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
-								
-								@Override
-								public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-									uom = spn_Move_UOM.getSelectedItem().toString();								
+							@Override
+							public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+								try {
+									uom = spn_Move_UOM.getSelectedItem().toString();
+								} catch (NullPointerException e) {
+									Logger.error(e);
+								} catch (Exception e) {
+									Logger.error(e);
 								}
+							}
 
-								@Override
-								public void onNothingSelected(AdapterView<?> arg0) {
-								}
-							});	
-						} catch (NullPointerException e) {
-							Logger.error(e);
-						} catch (Exception e) {
-							Logger.error(e);
-						}
+							@Override
+							public void onNothingSelected(AdapterView<?> arg0) {
+							}
+						});							
 						
 						et_move_qty.addTextChangedListener(new TextWatcher() {
 							

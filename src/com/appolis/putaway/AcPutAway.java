@@ -238,12 +238,10 @@ public class AcPutAway extends Activity implements OnClickListener {
 			if(resultCode == RESULT_OK){			
 			   message = data.getStringExtra(GlobalParams.RESULTSCAN);
 			   BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(message, -1, GlobalParams.BLANK_CHARACTER);
-			   barcodeAsyncTask.execute();
-			   
+			   barcodeAsyncTask.execute();			   
 			   for (int i = 0; i < enPutAway.size(); i++) {
-					if (enPutAway.get(i).get_itemNumber().equals(message)) {
-						passPutAway = ((EnPutAway) adapterPutAway.getItem(i));
-						Logger.error(message + " : " + passPutAway.get_lotNumber());
+					if (((EnPutAway) adapterPutAway.getItem(i)).get_itemNumber().equalsIgnoreCase(message)) {
+						passPutAway = ((EnPutAway) adapterPutAway.getItem(i));						
 						break;
 					}
 			   }
@@ -284,8 +282,8 @@ public class AcPutAway extends Activity implements OnClickListener {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
 				String barcodeScaned = new String(data);
 				BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(barcodeScaned, -1, GlobalParams.BLANK_CHARACTER);
-	            barcodeAsyncTask.execute();	      
-	            for (int i = 0; i < enPutAway.size(); i++) {	            	
+	            barcodeAsyncTask.execute();
+	            for (int i = 0; i < enPutAway.size(); i++) {
 					if (((EnPutAway) adapterPutAway.getItem(i)).get_itemNumber().equalsIgnoreCase(barcodeScaned)) {					
 						passPutAway = ((EnPutAway) adapterPutAway.getItem(i));					
 						break;
