@@ -266,7 +266,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}
@@ -564,7 +564,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
@@ -751,7 +751,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
@@ -893,7 +893,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}
@@ -992,7 +992,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}
@@ -1213,7 +1213,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}

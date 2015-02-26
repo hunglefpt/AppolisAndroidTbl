@@ -293,7 +293,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 
@@ -434,7 +434,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}
@@ -551,7 +551,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}

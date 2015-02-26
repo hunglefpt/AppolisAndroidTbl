@@ -266,7 +266,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
@@ -412,7 +412,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}
@@ -539,7 +539,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 						}
 					});
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 
 		}

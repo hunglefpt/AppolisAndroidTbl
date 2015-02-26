@@ -314,7 +314,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
@@ -462,7 +462,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
