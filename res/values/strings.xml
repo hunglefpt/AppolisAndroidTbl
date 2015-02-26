@@ -14,7 +14,8 @@
     <string name="COMMON_OK">OK</string>
     <string name="COMMON_COMPLETED">Completed</string>
     <string name="COMMON_OPTIONS">Options</string>
-    
+    <string name="COMMON_VIEW_TAG1">View tag 1</string>
+    <string name="COMMON_VIEW_TAG2">View tag 2</string>
 <!-- //=========================================================== Old Appolis ============================ -->
     <string name="login">Login</string>    
 	<string name="login_textview">Login</string>

@@ -217,8 +217,11 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 	public boolean onTouch(View view, MotionEvent motionEvent) {
 		if (view instanceof EditText) {
 	        EditText editText = (EditText) view;
+	        EditText editText2 = (EditText) view.getTag(R.string.COMMON_VIEW_TAG2);
 	        editText.setFocusable(true);
 	        editText.setFocusableInTouchMode(true);
+	        editText2.setFocusable(true);
+	        editText2.setFocusableInTouchMode(true);
 	    } else {
 	    	ReceiptInfoHolder holder = (ReceiptInfoHolder) view.getTag();
 	        holder.edtItemLot.setFocusable(false);
@@ -251,7 +254,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 					if(viewPosition != getCount() -1){
 						return;
 					}
-					EnPurchaseOrderReceiptInfo receipt = (EnPurchaseOrderReceiptInfo) receiptInfoHolder.edtItemLot.getTag();
+					EnPurchaseOrderReceiptInfo receipt = (EnPurchaseOrderReceiptInfo) receiptInfoHolder.edtItemLot.getTag(R.string.COMMON_VIEW_TAG1);
 					receipt.set_lotNumber(s.toString());
 					double changeValue = receipt.get_quantityReceived();
 					if(enableButtonOk){
@@ -274,17 +277,8 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 				public void afterTextChanged(Editable s) {
 				}
 			});
-			receiptInfoHolder.edtItemLot.setOnEditorActionListener(new OnEditorActionListener() {        
-			    @Override
-			    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			        if(actionId==EditorInfo.IME_ACTION_DONE){
-			        	receiptInfoHolder.edtItemQty.requestFocus();
-			        	receiptInfoHolder.edtItemQty.setSelection(receiptInfoHolder.edtItemQty.getText().toString().length());
-			        }
-			    return false;
-			    }
-			});
-			receiptInfoHolder.edtItemLot.setTag(listReceiptInfos.get(position));
+			receiptInfoHolder.edtItemLot.setTag(R.string.COMMON_VIEW_TAG1, listReceiptInfos.get(position));
+			receiptInfoHolder.edtItemLot.setTag(R.string.COMMON_VIEW_TAG2, receiptInfoHolder.edtItemQty);
 			
 			receiptInfoHolder.linItemLot = (LinearLayout) convertView.findViewById(R.id.lin_item_lot);
 			receiptInfoHolder.tvQtyLable = (TextView) convertView.findViewById(R.id.tv_qty_title_lable);
@@ -305,7 +299,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 						return;
 					}
 					
-					EnPurchaseOrderReceiptInfo receipt = (EnPurchaseOrderReceiptInfo) receiptInfoHolder.edtItemQty.getTag();
+					EnPurchaseOrderReceiptInfo receipt = (EnPurchaseOrderReceiptInfo) receiptInfoHolder.edtItemQty.getTag(R.string.COMMON_VIEW_TAG1);
 					double value;
 					if(null != s && !(s.toString().equalsIgnoreCase(""))){
 						value = Double.parseDouble(s.toString());
@@ -386,14 +380,28 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 			        return false; 
 			    } 
 			}); 
-			receiptInfoHolder.edtItemQty.setTag(listReceiptInfos.get(position));
+			receiptInfoHolder.edtItemQty.setTag(R.string.COMMON_VIEW_TAG1, listReceiptInfos.get(position));
+			receiptInfoHolder.edtItemQty.setTag(R.string.COMMON_VIEW_TAG2, receiptInfoHolder.edtItemLot);
 			convertView.setTag(receiptInfoHolder);
 		} else {
 			receiptInfoHolder = (ReceiptInfoHolder) convertView.getTag();
 			receiptInfoHolder.tvLocation.setTag(position);
-			receiptInfoHolder.edtItemLot.setTag(listReceiptInfos.get(position));
-			receiptInfoHolder.edtItemQty.setTag(listReceiptInfos.get(position));
+			receiptInfoHolder.edtItemLot.setTag(R.string.COMMON_VIEW_TAG1, listReceiptInfos.get(position));
+			receiptInfoHolder.edtItemLot.setTag(R.string.COMMON_VIEW_TAG2, receiptInfoHolder.edtItemQty);
+			receiptInfoHolder.edtItemQty.setTag(R.string.COMMON_VIEW_TAG1, listReceiptInfos.get(position));
+			receiptInfoHolder.edtItemQty.setTag(R.string.COMMON_VIEW_TAG2, receiptInfoHolder.edtItemLot);
 		}
+		
+		receiptInfoHolder.edtItemLot.setOnEditorActionListener(new OnEditorActionListener() {        
+		    @Override
+		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		        if(actionId == EditorInfo.IME_ACTION_DONE){
+		        	receiptInfoHolder.edtItemQty.requestFocus();
+		        	receiptInfoHolder.edtItemQty.setSelection(receiptInfoHolder.edtItemQty.getText().toString().length());
+		        }
+		    return false;
+		    }
+		});
 		
 		receiptInfoHolder.edtItemQty.setFilters(
 			new InputFilter[]{
