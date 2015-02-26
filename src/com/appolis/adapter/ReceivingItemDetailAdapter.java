@@ -220,8 +220,11 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 	        EditText editText2 = (EditText) view.getTag(R.string.COMMON_VIEW_TAG2);
 	        editText.setFocusable(true);
 	        editText.setFocusableInTouchMode(true);
-	        editText2.setFocusable(true);
-	        editText2.setFocusableInTouchMode(true);
+	        
+	        if(null != editText2){
+	        	editText2.setFocusable(true);
+	        	editText2.setFocusableInTouchMode(true);
+	        }
 	    } else {
 	    	ReceiptInfoHolder holder = (ReceiptInfoHolder) view.getTag();
 	        holder.edtItemLot.setFocusable(false);
