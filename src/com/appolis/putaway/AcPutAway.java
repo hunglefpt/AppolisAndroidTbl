@@ -559,7 +559,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 					Logger.error(data);
 					
 					NetParameter[] netParameterTwo = new NetParameter[1];
-					netParameterTwo[0] = new NetParameter("barcode", _barCode);
+					netParameterTwo[0] = new NetParameter("barcode", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
 					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
 					enPassPutAway = DataParser.getEnPutAway(dataTwo);
 					Logger.error(dataTwo);
@@ -629,12 +629,12 @@ public class AcPutAway extends Activity implements OnClickListener {
 				
 				try {
 					NetParameter[] netParameter = new NetParameter[1];
-					netParameter[0] = new NetParameter("licensePlateNumber", _barCode);
+					netParameter[0] = new NetParameter("licensePlateNumber", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
 					data = HttpNetServices.Instance.getLpByBarcode(netParameter);
 					Logger.error(data);
 					
 					NetParameter[] netParameterTwo = new NetParameter[1];
-					netParameterTwo[0] = new NetParameter("barcode", _barCode);
+					netParameterTwo[0] = new NetParameter("barcode", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
 					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
 					enPassPutAway = DataParser.getEnPutAway(dataTwo);
 					Logger.error(dataTwo);					
