@@ -17,6 +17,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -71,7 +73,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	private Button btnCancel, btnOK;
 	Bundle bundle;
 	private String barCode, checkLP, message, binTransfer;
-	private ProgressDialog dialog;
+	private ProgressDialog dialog, diaglogPost;
 	private EnItemNumber itemNumber;
 	private TextView tvTransfer, tvItemDescription, tvmaxQty;
 	private Spinner spn_Move_UOM;
@@ -975,11 +977,11 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		
 		@Override
 		protected void onPreExecute() {
-			dialog = new ProgressDialog(AcMoveDetails.this);
-			dialog.setMessage(GlobalParams.PROCESS_DATA);
-			dialog.show();
-			dialog.setCancelable(false); 
-			dialog.setCanceledOnTouchOutside(false);
+			diaglogPost = new ProgressDialog(AcMoveDetails.this);
+			diaglogPost.setMessage(GlobalParams.PROCESS_DATA);			
+			diaglogPost.setCancelable(false); 
+//			diaglogPost.setCanceledOnTouchOutside(false);
+			diaglogPost.show();
 		}
 		
 		@Override
@@ -1003,7 +1005,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
+			diaglogPost.dismiss();
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals("true")) {				

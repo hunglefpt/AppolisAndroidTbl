@@ -1153,10 +1153,10 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		@Override
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(AcPutAwayDetails.this);
-			dialog.setMessage(GlobalParams.PROCESS_DATA);
-			dialog.show();
+			dialog.setMessage(GlobalParams.PROCESS_DATA);			
 			dialog.setCancelable(false); 
-			dialog.setCanceledOnTouchOutside(false);
+//			dialog.setCanceledOnTouchOutside(false);
+			dialog.show();
 		}
 		
 		@Override
