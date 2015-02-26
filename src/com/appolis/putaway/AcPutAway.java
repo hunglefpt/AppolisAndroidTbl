@@ -169,7 +169,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			int position = ((ItemPutAway) v).get_position();
-			Logger.error(String.valueOf(position));			
+			Logger.error(String.valueOf(position));
 			if (checkPos == position) {
 				checkPos = -1;
 			} else {

@@ -471,20 +471,26 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 //							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
 //						}
 						
-						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
-								R.layout.custom_spinner_false, listUom);
-						spn_Move_UOM.setAdapter(uomAdapter);
-						spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
-							
-							@Override
-							public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-								uom = spn_Move_UOM.getSelectedItem().toString();								
-							}
+						try {
+							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
+									R.layout.custom_spinner_false, listUom);
+							spn_Move_UOM.setAdapter(uomAdapter);
+							spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+								
+								@Override
+								public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+									uom = spn_Move_UOM.getSelectedItem().toString();								
+								}
 
-							@Override
-							public void onNothingSelected(AdapterView<?> arg0) {
-							}
-						});
+								@Override
+								public void onNothingSelected(AdapterView<?> arg0) {
+								}
+							});
+						} catch (NullPointerException e) {
+							Logger.error(e);
+						} catch (Exception e) {
+							Logger.error(e);
+						}						
 						
 						et_move_qty.addTextChangedListener(new TextWatcher() {
 							
@@ -634,22 +640,28 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 //								linLot.setVisibility(View.INVISIBLE);
 //							}
 //							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-//						}						
-						
-						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
-								R.layout.custom_spinner_false, listUom);
-						spn_Move_UOM.setAdapter(uomAdapter);
-						spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+//						}	
 							
-							@Override
-							public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-								uom = spn_Move_UOM.getSelectedItem().toString();								
-							}
+						try {
+							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
+									R.layout.custom_spinner_false, listUom);
+							spn_Move_UOM.setAdapter(uomAdapter);
+							spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+								
+								@Override
+								public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+									uom = spn_Move_UOM.getSelectedItem().toString();								
+								}
 
-							@Override
-							public void onNothingSelected(AdapterView<?> arg0) {
-							}
-						});	
+								@Override
+								public void onNothingSelected(AdapterView<?> arg0) {
+								}
+							});	
+						} catch (NullPointerException e) {
+							Logger.error(e);
+						} catch (Exception e) {
+							Logger.error(e);
+						}
 						
 						et_move_qty.addTextChangedListener(new TextWatcher() {
 							
@@ -776,24 +788,30 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							listUom.add(enUom.get(i).getUomDescription());
 						}
 						
-						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
-								R.layout.custom_spinner_item, listUom);
-						spn_Move_UOM.setAdapter(uomAdapter);
-						spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
-							
-							@Override
-							public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-								uom = spn_Move_UOM.getSelectedItem().toString();
-								if (checkFirstUom) {
-									UpdateMaxQtyAsyncTask updateMaxQtyAsyncTask = new UpdateMaxQtyAsyncTask();
-									updateMaxQtyAsyncTask.execute();
+						try {
+							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
+									R.layout.custom_spinner_item, listUom);
+							spn_Move_UOM.setAdapter(uomAdapter);
+							spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+								
+								@Override
+								public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+									uom = spn_Move_UOM.getSelectedItem().toString();
+									if (checkFirstUom) {
+										UpdateMaxQtyAsyncTask updateMaxQtyAsyncTask = new UpdateMaxQtyAsyncTask();
+										updateMaxQtyAsyncTask.execute();
+									}
 								}
-							}
 
-							@Override
-							public void onNothingSelected(AdapterView<?> arg0) {
-							}
-						});
+								@Override
+								public void onNothingSelected(AdapterView<?> arg0) {
+								}
+							});
+						} catch (NullPointerException e) {
+							Logger.error(e);
+						} catch (Exception e) {
+							Logger.error(e);
+						}
 						
 						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
 							
@@ -1120,7 +1138,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							} catch (JSONException e) {		
 								Logger.error(e);
 							}
-							btnOK.setEnabled(true);
+//							btnOK.setEnabled(true);
 						} else {							
 							Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.INVALID_SCAN);
 						}

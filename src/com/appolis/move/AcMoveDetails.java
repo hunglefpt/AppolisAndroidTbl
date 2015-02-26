@@ -919,7 +919,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 								Logger.error(e);
 							}
 							
-							btnOK.setEnabled(true);
+//							btnOK.setEnabled(true);
 						} else {
 							Utilities.showPopUp(AcMoveDetails.this, null, GlobalParams.INVALID_SCAN);
 							et_move_to.setText(GlobalParams.BLANK_CHARACTER);
