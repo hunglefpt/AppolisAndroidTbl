@@ -229,6 +229,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:singleLine="true"
+                    android:maxLength="14"
                     android:text="@string/BLANK"
                     android:textColor="@color/white"
                     android:enabled="false"

@@ -61,6 +61,7 @@
 	            android:background="@drawable/back_ground_edt_in_listview"
 	            android:singleLine="true"
 			    android:ellipsize="end"
+			    android:maxLength="14"
 			    android:textSize="16sp"
 			    android:numeric="decimal"
 			    android:text="123"/>

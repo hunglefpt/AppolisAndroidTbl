@@ -395,8 +395,12 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 			receiptInfoHolder.edtItemQty.setTag(listReceiptInfos.get(position));
 		}
 		
-		receiptInfoHolder.edtItemQty.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(enPurchaseOrderItemInfo.get_significantDigits())});
-//		receiptInfoHolder.edtItemQty.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(0)});
+		receiptInfoHolder.edtItemQty.setFilters(
+			new InputFilter[]{
+				new DecimalDigitsInputFilter(enPurchaseOrderItemInfo.get_significantDigits()), 
+				new InputFilter.LengthFilter(14)
+			}
+		);
 		EnPurchaseOrderReceiptInfo receiptInfo = getItem(position);
 		receiptInfoHolder.edtItemLot.setHint(textPidRrdLot);
 		receiptInfoHolder.tvQtyLable.setHint(textRidGrdQty);

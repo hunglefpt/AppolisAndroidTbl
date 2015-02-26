@@ -226,6 +226,7 @@
                     android:imeOptions="actionDone"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
+                    android:maxLength="14"
                     android:singleLine="true"
                     android:text="@string/BLANK"
                     android:textColor="@color/white"

@@ -190,7 +190,12 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		edtMoveQty.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(enPurchaseOrderItemInfo.get_significantDigits())});
+		edtMoveQty.setFilters(
+			new InputFilter[]{
+				new DecimalDigitsInputFilter(enPurchaseOrderItemInfo.get_significantDigits()),
+				new InputFilter.LengthFilter(14)
+			}
+		);
 		
 		edtMoveTo = (EditText) findViewById(R.id.et_move_to);
 		btMoveOk =(Button) findViewById(R.id.btnOK);

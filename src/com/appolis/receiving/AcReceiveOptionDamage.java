@@ -157,7 +157,12 @@ public class AcReceiveOptionDamage extends Activity implements OnClickListener{
 		});
 		
 		if(null != enPurchaseOrderItemInfo){
-			edtQuantityToReceive.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(enPurchaseOrderItemInfo.get_significantDigits())});
+			edtQuantityToReceive.setFilters(
+				new InputFilter[]{
+						new DecimalDigitsInputFilter(enPurchaseOrderItemInfo.get_significantDigits()),
+						new InputFilter.LengthFilter(14)
+				}
+			);
 		}
 		
 		tvDamageReceiveMaxQty = (TextView) findViewById(R.id.tvDamageReceiveMaxQty);
