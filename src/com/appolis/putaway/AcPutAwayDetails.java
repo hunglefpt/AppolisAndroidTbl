@@ -383,6 +383,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	protected void onPause() {
 		super.onPause();
 		onUnregisterReceiver();
+		dialog.cancel();
 	}
 	
 	/**
@@ -399,7 +400,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.setMessage(getLanguage(GlobalParams.LOADING_MSG, GlobalParams.LOADING_DATA));
 			dialog.show();
 			dialog.setCancelable(false); 
-			dialog.setCanceledOnTouchOutside(false);
+			dialog.setCanceledOnTouchOutside(false);			
 		}
 		
 		@Override
@@ -1148,15 +1149,17 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	 */
 	class PostItemAsyncTask extends AsyncTask<Void, Void, String> {
 		String data;
-		Intent intent;
+		Intent intent;		
 		
 		@Override
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(AcPutAwayDetails.this);
-			dialog.setMessage(GlobalParams.PROCESS_DATA);			
+			dialog.setMessage(GlobalParams.PROCESS_DATA);		
 			dialog.setCancelable(false); 
-//			dialog.setCanceledOnTouchOutside(false);
+			dialog.setCanceledOnTouchOutside(false);
 			dialog.show();
+			btnCancel.setEnabled(false);
+			btnOK.setEnabled(false);
 		}
 		
 		@Override
@@ -1165,7 +1168,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				try {
 					data = HttpNetServices.Instance.postItem(binTransfer);
-					Logger.error(data);
+					Logger.error(data);					
 					result = "true";
 				} catch (AppolisException e) {
 					result = "false";
@@ -1185,7 +1188,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				if (result.equals("true")) {				
 					if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
-						finish();
+						AcPutAwayDetails.this.finish();
 						intent = new Intent(AcPutAwayDetails.this, AcPutAway.class);
 						startActivity(intent);
 					} else {
@@ -1195,6 +1198,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 					Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
 				}
 			}
+			btnCancel.setEnabled(true);
+			btnOK.setEnabled(true);
 		}
 	}
 	
@@ -1297,4 +1302,6 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
         
         return bundle;
     }
+	
+	
 }

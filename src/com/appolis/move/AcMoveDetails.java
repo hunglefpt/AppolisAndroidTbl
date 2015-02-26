@@ -53,6 +53,7 @@ import com.appolis.entities.EnUom;
 import com.appolis.login.MainActivity;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
+import com.appolis.putaway.AcPutAwayDetails;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -978,10 +979,12 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		@Override
 		protected void onPreExecute() {
 			diaglogPost = new ProgressDialog(AcMoveDetails.this);
-			diaglogPost.setMessage(GlobalParams.PROCESS_DATA);			
+			diaglogPost.setMessage(GlobalParams.PROCESS_DATA);
 			diaglogPost.setCancelable(false); 
-//			diaglogPost.setCanceledOnTouchOutside(false);
+			diaglogPost.setCanceledOnTouchOutside(false);
 			diaglogPost.show();
+			btnCancel.setEnabled(false);
+			btnOK.setEnabled(false);
 		}
 		
 		@Override
@@ -990,7 +993,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				try {				
 					data = HttpNetServices.Instance.postItem(binTransfer);
-					Logger.error(data);
+					Logger.error(data);					
 					result = "true";
 				} catch (AppolisException e) {
 					result = "false";
@@ -1010,7 +1013,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				if (result.equals("true")) {				
 					if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
-						finish();
+						AcMoveDetails.this.finish();
 					} else {
 						Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
 					}
@@ -1018,6 +1021,8 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 					Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
 				}
 			}
+			btnCancel.setEnabled(true);
+			btnOK.setEnabled(true);
 		}
 	}
 	
