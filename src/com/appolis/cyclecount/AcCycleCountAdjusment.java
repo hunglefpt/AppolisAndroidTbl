@@ -331,7 +331,9 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 					spUom.setAdapter(uomAdapter);
 					spUom.setSelection(selection);
 					selectUom = uomAdapter.getItem(selection);
-					txtCycleAdjustmentQty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(selectUom.getSignificantDigits())});
+					txtCycleAdjustmentQty.setFilters(new InputFilter[]
+												{new DecimalDigitsInputFilter(selectUom.getSignificantDigits()),
+												new InputFilter.LengthFilter(14)});
 					
 					if(checkVisibleButtonOk()) {
 						btnOk.setEnabled(true);
