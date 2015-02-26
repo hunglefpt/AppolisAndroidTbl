@@ -69,6 +69,7 @@
 			android:cacheColorHint="#fff"
 			android:divider="@color/Gray42"
         	android:dividerHeight="0.5dp"
+        	android:choiceMode="singleChoice"
 			android:fastScrollEnabled="false"
 			android:background="@drawable/border_layout_setting" >
 		</com.handmark.pulltorefresh.library.PullToRefreshListView> 

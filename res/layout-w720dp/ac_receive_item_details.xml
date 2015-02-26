@@ -126,6 +126,7 @@
 				android:cacheColorHint="@null"
 				android:divider="@color/Gray42"
         		android:dividerHeight="0.5dp"
+        		android:choiceMode="singleChoice"
 				android:fastScrollEnabled="true"
 				android:isScrollContainer="false"
 				android:background="@drawable/border_layout_setting">

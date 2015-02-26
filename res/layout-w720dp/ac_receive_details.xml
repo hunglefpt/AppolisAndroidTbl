@@ -67,6 +67,7 @@
 			android:headerDividersEnabled="true"
 			android:footerDividersEnabled="true"
 			android:layout_weight="1.0"
+			android:choiceMode="singleChoice"
 			android:cacheColorHint="#fff"
 			android:divider="@color/Gray42"
         	android:dividerHeight="0.5dp"

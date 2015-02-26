@@ -123,6 +123,7 @@
 				android:footerDividersEnabled="true"
 				android:layout_weight="1.0"
 				android:cacheColorHint="@null"
+				android:choiceMode="singleChoice"
 				android:divider="@color/Gray42"
         		android:dividerHeight="0.5dp"
 				android:fastScrollEnabled="true"
