@@ -158,12 +158,13 @@
 
         <ImageView
             android:id="@+id/img_disclosure_indicator"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="top"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:src="@drawable/disclosure_indicator" />
+            android:src="@drawable/ic_arrow" />
     </LinearLayout>
 
 </FrameLayout>
