@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -104,6 +105,35 @@ public class CommontDialog
 	 * @param idLayout
 	 * @return
 	 */
+	public static Dialog createDialogCenterStyle1(Context context, String title, View contentDialog)
+	{
+		final Dialog dialog = new Dialog(context, android.R.style.Theme_Dialog);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.common_layout_dialog_center);
+		View outOfDialog = dialog.findViewById(R.id.commonDialogBackground);
+		outOfDialog.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				dialog.dismiss();
+			}
+		});
+		TextView titleDialog = (TextView) dialog.findViewById(R.id.commonDialogTitle);
+		titleDialog.setText(title);
+		LinearLayout bodyDialog = (LinearLayout) dialog.findViewById(R.id.commonDialogBody);
+		bodyDialog.addView(contentDialog);
+		return dialog;
+	}
+	
+	/**
+	 * create dialog with layout content designed XML
+	 * this dialog will show in center screen
+	 * @param context
+	 * @param title
+	 * @param idLayout
+	 * @return
+	 */
 	public static Dialog createDialogCenter(Context context, String title, View contentDialog)
 	{
 		final Dialog dialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar);
@@ -143,7 +173,7 @@ public class CommontDialog
 		mTextView.setTextColor(context.getResources().getColor(R.color.white));
 		mTextView.setText(message);
 		
-		Dialog mDialog = createDialogCenter(context, title, mTextView);
+		Dialog mDialog = createDialogCenterStyle1(context, title, mTextView);
 		mDialog.show();
 	}
 	

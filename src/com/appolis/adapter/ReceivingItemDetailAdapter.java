@@ -9,6 +9,7 @@ package com.appolis.adapter;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -26,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.appolis.androidtablet.R;
 import com.appolis.common.LanguagePreferences;
@@ -119,6 +121,11 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 		this.enableButtonOk = enableButtonOk;
 	}
 
+	/**
+	 * setSelectedPosition
+	 * @param position
+	 */
+	@SuppressLint("UseValueOf") 
 	public void setSelectedPosition(int position){
 		if(listPossitionSelected.contains(position)){
 			//unselected;
@@ -130,6 +137,10 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 		notifyDataSetChanged();
 	}
 	
+	/**
+	 * getSelectedPosion
+	 * @return
+	 */
 	public ArrayList<Integer> getSelectedPosion(){
 		return listPossitionSelected;
 	}
@@ -198,12 +209,11 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 		TextView tvLocation;
 		LinearLayout linItemLot;
 		EditText edtItemLot;
-		LinearLayout linItemQty;
 		TextView tvQtyLable;
 		EditText edtItemQty;
 	}
 	
-	@Override
+	@SuppressLint("ClickableViewAccessibility") @Override
 	public boolean onTouch(View view, MotionEvent motionEvent) {
 		if (view instanceof EditText) {
 	        EditText editText = (EditText) view;
@@ -219,7 +229,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 	    return false;
 	}
 	
-	@Override
+	@SuppressLint("InflateParams") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ReceiptInfoHolder  receiptInfoHolder;
 		Log.e("Appolis", "================================================");
@@ -264,9 +274,19 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 				public void afterTextChanged(Editable s) {
 				}
 			});
+			receiptInfoHolder.edtItemLot.setOnEditorActionListener(new OnEditorActionListener() {        
+			    @Override
+			    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			        if(actionId==EditorInfo.IME_ACTION_DONE){
+			        	receiptInfoHolder.edtItemQty.requestFocus();
+			        	receiptInfoHolder.edtItemQty.setSelection(receiptInfoHolder.edtItemQty.getText().toString().length());
+			        }
+			    return false;
+			    }
+			});
 			receiptInfoHolder.edtItemLot.setTag(listReceiptInfos.get(position));
+			
 			receiptInfoHolder.linItemLot = (LinearLayout) convertView.findViewById(R.id.lin_item_lot);
-			receiptInfoHolder.linItemQty = (LinearLayout) convertView.findViewById(R.id.lin_item_qty);
 			receiptInfoHolder.tvQtyLable = (TextView) convertView.findViewById(R.id.tv_qty_title_lable);
 			receiptInfoHolder.edtItemQty = (EditText) convertView.findViewById(R.id.edt_item_qty);
 			receiptInfoHolder.edtItemQty.setOnTouchListener(this);
@@ -449,6 +469,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 					receiptInfoHolder.edtItemLot.requestFocus();
 					if(StringUtils.isNotBlank(getItem(listReceiptInfos.size()-1).get_lotNumber())){
 						receiptInfoHolder.edtItemQty.requestFocus();
+						receiptInfoHolder.edtItemQty.setSelection(receiptInfoHolder.edtItemQty.getText().toString().length());
 					}
 					
 					receiptInfoHolder.edtItemLot.setText(getItem(listReceiptInfos.size()-1).get_lotNumber());
@@ -482,6 +503,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 					receiptInfoHolder.linItemLot.setVisibility(View.INVISIBLE);
 					receiptInfoHolder.edtItemQty.requestFocus();
 					receiptInfoHolder.edtItemQty.setText(BuManagement.formatDecimal(listReceiptInfos.get(position).get_quantityReceived()).trim());
+					receiptInfoHolder.edtItemQty.setSelection(receiptInfoHolder.edtItemQty.getText().toString().length());
 				}
 				
 				receiptInfoHolder.edtItemLot.setOnFocusChangeListener(new OnFocusChangeListener() {

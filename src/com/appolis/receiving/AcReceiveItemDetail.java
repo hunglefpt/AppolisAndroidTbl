@@ -226,7 +226,7 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			if(itemQtyLeft < 0){
 				itemQtyLeft = 0;
 			}
-			tvReceiveItemDetailLeft.setText(textLeft + ": " + BuManagement.formatDecimal(itemQtyLeft).trim());
+			tvReceiveItemDetailLeft.setText(textLeft + ": " + 0);
 			
 			EnPurchaseOrderReceiptInfo enPurchaseOrderReceiptInfo = new EnPurchaseOrderReceiptInfo();
 			enPurchaseOrderReceiptInfo.set_binNumber(enPurchaseOrderInfo.get_receivingBinNumber());
@@ -238,12 +238,14 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 				
 				enPurchaseOrderReceiptInfo.set_itemID(enItemLotInfo.get_itemID());
 				enPurchaseOrderReceiptInfo.set_purchaseOrderItemShipID(-1);
+				enPurchaseOrderReceiptInfo.set_quantityReceived(enItemLotInfo.get_quantityOnHand());
 				// fix bug : Bug #13020 - START 
 				//remove quantity on hand
 				//enPurchaseOrderReceiptInfo.set_quantityReceived(enItemLotInfo.get_quantityOnHand());
 				// END
 			} else {
 				enPurchaseOrderReceiptInfo.set_purchaseOrderItemShipID(-1);
+				enPurchaseOrderReceiptInfo.set_quantityReceived(itemQtyLeft);
 			}
 			
 			listReceptInfo.add(enPurchaseOrderReceiptInfo);
