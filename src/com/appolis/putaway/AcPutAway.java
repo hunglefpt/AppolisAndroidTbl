@@ -239,6 +239,14 @@ public class AcPutAway extends Activity implements OnClickListener {
 			   message = data.getStringExtra(GlobalParams.RESULTSCAN);
 			   BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(message, -1, GlobalParams.BLANK_CHARACTER);
 			   barcodeAsyncTask.execute();
+			   
+			   for (int i = 0; i < enPutAway.size(); i++) {
+					if (enPutAway.get(i).get_itemNumber().equals(message)) {
+						passPutAway = ((EnPutAway) adapterPutAway.getItem(i));
+						Logger.error(message + " : " + passPutAway.get_lotNumber());
+						break;
+					}
+			   }
 			}
 			
 			break;
@@ -273,9 +281,16 @@ public class AcPutAway extends Activity implements OnClickListener {
 	        // decoded Data received from a scanner
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
-				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);			
-				BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(new String(data), -1, GlobalParams.BLANK_CHARACTER);
-	            barcodeAsyncTask.execute();
+				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
+				String barcodeScaned = new String(data);
+				BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(barcodeScaned, -1, GlobalParams.BLANK_CHARACTER);
+	            barcodeAsyncTask.execute();	      
+	            for (int i = 0; i < enPutAway.size(); i++) {	            	
+					if (((EnPutAway) adapterPutAway.getItem(i)).get_itemNumber().equalsIgnoreCase(barcodeScaned)) {					
+						passPutAway = ((EnPutAway) adapterPutAway.getItem(i));					
+						break;
+					}
+			   }
 	        }
 	    }
 	};
@@ -558,11 +573,11 @@ public class AcPutAway extends Activity implements OnClickListener {
 					itemNumber = DataParser.getItemNumber(data);
 					Logger.error(data);
 					
-					NetParameter[] netParameterTwo = new NetParameter[1];
-					netParameterTwo[0] = new NetParameter("barcode", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
-					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
-					enPassPutAway = DataParser.getEnPutAway(dataTwo);
-					Logger.error(dataTwo);
+//					NetParameter[] netParameterTwo = new NetParameter[1];
+//					netParameterTwo[0] = new NetParameter("barcode", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
+//					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
+//					enPassPutAway = DataParser.getEnPutAway(dataTwo);
+//					Logger.error(dataTwo);
 					
 					result = "true";
 				} catch (AppolisException e) {
@@ -633,12 +648,12 @@ public class AcPutAway extends Activity implements OnClickListener {
 					data = HttpNetServices.Instance.getLpByBarcode(netParameter);
 					Logger.error(data);
 					
-					NetParameter[] netParameterTwo = new NetParameter[1];
-					netParameterTwo[0] = new NetParameter("barcode", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
-					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
-					enPassPutAway = DataParser.getEnPutAway(dataTwo);
-					Logger.error(dataTwo);					
-					
+//					NetParameter[] netParameterTwo = new NetParameter[1];
+//					netParameterTwo[0] = new NetParameter("barcode", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
+//					dataTwo = HttpNetServices.Instance.getPutAway(netParameterTwo);
+//					enPassPutAway = DataParser.getEnPutAway(dataTwo);
+//					Logger.error(dataTwo);	
+		
 					result = GlobalParams.TRUE;
 				} catch (AppolisException e) {
 					result = GlobalParams.FALSE;

@@ -438,7 +438,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
 						et_move_qty.setEnabled(true);
 						
-						if (passPutAway.get_itemDesc() != null) {
+//						if (passPutAway.get_itemDesc() != null) {
 							tvTransfer.setText(passPutAway.get_itemNumber());
 							tvItemDescription.setText(passPutAway.get_itemDesc());
 							edt_move_from.setText(passPutAway.get_binNumber());
@@ -453,22 +453,23 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								linLot.setVisibility(View.INVISIBLE);
 							}
 							et_move_qty.setText(df.format(passPutAway.get_qty()));
-						} else {
-							tvTransfer.setText(enPassPutAway.getItemNumber());
-							tvItemDescription.setText(enPassPutAway.getItemDescription());
-							edt_move_from.setText("RcvBin1");
-							tvmaxQty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-							listUom.add(enPassPutAway.getUomDescription());
-							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
-								linLot.setVisibility(View.VISIBLE);
-								edtLotValue.setEnabled(false);
-								edtLotValue.setBackgroundResource(R.color.transparent);
-								edtLotValue.setText(enPassPutAway.getLotNumber());
-							} else {
-								linLot.setVisibility(View.INVISIBLE);
-							}
-							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-						}
+//						} 
+//						else {
+//							tvTransfer.setText(enPassPutAway.getItemNumber());
+//							tvItemDescription.setText(enPassPutAway.getItemDescription());
+//							edt_move_from.setText("RcvBin1");
+//							tvmaxQty.setText(df.format(enPassPutAway.getQuantityOnHand()));
+//							listUom.add(enPassPutAway.getUomDescription());
+//							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
+//								linLot.setVisibility(View.VISIBLE);
+//								edtLotValue.setEnabled(false);
+//								edtLotValue.setBackgroundResource(R.color.transparent);
+//								edtLotValue.setText(enPassPutAway.getLotNumber());
+//							} else {
+//								linLot.setVisibility(View.INVISIBLE);
+//							}
+//							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
+//						}
 						
 						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
 								R.layout.custom_spinner_false, listUom);
@@ -498,21 +499,21 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 										
-										if (passPutAway.get_itemDesc() != null) {
+//										if (passPutAway.get_itemDesc() != null) {
 											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 													passPutAway.get_significantDigits())});
-										} else {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													enPassPutAway.getSignificantDigits())});
-										}										
+//										} else {
+//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+//													enPassPutAway.getSignificantDigits())});
+//										}										
 									} else {
-										if (passPutAway.get_itemDesc() != null) {
+//										if (passPutAway.get_itemDesc() != null) {
 											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 													passPutAway.get_significantDigits())});
-										} else {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													enPassPutAway.getSignificantDigits())});
-										}
+//										} else {
+//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+//													enPassPutAway.getSignificantDigits())});
+//										}
 									}
 								}								
 							}
@@ -603,7 +604,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
 						et_move_qty.setEnabled(true);
 						
-						if (passPutAway.get_itemDesc() != null) {							
+//						if (passPutAway.get_itemDesc() != null) {							
 							tvTransfer.setText(passPutAway.get_itemNumber());
 							tvItemDescription.setText(passPutAway.get_itemDesc());
 							edt_move_from.setText(passPutAway.get_binNumber());
@@ -618,22 +619,22 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								linLot.setVisibility(View.INVISIBLE);
 							}
 							et_move_qty.setText(df.format(passPutAway.get_qty()));
-						} else {							
-							tvTransfer.setText(enPassPutAway.getItemNumber());
-							tvItemDescription.setText(enPassPutAway.getItemDescription());
-							edt_move_from.setText("Manufbin1");
-							tvmaxQty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-							listUom.add(enPassPutAway.getUomDescription());
-							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
-								linLot.setVisibility(View.VISIBLE);
-								edtLotValue.setEnabled(false);
-								edtLotValue.setBackgroundResource(R.color.transparent);
-								edtLotValue.setText(enPassPutAway.getLotNumber());
-							} else {
-								linLot.setVisibility(View.INVISIBLE);
-							}
-							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-						}						
+//						} else {							
+//							tvTransfer.setText(enPassPutAway.getItemNumber());
+//							tvItemDescription.setText(enPassPutAway.getItemDescription());
+//							edt_move_from.setText("Manufbin1");
+//							tvmaxQty.setText(df.format(enPassPutAway.getQuantityOnHand()));
+//							listUom.add(enPassPutAway.getUomDescription());
+//							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
+//								linLot.setVisibility(View.VISIBLE);
+//								edtLotValue.setEnabled(false);
+//								edtLotValue.setBackgroundResource(R.color.transparent);
+//								edtLotValue.setText(enPassPutAway.getLotNumber());
+//							} else {
+//								linLot.setVisibility(View.INVISIBLE);
+//							}
+//							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
+//						}						
 						
 						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
 								R.layout.custom_spinner_false, listUom);
@@ -663,21 +664,21 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 										
-										if (passPutAway.get_itemDesc() != null) {
+//										if (passPutAway.get_itemDesc() != null) {
 											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 													passPutAway.get_significantDigits())});
-										} else {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													enPassPutAway.getSignificantDigits())});
-										}
+//										} else {
+//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+//													enPassPutAway.getSignificantDigits())});
+//										}
 									} else {
-										if (passPutAway.get_itemDesc() != null) {
+//										if (passPutAway.get_itemDesc() != null) {
 											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 													passPutAway.get_significantDigits())});
-										} else {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													enPassPutAway.getSignificantDigits())});
-										}
+//										} else {
+//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+//													enPassPutAway.getSignificantDigits())});
+//										}
 									}
 								}								
 							}
