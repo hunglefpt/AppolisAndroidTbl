@@ -921,7 +921,8 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals("true")) {
-					if (edt_move_from.getEditableText().toString().equalsIgnoreCase(et_move_to.getEditableText().toString())) {
+					if (edt_move_from.getEditableText().toString().trim().equalsIgnoreCase
+							(et_move_to.getEditableText().toString().trim())) {
 						Utilities.showPopUp(AcMoveDetails.this, null,
 								getLanguage(GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE,
 										GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE));
