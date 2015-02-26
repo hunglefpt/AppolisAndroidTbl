@@ -267,11 +267,14 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		case R.id.btnOK:
 			try {
 				prepareJsonForm();
+				PostItemAsyncTask postItemAsyncTask = new PostItemAsyncTask();
+		        postItemAsyncTask.execute();
 			} catch (JSONException e) {
 				
+			} catch (Exception e) {
+				
 			}
-			PostItemAsyncTask postItemAsyncTask = new PostItemAsyncTask();
-	        postItemAsyncTask.execute();		
+					
 			break;
 			
 		default:
@@ -480,8 +483,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								} else {
 									if (s.length() > 0 && Double.parseDouble(s.toString())
 											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null, 
-												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										Utilities.showPopUp(AcPutAwayDetails.this, null,
+												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+														GlobalParams.MV_LIMITQTY_MSG_VALUE));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												passPutAway.get_significantDigits())});
@@ -490,7 +494,12 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												passPutAway.get_significantDigits())});
 									}
-								}								
+								}
+								
+								if (et_move_qty.getText().toString().equals("0") 
+										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+									btnOK.setEnabled(false);
+								}
 							}
 							
 							@Override
@@ -624,8 +633,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								} else {
 									if (s.length() > 0 && Double.parseDouble(s.toString())
 											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null, 
-												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										Utilities.showPopUp(AcPutAwayDetails.this, null,
+												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+														GlobalParams.MV_LIMITQTY_MSG_VALUE));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												passPutAway.get_significantDigits())});
@@ -633,7 +643,12 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												passPutAway.get_significantDigits())});
 									}
-								}								
+								}
+								
+								if (et_move_qty.getText().toString().equals("0") 
+										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+									btnOK.setEnabled(false);
+								}
 							}
 							
 							@Override
@@ -810,8 +825,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								} else {
 									if (s.length() > 0 && Double.parseDouble(s.toString())
 											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null, 
-												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										Utilities.showPopUp(AcPutAwayDetails.this, null,
+												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+														GlobalParams.MV_LIMITQTY_MSG_VALUE));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												enUom.get(0).getSignificantDigits())});
@@ -819,7 +835,12 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												itemNumber.get_significantDigits())});
 									}
-								}								
+								}
+								
+								if (et_move_qty.getText().toString().equals("0") 
+										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+									btnOK.setEnabled(false);
+								}
 							}
 							
 							@Override
@@ -979,8 +1000,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								} else {
 									if (s.length() > 0 && Double.parseDouble(s.toString()) 
 											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null, 
-												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
+										Utilities.showPopUp(AcPutAwayDetails.this, null,
+												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+														GlobalParams.MV_LIMITQTY_MSG_VALUE));
 										et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												itemNumber.get_significantDigits())});
@@ -988,7 +1010,12 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
 												itemNumber.get_significantDigits())});
 									}									
-								}								
+								}	
+								
+								if (et_move_qty.getText().toString().equals("0") 
+										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+									btnOK.setEnabled(false);
+								}
 							}
 							
 							@Override
@@ -1071,24 +1098,40 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
-					if (enBarcodeExistences != null) {				
-						if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
-							Logger.error(data + "==========");
-							try {
-								prepareJsonForm();
-							} catch (JSONException e) {		
-								Logger.error(e);
-							}
-							btnOK.setEnabled(true);
-						} else {							
-							Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.INVALID_SCAN);
-						}
-					
-					} else {
+					if (edt_move_from.getEditableText().toString().equalsIgnoreCase(et_move_to.getEditableText().toString())) {
 						Utilities.showPopUp(AcPutAwayDetails.this, null,
-								getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
-										GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
+								getLanguage(GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE,
+										GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE));
+					} else {
+						if (enBarcodeExistences != null) {				
+							if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
+								Logger.error(data + "==========");
+								try {
+									prepareJsonForm();
+								} catch (JSONException e) {		
+									Logger.error(e);
+								}
+								
+								if (et_move_qty.getText().toString().equals("0") 
+										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+									btnOK.setEnabled(false);
+								} else {
+									btnOK.setEnabled(true);
+								}
+								
+							} else {							
+								Utilities.showPopUp(AcPutAwayDetails.this, null,
+										getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
+												GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
+							}
+						
+						} else {
+							Utilities.showPopUp(AcPutAwayDetails.this, null,
+									getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
+											GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
+						}
 					}
+					
 				} else {
 					Utilities.showPopUp(AcPutAwayDetails.this, null,
 							getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
