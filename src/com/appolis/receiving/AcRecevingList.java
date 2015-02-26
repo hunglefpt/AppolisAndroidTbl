@@ -520,14 +520,14 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 					// error scan
 					String strUnSupport = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY
 							, GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE);
-					Utilities.showPopUp(context, null, strUnSupport);
+					CommontDialog.showErrorDialog(context, strUnSupport, null);
 					break;
 				
 				case ErrorCode.STATUS_SCAN_UNSUPPORTED_BARCODE:
 					// Unsupported barcode 
 					String strErrorScan = languagePrefs.getPreferencesString(
 							GlobalParams.RE_SCANPO_MSG_KEY, GlobalParams.RE_SCANPO_MSG_VALUE);
-					Utilities.showPopUp(context, null, strErrorScan);
+					CommontDialog.showErrorDialog(context, strErrorScan, null);
 					break;
 					
 				case ErrorCode.STATUS_NETWORK_NOT_CONNECT: //no network

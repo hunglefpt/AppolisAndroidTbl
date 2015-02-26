@@ -397,7 +397,7 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 							}
 						});
 					} else {
-						Utilities.showPopUp(context, null, getResources().getString(R.string.LOADING_FAIL));
+						CommontDialog.showErrorDialog(context, getResources().getString(R.string.LOADING_FAIL), null);
 					}
 				} else {
 					switch (errorCode) {
@@ -412,7 +412,7 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 							break;
 							
 						default:
-							Utilities.showPopUp(context, null, getResources().getString(R.string.LOADING_FAIL));
+							CommontDialog.showErrorDialog(context, getResources().getString(R.string.LOADING_FAIL), null);
 							break;
 					}
 				}

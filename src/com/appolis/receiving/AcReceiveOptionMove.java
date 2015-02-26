@@ -801,10 +801,10 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 							}
 						});
 					} else {
-						Utilities.showPopUp(context, null, getResources().getString(R.string.LOADING_FAIL));
+						CommontDialog.showErrorDialog(context, getResources().getString(R.string.LOADING_FAIL), null);
 					}
 				} else {
-					Utilities.showPopUp(context, null, getResources().getString(R.string.LOADING_FAIL));
+					CommontDialog.showErrorDialog(context,getResources().getString(R.string.LOADING_FAIL), null);
 				}
 			}
 		}

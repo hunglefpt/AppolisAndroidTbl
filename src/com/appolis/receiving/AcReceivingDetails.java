@@ -744,7 +744,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 								.getPreferencesString(
 										GlobalParams.ITEM_NOT_IN_PO_KEY,
 										GlobalParams.ITEM_NOT_IN_PO_VALUE);
-						Utilities.showPopUp(context, null, strErrorScan);
+						CommontDialog.showErrorDialog(context, strErrorScan, null);
 					}
 
 					break;
@@ -754,7 +754,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 					String strErrorScan = languagePrefs.getPreferencesString(
 							GlobalParams.SCAN_NOTFOUND_KEY,
 							GlobalParams.SCAN_NOTFOUND_VALUE);
-					Utilities.showPopUp(context, null, strErrorScan);
+					CommontDialog.showErrorDialog(context, strErrorScan, null);
 					break;
 
 				case ErrorCode.STATUS_SCAN_UNSUPPORTED_BARCODE:
@@ -762,7 +762,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 					String strUnSupport = languagePrefs.getPreferencesString(
 							GlobalParams.RD_INVALID_BARCODE_MSG_KEY,
 							GlobalParams.RD_INVALID_BARCODE_MSG_VALUE);
-					Utilities.showPopUp(context, null, strUnSupport);
+					CommontDialog.showErrorDialog(context, strUnSupport, null);
 					break;
 
 				case ErrorCode.STATUS_NETWORK_NOT_CONNECT: // no network
