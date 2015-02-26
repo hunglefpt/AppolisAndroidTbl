@@ -919,7 +919,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 								Logger.error(e);
 							}
 							
-//							btnOK.setEnabled(true);
+							btnOK.setEnabled(true);
 						} else {
 							Utilities.showPopUp(AcMoveDetails.this, null, GlobalParams.INVALID_SCAN);
 							et_move_to.setText(GlobalParams.BLANK_CHARACTER);
@@ -1070,12 +1070,10 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		enBinTransfer.setItemNumber(tvTransfer.getText().toString());
 		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());
 		if (StringUtils.isNotBlank(et_move_qty.getEditableText().toString())) {
-			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));
-			btnOK.setEnabled(true);
+			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));			
 		} else {
 			et_move_qty.setText("0");
-			enBinTransfer.setQuantity(0);
-			btnOK.setEnabled(false);
+			enBinTransfer.setQuantity(0);		
 		}
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");

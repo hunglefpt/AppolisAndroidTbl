@@ -46,7 +46,6 @@ import com.appolis.entities.EnBinTransfer;
 import com.appolis.entities.EnItemNumber;
 import com.appolis.entities.EnItemPODetails;
 import com.appolis.entities.EnLPNumber;
-import com.appolis.entities.EnPassPutAway;
 import com.appolis.entities.EnPutAway;
 import com.appolis.entities.EnUom;
 import com.appolis.login.MainActivity;
@@ -91,7 +90,6 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private EnPutAway passPutAway;
-	private EnPassPutAway enPassPutAway;
 	DecimalFormat df = new DecimalFormat("#0.00");
 	
 	@Override
@@ -104,8 +102,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			barCode = bundle.getString(GlobalParams.BARCODE_MOVE);
 			checkLP = bundle.getString(GlobalParams.CHECK_LP_OR_NOT_LP);
 			checkBin = bundle.getString(GlobalParams.CHECK_BIN_OR_NOT_BIN);
-			passPutAway = (EnPutAway) bundle.getSerializable(GlobalParams.PUT_AWAY_BIN_DATA);
-			enPassPutAway = (EnPassPutAway) bundle.getSerializable(GlobalParams.PUT_PASS_AWAY_BIN_DATA);		
+			passPutAway = (EnPutAway) bundle.getSerializable(GlobalParams.PUT_AWAY_BIN_DATA);			
 			if (bundle.containsKey(GlobalParams.LOT_NUMBER) && bundle.containsKey(GlobalParams.BIN_NUMBER)
 					&& bundle.containsKey(GlobalParams.QTY_NUMBER)) {
 				lotNumber = bundle.getString(GlobalParams.LOT_NUMBER);
@@ -437,40 +434,22 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						spn_Move_UOM.setEnabled(false);
 						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
 						et_move_qty.setEnabled(true);
-						
-//						if (passPutAway.get_itemDesc() != null) {
-							tvTransfer.setText(passPutAway.get_itemNumber());
-							tvItemDescription.setText(passPutAway.get_itemDesc());
-							edt_move_from.setText(passPutAway.get_binNumber());
-							tvmaxQty.setText(df.format(passPutAway.get_qty()));
-							listUom.add(passPutAway.get_uomDescription());
-							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
-								linLot.setVisibility(View.VISIBLE);
-								edtLotValue.setEnabled(false);
-								edtLotValue.setBackgroundResource(R.color.transparent);
-								edtLotValue.setText(passPutAway.get_lotNumber());
-							} else {
-								linLot.setVisibility(View.INVISIBLE);
-							}
-							et_move_qty.setText(df.format(passPutAway.get_qty()));
-//						} 
-//						else {
-//							tvTransfer.setText(enPassPutAway.getItemNumber());
-//							tvItemDescription.setText(enPassPutAway.getItemDescription());
-//							edt_move_from.setText("RcvBin1");
-//							tvmaxQty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-//							listUom.add(enPassPutAway.getUomDescription());
-//							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
-//								linLot.setVisibility(View.VISIBLE);
-//								edtLotValue.setEnabled(false);
-//								edtLotValue.setBackgroundResource(R.color.transparent);
-//								edtLotValue.setText(enPassPutAway.getLotNumber());
-//							} else {
-//								linLot.setVisibility(View.INVISIBLE);
-//							}
-//							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-//						}
-						
+
+						tvTransfer.setText(passPutAway.get_itemNumber());
+						tvItemDescription.setText(passPutAway.get_itemDesc());
+						edt_move_from.setText(passPutAway.get_binNumber());
+						tvmaxQty.setText(df.format(passPutAway.get_qty()));
+						listUom.add(passPutAway.get_uomDescription());
+						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
+							linLot.setVisibility(View.VISIBLE);
+							edtLotValue.setEnabled(false);
+							edtLotValue.setBackgroundResource(R.color.transparent);
+							edtLotValue.setText(passPutAway.get_lotNumber());
+						} else {
+							linLot.setVisibility(View.INVISIBLE);
+						}
+						et_move_qty.setText(df.format(passPutAway.get_qty()));
+
 						try {
 							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
 									R.layout.custom_spinner_false, listUom);
@@ -504,22 +483,12 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										Utilities.showPopUp(AcPutAwayDetails.this, null, 
 												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-										
-//										if (passPutAway.get_itemDesc() != null) {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													passPutAway.get_significantDigits())});
-//										} else {
-//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//													enPassPutAway.getSignificantDigits())});
-//										}										
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												passPutAway.get_significantDigits())});
+									
 									} else {
-//										if (passPutAway.get_itemDesc() != null) {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													passPutAway.get_significantDigits())});
-//										} else {
-//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//													enPassPutAway.getSignificantDigits())});
-//										}
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												passPutAway.get_significantDigits())});
 									}
 								}								
 							}
@@ -610,38 +579,21 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
 						et_move_qty.setEnabled(true);
 						
-//						if (passPutAway.get_itemDesc() != null) {							
-							tvTransfer.setText(passPutAway.get_itemNumber());
-							tvItemDescription.setText(passPutAway.get_itemDesc());
-							edt_move_from.setText(passPutAway.get_binNumber());
-							tvmaxQty.setText(df.format(passPutAway.get_qty()));
-							listUom.add(passPutAway.get_uomDescription());
-							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
-								linLot.setVisibility(View.VISIBLE);
-								edtLotValue.setEnabled(false);
-								edtLotValue.setBackgroundResource(R.color.transparent);
-								edtLotValue.setText(passPutAway.get_lotNumber());
-							} else {
-								linLot.setVisibility(View.INVISIBLE);
-							}
-							et_move_qty.setText(df.format(passPutAway.get_qty()));
-//						} else {							
-//							tvTransfer.setText(enPassPutAway.getItemNumber());
-//							tvItemDescription.setText(enPassPutAway.getItemDescription());
-//							edt_move_from.setText("Manufbin1");
-//							tvmaxQty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-//							listUom.add(enPassPutAway.getUomDescription());
-//							if (enPassPutAway.getLotNumber() != null && StringUtils.isNotBlank(enPassPutAway.getLotNumber())) {
-//								linLot.setVisibility(View.VISIBLE);
-//								edtLotValue.setEnabled(false);
-//								edtLotValue.setBackgroundResource(R.color.transparent);
-//								edtLotValue.setText(enPassPutAway.getLotNumber());
-//							} else {
-//								linLot.setVisibility(View.INVISIBLE);
-//							}
-//							et_move_qty.setText(df.format(enPassPutAway.getQuantityOnHand()));
-//						}
-						
+						tvTransfer.setText(passPutAway.get_itemNumber());
+						tvItemDescription.setText(passPutAway.get_itemDesc());
+						edt_move_from.setText(passPutAway.get_binNumber());
+						tvmaxQty.setText(df.format(passPutAway.get_qty()));
+						listUom.add(passPutAway.get_uomDescription());
+						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
+							linLot.setVisibility(View.VISIBLE);
+							edtLotValue.setEnabled(false);
+							edtLotValue.setBackgroundResource(R.color.transparent);
+							edtLotValue.setText(passPutAway.get_lotNumber());
+						} else {
+							linLot.setVisibility(View.INVISIBLE);
+						}
+						et_move_qty.setText(df.format(passPutAway.get_qty()));
+
 						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
 								R.layout.custom_spinner_false, listUom);
 						spn_Move_UOM.setAdapter(uomAdapter);
@@ -675,22 +627,11 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 										Utilities.showPopUp(AcPutAwayDetails.this, null, 
 												getResources().getString(R.string.QTY_IS_NOT_GREATER_THAN_MAX_QTY));
 										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-										
-//										if (passPutAway.get_itemDesc() != null) {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													passPutAway.get_significantDigits())});
-//										} else {
-//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//													enPassPutAway.getSignificantDigits())});
-//										}
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												passPutAway.get_significantDigits())});
 									} else {
-//										if (passPutAway.get_itemDesc() != null) {
-											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-													passPutAway.get_significantDigits())});
-//										} else {
-//											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-//													enPassPutAway.getSignificantDigits())});
-//										}
+										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+												passPutAway.get_significantDigits())});
 									}
 								}								
 							}
@@ -1138,7 +1079,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							} catch (JSONException e) {		
 								Logger.error(e);
 							}
-//							btnOK.setEnabled(true);
+							btnOK.setEnabled(true);
 						} else {							
 							Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.INVALID_SCAN);
 						}
@@ -1284,12 +1225,10 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		enBinTransfer.setItemNumber(tvTransfer.getText().toString());
 		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());		
 		if (StringUtils.isNotBlank(et_move_qty.getEditableText().toString())) {
-			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));
-			btnOK.setEnabled(true);
+			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));			
 		} else {
 			et_move_qty.setText("0");
 			enBinTransfer.setQuantity(0);
-			btnOK.setEnabled(false);
 		}
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");
