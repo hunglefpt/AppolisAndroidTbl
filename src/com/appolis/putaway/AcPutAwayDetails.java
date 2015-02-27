@@ -91,12 +91,13 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private EnPutAway passPutAway;
 	DecimalFormat df = new DecimalFormat("#0.00");
+	PostItemAsyncTask postItemAsyncTask;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
-		setContentView(R.layout.move_details_layout);
+		setContentView(R.layout.move_details_layout);		
 		initLayout();
 		if (bundle.containsKey(GlobalParams.BARCODE_MOVE)) {
 			barCode = bundle.getString(GlobalParams.BARCODE_MOVE);
@@ -182,6 +183,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		listBinTransfer = new ArrayList<EnBinTransfer>();
 		passPutAway = new EnPutAway();
 		bundle = this.getBundle();
+		postItemAsyncTask = new PostItemAsyncTask();
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		tvHeader.setText(getLanguage(GlobalParams.PUTAWAY_TITLE_PUTAWAY, GlobalParams.MOVE));
@@ -266,8 +268,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			
 		case R.id.btnOK:
 			try {
-				prepareJsonForm();
-				PostItemAsyncTask postItemAsyncTask = new PostItemAsyncTask();
+				prepareJsonForm();				
 		        postItemAsyncTask.execute();
 			} catch (JSONException e) {
 				
@@ -383,7 +384,9 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	protected void onPause() {
 		super.onPause();
 		onUnregisterReceiver();
-		dialog.cancel();
+		if (postItemAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+			postItemAsyncTask.cancel(true);
+		}
 	}
 	
 	/**

@@ -17,8 +17,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -53,7 +51,6 @@ import com.appolis.entities.EnUom;
 import com.appolis.login.MainActivity;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
-import com.appolis.putaway.AcPutAwayDetails;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -93,6 +90,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	private boolean checkFirstUom = false;
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
+	PostItemAsyncTask postItemAsyncTask;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -215,7 +213,8 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		enUom = new ArrayList<>();
 		enBarcodeExistences = new EnBarcodeExistences();
 		listBinTransfer = new ArrayList<EnBinTransfer>();
-		bundle = this.getBundle();		
+		bundle = this.getBundle();
+		postItemAsyncTask = new PostItemAsyncTask();
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		tvHeader.setText(getLanguage(GlobalParams.MV_TITLE_MOVE, GlobalParams.MOVE));
@@ -299,8 +298,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.btnOK:	
-			try {
-				PostItemAsyncTask postItemAsyncTask = new PostItemAsyncTask();
+			try {			
 		        postItemAsyncTask.execute();		
 			} catch (Exception e) {
 				
@@ -433,6 +431,9 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	protected void onPause() {
 		super.onPause();
 		onUnregisterReceiver();
+		if (postItemAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+			postItemAsyncTask.cancel(true);
+		}
 	}
 	
 	/**
