@@ -90,7 +90,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private EnPutAway passPutAway;
-	DecimalFormat df = new DecimalFormat("#0.00");	
+	DecimalFormat df = new DecimalFormat("#0.00");
 	private boolean activityIsRunning = false;
 	
 	@Override

@@ -60,12 +60,14 @@ public class AcMove extends Activity implements OnClickListener{
 	private ImageView imgClear;
 	private LanguagePreferences languagePrefs;
 	private TextView tvSelect;
+	private boolean activityIsRunning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		setContentView(R.layout.move_layout);
+		activityIsRunning = true;
 		intLayout();
 	}
 
@@ -184,6 +186,7 @@ public class AcMove extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		activityIsRunning = true;
 		switch (requestCode) {
 		case GlobalParams.AC_MOVE_LEVEL_ONE:
 			if(resultCode == RESULT_OK){
@@ -237,12 +240,14 @@ public class AcMove extends Activity implements OnClickListener{
 	@Override
 	protected void onResume() {
 		super.onResume();
+		activityIsRunning = true;
 		onRegisterReceiver();
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
+		activityIsRunning = false;
 		onUnregisterReceiver();
 	}
 	
@@ -287,57 +292,59 @@ public class AcMove extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enBarcodeExistences != null) {
-						if (enBarcodeExistences.getBinOnlyCount() == 0 
-								&& enBarcodeExistences.getGtinCount() == 0
-								&& enBarcodeExistences.getItemIdentificationCount() == 0 
-								&& enBarcodeExistences.getItemOnlyCount() == 0
-								&& enBarcodeExistences.getLotOnlyCount() == 0
-								&& enBarcodeExistences.getLPCount() == 0
-								&& enBarcodeExistences.getOrderCount() == 0
-								&& enBarcodeExistences.getPoCount() == 0
-								&& enBarcodeExistences.getUOMBarcodeCount() == 0) {
-							Utilities.showPopUp(AcMove.this, null,
-									getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
-											GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
-						} else if (enBarcodeExistences.getOrderCount() != 0 || enBarcodeExistences.getBinOnlyCount() != 0
-								|| enBarcodeExistences.getLotOnlyCount() != 0 || enBarcodeExistences.getPoCount() != 0) {
-							Utilities.showPopUp(AcMove.this, null,
-									getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
-											GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));	
-						} else if (enBarcodeExistences.getItemOnlyCount() != 0								
-								|| enBarcodeExistences.getUOMBarcodeCount() != 0) {							
-							intent = new Intent(AcMove.this, AcMoveDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
-							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
-							startActivity(intent);
-						} else if (enBarcodeExistences.getItemIdentificationCount() != 0) {
-							intent = new Intent(AcMove.this, AcMoveDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
-							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
-							startActivity(intent);
-						} else if (enBarcodeExistences.getLPCount() != 0) {
-							intent = new Intent(AcMove.this, AcMoveDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
-							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.TRUE);
-							startActivity(intent);
+			if (activityIsRunning) {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (enBarcodeExistences != null) {
+							if (enBarcodeExistences.getBinOnlyCount() == 0 
+									&& enBarcodeExistences.getGtinCount() == 0
+									&& enBarcodeExistences.getItemIdentificationCount() == 0 
+									&& enBarcodeExistences.getItemOnlyCount() == 0
+									&& enBarcodeExistences.getLotOnlyCount() == 0
+									&& enBarcodeExistences.getLPCount() == 0
+									&& enBarcodeExistences.getOrderCount() == 0
+									&& enBarcodeExistences.getPoCount() == 0
+									&& enBarcodeExistences.getUOMBarcodeCount() == 0) {
+								Utilities.showPopUp(AcMove.this, null,
+										getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
+												GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
+							} else if (enBarcodeExistences.getOrderCount() != 0 || enBarcodeExistences.getBinOnlyCount() != 0
+									|| enBarcodeExistences.getLotOnlyCount() != 0 || enBarcodeExistences.getPoCount() != 0) {
+								Utilities.showPopUp(AcMove.this, null,
+										getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
+												GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));	
+							} else if (enBarcodeExistences.getItemOnlyCount() != 0								
+									|| enBarcodeExistences.getUOMBarcodeCount() != 0) {							
+								intent = new Intent(AcMove.this, AcMoveDetails.class);
+								intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
+								intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
+								startActivity(intent);
+							} else if (enBarcodeExistences.getItemIdentificationCount() != 0) {
+								intent = new Intent(AcMove.this, AcMoveDetails.class);
+								intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
+								intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
+								startActivity(intent);
+							} else if (enBarcodeExistences.getLPCount() != 0) {
+								intent = new Intent(AcMove.this, AcMoveDetails.class);
+								intent.putExtra(GlobalParams.BARCODE_MOVE, edtItem.getEditableText().toString().trim());
+								intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.TRUE);
+								startActivity(intent);
+							} else {
+								Utilities.showPopUp(AcMove.this, null,
+										getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
+												GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
+							}
+							
 						} else {
-							Utilities.showPopUp(AcMove.this, null,
-									getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
-											GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
+							Utilities.showPopUp(AcMove.this, null, GlobalParams.INVALID_SCAN);
 						}
-						
 					} else {
 						Utilities.showPopUp(AcMove.this, null, GlobalParams.INVALID_SCAN);
 					}
-				} else {
-					Utilities.showPopUp(AcMove.this, null, GlobalParams.INVALID_SCAN);
 				}
-			}
+			}			
 		}
 	}
 	
