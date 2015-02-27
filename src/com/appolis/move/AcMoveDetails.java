@@ -1020,7 +1020,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						}
 					} else {
 						Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
-					}					
+					}
 				}
 			}
 		}

@@ -53,12 +53,14 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 	private EnPO po;
 	private LanguagePreferences languagePrefs;
 	private TextView tvScanLP;
+	private boolean activityIsRunning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		setContentView(R.layout.receive_inventory_layout);
+		activityIsRunning = true;
 		intLayout();
 	}
 
@@ -132,7 +134,8 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);		
+		super.onActivityResult(requestCode, resultCode, data);
+		activityIsRunning = true;
 		switch (requestCode) {
 		case GlobalParams.AC_RECEIVER_INVENTORY_LEVEL_ONE:
 			if(resultCode == RESULT_OK){
@@ -189,21 +192,23 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals("true")) {
-					if (po != null && po.getLpNumber() != null) {
-						intent = new Intent(AcReceiverScanLP.this, AcReceiverInventoryDetails.class);
-						intent.putExtra(GlobalParams.PO_OBJECT, po);
-						startActivity(intent);
+			if (activityIsRunning) {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals("true")) {
+						if (po != null && po.getLpNumber() != null) {
+							intent = new Intent(AcReceiverScanLP.this, AcReceiverInventoryDetails.class);
+							intent.putExtra(GlobalParams.PO_OBJECT, po);
+							startActivity(intent);
+						} else {
+							Utilities.showPopUp(AcReceiverScanLP.this, null,
+									getLanguage(GlobalParams.BIN_MESSAGEBOXTITLEINVALIDLP, GlobalParams.INVALID_LICENSE_PLATE));
+						}
 					} else {
 						Utilities.showPopUp(AcReceiverScanLP.this, null,
 								getLanguage(GlobalParams.BIN_MESSAGEBOXTITLEINVALIDLP, GlobalParams.INVALID_LICENSE_PLATE));
 					}
-				} else {
-					Utilities.showPopUp(AcReceiverScanLP.this, null,
-							getLanguage(GlobalParams.BIN_MESSAGEBOXTITLEINVALIDLP, GlobalParams.INVALID_LICENSE_PLATE));
 				}
 			}
 		}
@@ -279,12 +284,14 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 	@Override
 	protected void onResume() {
 		super.onResume();
+		activityIsRunning = true;
 		onRegisterReceiver();
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
+		activityIsRunning = false;
 		onUnregisterReceiver();
 	}
 	

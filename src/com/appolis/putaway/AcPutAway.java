@@ -43,7 +43,6 @@ import com.appolis.entities.EnPutAwayBin;
 import com.appolis.login.LoginActivity;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
-import com.appolis.putaway.AcPutAwayBin.BarcodeAsyncTask;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -593,7 +592,9 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 					
 					for (int i = 0; i < enPutAway.size(); i++) {
 						if (((EnPutAway) adapterPutAway.getItem(i)).get_itemNumber().equalsIgnoreCase
-								(itemNumber.get_itemNumber())) {					
+								(itemNumber.get_itemNumber()) 
+								&& ((EnPutAway) adapterPutAway.getItem(i)).get_lotNumber().equalsIgnoreCase
+								(itemNumber.get_LotNumber())) {
 							passPutAway = ((EnPutAway) adapterPutAway.getItem(i));					
 							break;
 						}
