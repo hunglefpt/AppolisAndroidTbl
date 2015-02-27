@@ -1193,6 +1193,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 					if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
 						AcPutAwayDetails.this.finish();
 						intent = new Intent(AcPutAwayDetails.this, AcPutAway.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
 					} else {
 						Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
