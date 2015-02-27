@@ -90,14 +90,15 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private EnPutAway passPutAway;
-	DecimalFormat df = new DecimalFormat("#0.00");
-	PostItemAsyncTask postItemAsyncTask;
+	DecimalFormat df = new DecimalFormat("#0.00");	
+	private boolean activityIsRunning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
-		setContentView(R.layout.move_details_layout);		
+		setContentView(R.layout.move_details_layout);	
+		activityIsRunning = true;
 		initLayout();
 		if (bundle.containsKey(GlobalParams.BARCODE_MOVE)) {
 			barCode = bundle.getString(GlobalParams.BARCODE_MOVE);
@@ -182,8 +183,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		enBarcodeExistences = new EnBarcodeExistences();
 		listBinTransfer = new ArrayList<EnBinTransfer>();
 		passPutAway = new EnPutAway();
-		bundle = this.getBundle();
-		postItemAsyncTask = new PostItemAsyncTask();
+		bundle = this.getBundle();		
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		tvHeader.setText(getLanguage(GlobalParams.PUTAWAY_TITLE_PUTAWAY, GlobalParams.MOVE));
@@ -266,9 +266,10 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			finish();
 			break;
 			
-		case R.id.btnOK:
+		case R.id.btnOK:			
 			try {
-				prepareJsonForm();				
+				prepareJsonForm();
+				PostItemAsyncTask postItemAsyncTask = new PostItemAsyncTask();
 		        postItemAsyncTask.execute();
 			} catch (JSONException e) {
 				
@@ -289,6 +290,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		activityIsRunning = true;
 		switch (requestCode) {
 		case GlobalParams.AC_PUT_AWAY_LEVEL_TWO:
 			if(resultCode == RESULT_OK){
@@ -377,16 +379,15 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	@Override
 	protected void onResume() {
 		super.onResume();
+		activityIsRunning = true;
 		onRegisterReceiver();
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		onUnregisterReceiver();
-		if (postItemAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
-			postItemAsyncTask.cancel(true);
-		}
+		activityIsRunning = false;
+		onUnregisterReceiver();	
 	}
 	
 	/**
@@ -429,7 +430,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String result) {						
 			dialog.dismiss();
 			// If not cancel by user
 			if (!isCancelled()) {
@@ -1161,8 +1162,6 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
 			dialog.show();
-			btnCancel.setEnabled(false);
-			btnOK.setEnabled(false);
 		}
 		
 		@Override
@@ -1186,24 +1185,24 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals("true")) {				
-					if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
-						AcPutAwayDetails.this.finish();
-						intent = new Intent(AcPutAwayDetails.this, AcPutAway.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(intent);
+			if (activityIsRunning) {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {				
+					if (result.equals("true")) {				
+						if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
+							AcPutAwayDetails.this.finish();
+							intent = new Intent(AcPutAwayDetails.this, AcPutAway.class);
+							intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							startActivity(intent);
+						} else {
+							Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+						}
 					} else {
 						Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
-					}
-				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+					}					
 				}
 			}
-			btnCancel.setEnabled(true);
-			btnOK.setEnabled(true);
 		}
 	}
 	

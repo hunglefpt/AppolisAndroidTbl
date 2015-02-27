@@ -90,13 +90,14 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	private boolean checkFirstUom = false;
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
-	PostItemAsyncTask postItemAsyncTask;
+	private boolean activityIsRunning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		setContentView(R.layout.move_details_layout);
+		activityIsRunning = true;
 		initLayout();
 		if (bundle.containsKey(GlobalParams.BARCODE_MOVE)) {
 			barCode = bundle.getString(GlobalParams.BARCODE_MOVE);		
@@ -214,7 +215,6 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		enBarcodeExistences = new EnBarcodeExistences();
 		listBinTransfer = new ArrayList<EnBinTransfer>();
 		bundle = this.getBundle();
-		postItemAsyncTask = new PostItemAsyncTask();
 		
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		tvHeader.setText(getLanguage(GlobalParams.MV_TITLE_MOVE, GlobalParams.MOVE));
@@ -298,7 +298,8 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.btnOK:	
-			try {			
+			try {	
+				PostItemAsyncTask postItemAsyncTask = new PostItemAsyncTask();				
 		        postItemAsyncTask.execute();		
 			} catch (Exception e) {
 				
@@ -317,6 +318,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		activityIsRunning = true;
 		switch (requestCode) {
 		case GlobalParams.AC_MOVE_LEVEL_TWO:
 			if(resultCode == RESULT_OK){
@@ -424,16 +426,15 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		activityIsRunning = true;
 		onRegisterReceiver();
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		onUnregisterReceiver();
-		if (postItemAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
-			postItemAsyncTask.cancel(true);
-		}
+		activityIsRunning = false;
+		onUnregisterReceiver();		
 	}
 	
 	/**
@@ -983,9 +984,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			diaglogPost.setMessage(GlobalParams.PROCESS_DATA);
 			diaglogPost.setCancelable(false); 
 			diaglogPost.setCanceledOnTouchOutside(false);
-			diaglogPost.show();
-			btnCancel.setEnabled(false);
-			btnOK.setEnabled(false);
+			diaglogPost.show();			
 		}
 		
 		@Override
@@ -1009,21 +1008,21 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(String result) {
-			diaglogPost.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals("true")) {				
-					if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
-						AcMoveDetails.this.finish();
+			if (activityIsRunning) {
+				diaglogPost.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals("true")) {				
+						if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
+							AcMoveDetails.this.finish();
+						} else {
+							Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+						}
 					} else {
 						Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
-					}
-				} else {
-					Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+					}					
 				}
 			}
-			btnCancel.setEnabled(true);
-			btnOK.setEnabled(true);
 		}
 	}
 	

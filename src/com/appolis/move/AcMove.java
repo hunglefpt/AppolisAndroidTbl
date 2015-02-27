@@ -9,6 +9,7 @@ package com.appolis.move;
 
 import java.net.URLEncoder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -18,8 +19,10 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,9 +34,9 @@ import com.appolis.androidtablet.R;
 import com.appolis.common.AppolisException;
 import com.appolis.common.LanguagePreferences;
 import com.appolis.entities.EnBarcodeExistences;
+import com.appolis.interfaceapp.KeyboardVisibilityListener;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
-import com.appolis.putaway.AcPutAway;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -85,6 +88,32 @@ public class AcMove extends Activity implements OnClickListener{
 		edtItem.setHint(getLanguage(GlobalParams.SCANITEM, GlobalParams.SCAN_ITEM_OR_LICENCE_PLATE));
 		btnOK.setText(getLanguage(GlobalParams.OK, GlobalParams.OK));
 		btnCancel.setText(getLanguage(GlobalParams.CANCEL, GlobalParams.CANCEL));
+			
+		findViewById(android.R.id.content).setOnTouchListener(new OnTouchListener() {
+		    @SuppressLint("ClickableViewAccessibility")
+			@Override
+		    public boolean onTouch(View v, MotionEvent event) {
+//		    	if (Utilities.setKeyboardVisibilityListener(AcMove.this, m)) {
+//		    		Utilities.hideKeyboard(AcMove.this);
+//			        BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+//			        barcodeAsyncTask.execute();
+//				}
+		    	
+		        return false;
+		    }
+		});
+		
+		Utilities.setKeyboardVisibilityListener(this, new KeyboardVisibilityListener() {
+			
+			@Override
+			public void onKeyboardVisibilityChanged(boolean keyboardVisible) {
+				if (keyboardVisible) {
+					Logger.error("11111111");
+				} else {
+					Logger.error("22222222");
+				}
+			}
+		});
 		
 		imgHome.setOnClickListener(this);
 		imgScan.setOnClickListener(this);

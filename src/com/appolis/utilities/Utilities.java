@@ -18,6 +18,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.appolis.androidtablet.R;
 import com.appolis.common.LanguagePreferences;
+import com.appolis.interfaceapp.KeyboardVisibilityListener;
 
 /**
  * @author hoangnh11
@@ -186,6 +188,38 @@ public class Utilities {
 		mContext.startActivityForResult(intentCamera, GlobalParams.SCAN);
 	}
 
+	public static boolean isSoftKeyboardShowing(Activity mContext) {
+	    InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
+	    return inputMethodManager.isActive();
+	}
+	
+	public static void setKeyboardVisibilityListener(Activity activity, final KeyboardVisibilityListener keyboardVisibilityListener) {
+	    final View contentView = activity.findViewById(android.R.id.content);
+	    contentView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+	        private int mPreviousHeight;
+
+	        @Override
+	        public void onGlobalLayout() {
+	            int newHeight = contentView.getMeasuredHeight();
+	            if (mPreviousHeight != 0) {
+	                if (mPreviousHeight > newHeight) {
+	                    // Height decreased: keyboard was shown
+	                    keyboardVisibilityListener.onKeyboardVisibilityChanged(true);
+	                    Logger.error("333333: " + newHeight + " : " + mPreviousHeight);
+	                } else if (mPreviousHeight < newHeight) {
+	                    // Height increased: keyboard was hidden
+	                    keyboardVisibilityListener.onKeyboardVisibilityChanged(false);
+	                    Logger.error("4444444: " + newHeight + " : " + mPreviousHeight);
+	                } else {
+	                    // No change
+	                	Logger.error("555555555: " + newHeight + " : " + mPreviousHeight);
+	                }
+	            }
+	            mPreviousHeight = newHeight;
+	        }
+	    });
+	}
+	
 	public static int getPagerNumber(int total, int div) {
 
 		if (total % div == 0) {

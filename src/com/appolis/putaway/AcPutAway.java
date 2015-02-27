@@ -86,7 +86,7 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
-		setContentView(R.layout.put_away);
+		setContentView(R.layout.put_away);		
 		intLayout();
 		PutawayAsyncTask putawayAsyncTask = new PutawayAsyncTask();
         putawayAsyncTask.execute();
@@ -428,7 +428,7 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 //						adapterPutAway.setOnItemClickHandler(onItemClick);
 						lsPutAway.setAdapter(adapterPutAway);						
 						edtItem.setText(GlobalParams.BLANK_CHARACTER);
-						adapterPutAway.getFilter().filter(GlobalParams.BLANK_CHARACTER);
+						adapterPutAway.getFilter().filter(GlobalParams.BLANK_CHARACTER);				
 					} else {
 						Utilities.showPopUp(AcPutAway.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
