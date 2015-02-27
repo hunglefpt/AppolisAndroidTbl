@@ -20,8 +20,10 @@ import org.apache.http.conn.ConnectTimeoutException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -47,6 +49,7 @@ import com.appolis.entities.EnUom;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
 import com.appolis.scan.CaptureBarcodeCamera;
+import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.CommontDialog;
 import com.appolis.utilities.DataParser;
 import com.appolis.utilities.GlobalParams;
@@ -73,12 +76,14 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 	private String uom;
 	private ProgressDialog dialog;
 	private String textLoading;
+	private boolean activityIsRunning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_receive_acquire_barcode);
+		activityIsRunning = true;
 		
 		Bundle bundle = getIntent().getExtras();
 		if (bundle.containsKey(GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS)) {
@@ -207,10 +212,77 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 		
 	}
 	
+	/**
+	 * handler for receiving the notifications coming from 
+	 * SingleEntryApplication.
+	 * Update the UI accordingly when we receive a notification
+	 */
+	private final BroadcastReceiver _newItemsReceiver = new BroadcastReceiver() {   
+	    
+		@Override  
+	    public void onReceive(Context context, Intent intent) {
+		
+	        // a Scanner has connected
+	        if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_SCANNER_ARRIVAL))
+	        {
+	        	linScan.setVisibility(View.GONE);
+	        }
+	        
+	        // a Scanner has disconnected
+	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_SCANNER_REMOVAL))
+	        {
+	        	linScan.setVisibility(View.VISIBLE);
+	        }
+	        
+	        // decoded Data received from a scanner
+	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
+	        {
+				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
+				String message = new String(data);
+				edtBarcodeValue.setText(message.trim());
+	        }
+	    }
+	};
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		activityIsRunning = true;
+		// register to receive notifications from SingleEntryApplication
+        // these notifications originate from ScanAPI 
+        IntentFilter filter;
+
+        filter = new IntentFilter(SingleEntryApplication.NOTIFY_SCANNER_ARRIVAL);
+        registerReceiver(this._newItemsReceiver, filter);
+
+        filter = new IntentFilter(SingleEntryApplication.NOTIFY_SCANNER_REMOVAL);   
+        registerReceiver(this._newItemsReceiver, filter);
+
+        filter = new IntentFilter(SingleEntryApplication.NOTIFY_DECODED_DATA);
+        registerReceiver(this._newItemsReceiver, filter);
+        
+    	// increasing the Application View count from 0 to 1 will
+    	// cause the application to open and initialize ScanAPI
+    	SingleEntryApplication.getApplicationInstance().increaseViewCount();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();	
+		activityIsRunning = false;
+        // unregister the notifications
+		unregisterReceiver(_newItemsReceiver);        
+        // indicate this view has been destroyed
+        // if the reference count becomes 0 ScanAPI can
+        // be closed if this is not a screen rotation scenario
+        SingleEntryApplication.getApplicationInstance().decreaseViewCount();
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
+		activityIsRunning = true;
 		switch (requestCode) {
 		case GlobalParams.CAPTURE_BARCODE_CAMERA_ACTIVITY:
 			if (resultCode == RESULT_OK) {
@@ -279,11 +351,11 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if(null != dialog){
+			if(null != dialog && activityIsRunning){
 				dialog.dismiss();
 			}
 			
-			if(!isCancelled()){
+			if(!isCancelled() && activityIsRunning){
 				switch (result) {
 				case ErrorCode.STATUS_SUCCESS:
 					edtBarcodeValue.setText("");
@@ -368,12 +440,12 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 
 		@Override
 		protected void onPostExecute(String result) {
-			if(null != dialog){
+			if(null != dialog && activityIsRunning){
 				dialog.dismiss();
 			}
 			
 			// If not cancel by user
-			if (!isCancelled()) {
+			if (!isCancelled() && activityIsRunning) {
 				if (result.equals("true")) {
 					if (enUom != null) {
 						
