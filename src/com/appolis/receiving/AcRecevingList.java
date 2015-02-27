@@ -78,6 +78,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 	private ReceivingListAdapter receivingListAdapter = null;
 	private LanguagePreferences languagePrefs;
 	private int checkPos = -1;
+	private boolean activityIsRunning = false;
 	
 	//text multiple language
 	private String strLoading;
@@ -88,6 +89,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_receive_list);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
+		activityIsRunning = true;
 		getLanguage();
 		initLayout();
 	}
@@ -174,6 +176,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		activityIsRunning = true;
 		// register to receive notifications from SingleEntryApplication
         // these notifications originate from ScanAPI 
         IntentFilter filter;
@@ -232,6 +235,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		activityIsRunning = true;
 		switch (requestCode) {
 		case GlobalParams.CAPTURE_BARCODE_CAMERA_ACTIVITY:
 			if(resultCode == RESULT_OK){
@@ -286,7 +290,8 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 
 	@Override
 	protected void onPause() {
-		super.onPause();		
+		super.onPause();	
+		activityIsRunning = false;
         // unregister the notifications
 		unregisterReceiver(_newItemsReceiver);        
         // indicate this view has been destroyed
@@ -325,7 +330,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if(!isCancelled()){
+			if(!isCancelled() && activityIsRunning){
 				progressDialog = new ProgressDialog(context);
 				progressDialog.setMessage(strLoading + "...");
 				progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -336,7 +341,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 			
@@ -371,7 +376,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if(null != progressDialog && (progressDialog.isShowing())){
+			if(null != progressDialog && (progressDialog.isShowing()) && activityIsRunning){
 				progressDialog.dismiss();
 			}
 			
@@ -432,9 +437,9 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if(!isCancelled()){
+			if(!isCancelled() && activityIsRunning){
 				progressDialog = new ProgressDialog(context);
-				progressDialog.setMessage(strLoading);
+				progressDialog.setMessage(strLoading + "...");
 				progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 	
 							@Override
@@ -443,7 +448,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
@@ -504,7 +509,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if(null != progressDialog && (progressDialog.isShowing())){
+			if(null != progressDialog && (progressDialog.isShowing()) && activityIsRunning){
 				progressDialog.dismiss();
 			}
 			

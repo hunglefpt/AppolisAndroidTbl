@@ -89,6 +89,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 	private EnItemLotInfo enItemLotInfo;
 	private LanguagePreferences languagePrefs;
 	private int checkPos = -1;
+	private boolean activityIsRunning = false;
 	
 	// multiple language
 	private String strTextOk;
@@ -100,7 +101,8 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_receive_details);
-
+		
+		activityIsRunning = true;
 		Bundle bundle = getIntent().getExtras();
 		if (bundle.containsKey(GlobalParams.PARAM_EN_RECIVING_INFO_PO_NUMBER)) {
 			poNumber = bundle
@@ -111,7 +113,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		getLanguage();
 		initLayout();
 	}
-
+	
 	/**
 	 * initial layout of screen
 	 */
@@ -262,6 +264,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		activityIsRunning = true;
 		// register to receive notifications from SingleEntryApplication
 		// these notifications originate from ScanAPI
 		IntentFilter filter;
@@ -337,6 +340,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		activityIsRunning = true;
 		switch (requestCode) {
 		case GlobalParams.AC_RECEIVING_ITEM_DETAILS_ACTIVITY:
 			if (resultCode == RESULT_OK) {
@@ -408,6 +412,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 	@Override
 	protected void onPause() {
 		super.onPause();
+		activityIsRunning = false;
 		// unregister the notifications
 		unregisterReceiver(_newItemsReceiver);
 		// indicate this view has been destroyed
@@ -479,20 +484,21 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(strLoading);
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
-
+			if(!isCancelled() && activityIsRunning){
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(strLoading + "...");
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 		}
 
 		@Override
@@ -533,7 +539,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && activityIsRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -567,8 +573,6 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 					break;
 
 				default:
-					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
-							+ result);
 					CommontDialog.showErrorDialog(context, response, null);
 					break;
 				}
@@ -604,9 +608,9 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (!isCancelled()) {
+			if (!isCancelled() && activityIsRunning) {
 				progressDialog = new ProgressDialog(context);
-				progressDialog.setMessage(strLoading);
+				progressDialog.setMessage(strLoading + "...");
 				progressDialog
 						.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
@@ -616,7 +620,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
@@ -699,7 +703,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && activityIsRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -850,9 +854,9 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (!isCancelled()) {
+			if (!isCancelled() && activityIsRunning) {
 				progressDialog = new ProgressDialog(context);
-				progressDialog.setMessage(strLoading);
+				progressDialog.setMessage(strLoading + "...");
 				progressDialog
 						.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
@@ -862,7 +866,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 							}
 						});
 				progressDialog.setCanceledOnTouchOutside(false);
-				progressDialog.setCancelable(true);
+				progressDialog.setCancelable(false);
 				progressDialog.show();
 			}
 		}
@@ -898,7 +902,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && activityIsRunning) {
 				progressDialog.dismiss();
 			}
 
