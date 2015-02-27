@@ -27,7 +27,7 @@ public class ItemPutAway extends BaseLinearLayout{
 		super(context);
 		initControl(R.layout.item_list_put_away, context);
 		linItem = (LinearLayout) findViewById(R.id.linItem);
-		linItem.setOnClickListener(onItemClick);
+//		linItem.setOnClickListener(onItemClick);
 	}
 
 	/**

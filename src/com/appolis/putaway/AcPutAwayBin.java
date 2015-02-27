@@ -168,7 +168,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	@Override
 	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {
 		Logger.error(String.valueOf(position));
-		positonItem = position - 1;		
+		positonItem = position - 1;
 		if (checkPos == positonItem) {
 			checkPos = -1;
 		} else {

@@ -23,6 +23,8 @@ import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,6 +43,7 @@ import com.appolis.entities.EnPutAwayBin;
 import com.appolis.login.LoginActivity;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
+import com.appolis.putaway.AcPutAwayBin.BarcodeAsyncTask;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -56,7 +59,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
  * @author hoangnh11
  * Display Put away screen for search items
  */
-public class AcPutAway extends Activity implements OnClickListener {
+public class AcPutAway extends Activity implements OnClickListener, OnItemClickListener {
 	
 	private TextView tvHeader;
 	private ImageView imgHome, imgScan;
@@ -77,6 +80,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 	private EnPutAway passPutAway;
 	private EnItemNumber itemNumber;
 	private EnPassPutAway enPassPutAway; 
+	private int positonItem;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +151,7 @@ public class AcPutAway extends Activity implements OnClickListener {
 		
 		lsPutAway = (PullToRefreshListView) findViewById(R.id.lsPutAway);
 		lsPutAway.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+		lsPutAway.setOnItemClickListener(this);
 		lsPutAway.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
 			@Override
@@ -161,27 +166,46 @@ public class AcPutAway extends Activity implements OnClickListener {
 		});
 	}
 	
+//	/**
+//	 * Process click event in List view
+//	 */
+//	OnClickListener onItemClick = new OnClickListener() {	
+//
+//		@Override
+//		public void onClick(View v) {
+//			int position = ((ItemPutAway) v).get_position();
+//			Logger.error(String.valueOf(position));
+//			if (checkPos == position) {
+//				checkPos = -1;
+//			} else {
+//				BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask
+//						(((EnPutAway) adapterPutAway.getItem(position)).get_itemNumber(), position,
+//						((EnPutAway) adapterPutAway.getItem(position)).get_binNumber());
+//				barcodeAsyncTask.execute();
+//				passPutAway = ((EnPutAway) adapterPutAway.getItem(position));
+//				checkPos = position;
+//			}
+//		}
+//	};
+	
 	/**
 	 * Process click event in List view
 	 */
-	OnClickListener onItemClick = new OnClickListener() {	
-
-		@Override
-		public void onClick(View v) {
-			int position = ((ItemPutAway) v).get_position();
-			Logger.error(String.valueOf(position));
-			if (checkPos == position) {
-				checkPos = -1;
-			} else {
-				BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask
-						(((EnPutAway) adapterPutAway.getItem(position)).get_itemNumber(), position,
-						((EnPutAway) adapterPutAway.getItem(position)).get_binNumber());
-				barcodeAsyncTask.execute();
-				passPutAway = ((EnPutAway) adapterPutAway.getItem(position));
-				checkPos = position;
-			}
+	@Override
+	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {
+		Logger.error(String.valueOf(position));
+		positonItem = position - 1;
+		if (checkPos == positonItem) {
+			checkPos = -1;
+		} else {
+			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask
+					(((EnPutAway) adapterPutAway.getItem(positonItem)).get_itemNumber(), positonItem,
+					((EnPutAway) adapterPutAway.getItem(positonItem)).get_binNumber());
+			barcodeAsyncTask.execute();
+			passPutAway = ((EnPutAway) adapterPutAway.getItem(positonItem));
+			checkPos = positonItem;
 		}
-	};
+	}
 	
 	/**
 	 * get language from language package
@@ -399,10 +423,10 @@ public class AcPutAway extends Activity implements OnClickListener {
 				if (result.equals(GlobalParams.TRUE)) {				
 					if (enPutAway != null) {
 						listPutAway = new ArrayList<EnPutAway>(enPutAway);
-						Collections.sort(listPutAway, new PutAwayComparator());
+						Collections.sort(listPutAway, new PutAwayComparator());						
 						adapterPutAway = new PutAwayAdapter(AcPutAway.this, listPutAway);
-						adapterPutAway.setOnItemClickHandler(onItemClick);
-						lsPutAway.setAdapter(adapterPutAway);
+//						adapterPutAway.setOnItemClickHandler(onItemClick);
+						lsPutAway.setAdapter(adapterPutAway);						
 						edtItem.setText(GlobalParams.BLANK_CHARACTER);
 						adapterPutAway.getFilter().filter(GlobalParams.BLANK_CHARACTER);
 					} else {

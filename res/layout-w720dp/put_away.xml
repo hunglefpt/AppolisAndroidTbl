@@ -81,7 +81,7 @@
         android:gravity="bottom|right"
         android:orientation="horizontal"
         android:paddingBottom="8dp"
-        android:visibility="gone"
+		android:visibility="gone"
         android:paddingRight="8dp" >
 
         <Button
