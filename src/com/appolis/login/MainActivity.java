@@ -9,11 +9,13 @@ package com.appolis.login;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -23,6 +25,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -80,6 +83,7 @@ public class MainActivity extends Activity implements OnClickListener, Animation
 	private LinearLayout linTip, linTipTwo;
 	private ImageView imgCancel, imgCancelTwo;
 	private AppPreferences _appPrefs;
+	private String scanFlag;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -736,18 +740,22 @@ public class MainActivity extends Activity implements OnClickListener, Animation
 	        	imgHome.setVisibility(View.VISIBLE);
 	        	imgViewScanBarcode.setVisibility(View.GONE);	      
 	        	_appPrefs.saveSocketConnect(GlobalParams.TRUE);
+	        	scanFlag = GlobalParams.FLAG_ACTIVE;	        	
 	        }
 	        
 	        // a Scanner has disconnected
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_SCANNER_REMOVAL)) {
 //	        	imgHome.setVisibility(View.GONE);
-	        	imgViewScanBarcode.setVisibility(View.VISIBLE);
+	        	imgViewScanBarcode.setVisibility(View.VISIBLE);	        	
 	        }
 	        
 	        // decoded Data received from a scanner
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA)) {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				Utilities.dialogShow(new String(data), MainActivity.this);
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					dialogShow(new String(data), MainActivity.this);
+					scanFlag = GlobalParams.FLAG_INACTIVE;
+				}
 	        }
 	        
 	        // an error has occurred
@@ -819,4 +827,27 @@ public class MainActivity extends Activity implements OnClickListener, Animation
 	public String getLanguage(String key, String value){
 		return languagePrefs.getPreferencesString(key, value);
 	}
+	
+	// Show dialog
+    public void dialogShow(String message, Activity activity)
+    {
+    	final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialogwarning);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView tvScantitle2 = (TextView) dialog.findViewById(R.id.tvScantitle2);
+        tvScantitle2.setText(message);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		
+		dialogButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		
+		dialog.show();		
+    }
 }

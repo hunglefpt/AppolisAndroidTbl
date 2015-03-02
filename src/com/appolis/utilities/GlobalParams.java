@@ -67,6 +67,8 @@ public final class GlobalParams {
 	public static final String UN_DO = "Undo";
 	public static final String YES_TEXT = "Yes";
 	public static final String NO_TEXT = "No";
+	public static final String FLAG_ACTIVE = "FLAG ACTIVE";
+	public static final String FLAG_INACTIVE = "FLAG INACTIVE";
 	public static final String ERRORBINNOTFOUND_KEY = "ErrorBinNotFound";
 	public static final String ERRORBINNOTFOUND_VALUE = "Bin/License Plate not found, please re-scan";
 	public static final String MESSAGE_SELECT = "You must select one item to move";

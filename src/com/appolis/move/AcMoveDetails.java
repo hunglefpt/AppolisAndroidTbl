@@ -14,6 +14,7 @@ import java.util.List;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -91,6 +92,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private boolean activityIsRunning = false;
+	private String scanFlag;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -358,7 +360,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	        if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_SCANNER_ARRIVAL))
 	        {
 	        	imgScan.setVisibility(View.GONE);
-	        	checkSocket = true;
+	        	checkSocket = true;	        	
 	        }
 	        
 	        // a Scanner has disconnected
@@ -372,19 +374,21 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				if (checkLotFocus) {
-				   edtLotValue.setText(new String(data));
-				   CheckLotNumberAsyncTask checkLotNumberAsyncTask = new CheckLotNumberAsyncTask();
-				   checkLotNumberAsyncTask.execute();
-			    } else if (checkFromFocus) { 
-				   edt_move_from.setText(new String(data));
-				   CheckFromBinAsyncTask checkFromBinAsyncTask = new CheckFromBinAsyncTask();
-				   checkFromBinAsyncTask.execute();
-			    } else if (checkToFocus){
-				   et_move_to.setText(new String(data));
-				   BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
-		           barcodeAsyncTask.execute();
-			    }
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					if (checkLotFocus) {
+					   edtLotValue.setText(new String(data));
+					   CheckLotNumberAsyncTask checkLotNumberAsyncTask = new CheckLotNumberAsyncTask();
+					   checkLotNumberAsyncTask.execute();
+				    } else if (checkFromFocus) { 
+					   edt_move_from.setText(new String(data));
+					   CheckFromBinAsyncTask checkFromBinAsyncTask = new CheckFromBinAsyncTask();
+					   checkFromBinAsyncTask.execute();
+				    } else if (checkToFocus){
+					   et_move_to.setText(new String(data));
+					   BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+			           barcodeAsyncTask.execute();
+				    }
+				}
 	        }
 	    }
 	};
@@ -452,6 +456,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -509,15 +514,17 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						tvItemDescription.setText(languagePrefs.getPreferencesString
 								(GlobalParams.LICENSE_PLATE, GlobalParams.LICENSE_PLATE));
 						edt_move_from.setText(enLPNumber.get_topBinNumber());
-						
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
 					String msg = languagePrefs.getPreferencesString
 							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					Utilities.showPopUp(AcMoveDetails.this, null, msg);
+					showPopUp(AcMoveDetails.this, null, msg);
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -537,6 +544,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -632,7 +640,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						            }
 									return false;
 								}
-							});
+							});							
 						} else if (itemNumber.is_LotTrackingInd() && StringUtils.isNotBlank(itemNumber.get_LotNumber())){
 							linLot.setVisibility(View.VISIBLE);
 							edtLotValue.setEnabled(false);
@@ -649,7 +657,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						            }
 									return false;
 								}
-							});
+							});							
 						} else {
 							linLot.setVisibility(View.VISIBLE);
 							edtLotValue.setOnEditorActionListener(new OnEditorActionListener() {
@@ -664,15 +672,19 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 									return false;
 								}
 							});
-						}						
+							
+						}
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
 					String msg = languagePrefs.getPreferencesString
 							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					Utilities.showPopUp(AcMoveDetails.this, null, msg);
+					showPopUp(AcMoveDetails.this, null, msg);
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -692,6 +704,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -739,16 +752,19 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 								return false;
 							}
 						});
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcMoveDetails.this, null,
+						showPopUp(AcMoveDetails.this, null,
 								getLanguage(GlobalParams.ERRORINVALIDLOTNUMFORITEM,	GlobalParams.INVALID_LOT));
 						edt_move_from.setText(GlobalParams.BLANK_CHARACTER);		
 					}
 				} else {
-					Utilities.showPopUp(AcMoveDetails.this, null,
+					showPopUp(AcMoveDetails.this, null,
 							getLanguage(GlobalParams.ERRORINVALIDLOTNUMFORITEM,	GlobalParams.INVALID_LOT));
 					edt_move_from.setText(GlobalParams.BLANK_CHARACTER);
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -768,6 +784,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -860,8 +877,9 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						});
 						
 						checkFirstUom = true;
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcMoveDetails.this, null,
+						showPopUp(AcMoveDetails.this, null,
 								getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 										GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 						if (edtLotValue.isEnabled()) {
@@ -870,7 +888,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						edt_move_from.setText(GlobalParams.BLANK_CHARACTER);
 					}
 				} else {
-					Utilities.showPopUp(AcMoveDetails.this, null,
+					showPopUp(AcMoveDetails.this, null,
 							getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 									GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 					if (edtLotValue.isEnabled()) {
@@ -878,6 +896,8 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 					}
 					edt_move_from.setText(GlobalParams.BLANK_CHARACTER);
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -897,6 +917,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -928,7 +949,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 				if (result.equals("true")) {
 					if (edt_move_from.getEditableText().toString().trim().equalsIgnoreCase
 							(et_move_to.getEditableText().toString().trim())) {
-						Utilities.showPopUp(AcMoveDetails.this, null,
+						showPopUp(AcMoveDetails.this, null,
 								getLanguage(GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE,
 										GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE));
 					} else {
@@ -947,25 +968,27 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 								} else {
 									btnOK.setEnabled(true);
 								}
-								
+								scanFlag = GlobalParams.FLAG_ACTIVE;
 							} else {
-								Utilities.showPopUp(AcMoveDetails.this, null,
+								showPopUp(AcMoveDetails.this, null,
 										getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 												GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 							}					
 						} else {
-							Utilities.showPopUp(AcMoveDetails.this, null,
+							showPopUp(AcMoveDetails.this, null,
 									getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 											GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 							et_move_to.setText(GlobalParams.BLANK_CHARACTER);
 						}
 					}					
 				} else {
-					Utilities.showPopUp(AcMoveDetails.this, null,
+					showPopUp(AcMoveDetails.this, null,
 							getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 									GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 					et_move_to.setText(GlobalParams.BLANK_CHARACTER);
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -984,7 +1007,8 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			diaglogPost.setMessage(GlobalParams.PROCESS_DATA);
 			diaglogPost.setCancelable(false); 
 			diaglogPost.setCanceledOnTouchOutside(false);
-			diaglogPost.show();			
+			diaglogPost.show();
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -1015,12 +1039,15 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 					if (result.equals("true")) {				
 						if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
 							AcMoveDetails.this.finish();
+							scanFlag = GlobalParams.FLAG_ACTIVE;
 						} else {
-							Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+							showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
 						}
 					} else {
-						Utilities.showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+						showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
 					}
+				} else {
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
 			}
 		}
@@ -1041,6 +1068,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -1075,16 +1103,17 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 				if (result.equals(GlobalParams.TRUE)) {
 					if (itemNumber != null) {
 						tvmaxQty.setText(String.valueOf(itemNumber.get_quantityOnHand()));
-						et_move_qty.setText(GlobalParams.BLANK_CHARACTER);					
+						et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
 						String msg = languagePrefs.getPreferencesString
 								(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-						Utilities.showPopUp(AcMoveDetails.this, null, msg);						
+						showPopUp(AcMoveDetails.this, null, msg);						
 					}
 				} else {
 					String msg = languagePrefs.getPreferencesString
 							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					Utilities.showPopUp(AcMoveDetails.this, null, msg);					
+					showPopUp(AcMoveDetails.this, null, msg);					
 				}
 			}
 		}
@@ -1112,6 +1141,35 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		listBinTransfer.add(enBinTransfer);
 		binTransfer = DataParser.convertObjectToString(listBinTransfer);
 		Logger.error(binTransfer);
+	}
+	
+	public void showPopUp(final Context mContext,
+			final Class<?> newClass, final String strMessages) {
+		String message;
+		if (strMessages.equals(GlobalParams.BLANK)) {
+			message = GlobalParams.WRONG_USER;
+		} else {
+			message = strMessages;
+		}
+		
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(message);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
 	}
 	
 	/**

@@ -8,6 +8,7 @@
 package com.appolis.receiverinventory;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -54,6 +55,7 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 	private LanguagePreferences languagePrefs;
 	private TextView tvScanLP;
 	private boolean activityIsRunning = false;
+	private String scanFlag;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
@@ -166,6 +168,7 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -201,15 +204,18 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 							intent = new Intent(AcReceiverScanLP.this, AcReceiverInventoryDetails.class);
 							intent.putExtra(GlobalParams.PO_OBJECT, po);
 							startActivity(intent);
+							scanFlag = GlobalParams.FLAG_ACTIVE;
 						} else {
-							Utilities.showPopUp(AcReceiverScanLP.this, null,
+							showPopUp(AcReceiverScanLP.this, null,
 									getLanguage(GlobalParams.BIN_MESSAGEBOXTITLEINVALIDLP, GlobalParams.INVALID_LICENSE_PLATE));
 						}
 					} else {
-						Utilities.showPopUp(AcReceiverScanLP.this, null,
+						showPopUp(AcReceiverScanLP.this, null,
 								getLanguage(GlobalParams.BIN_MESSAGEBOXTITLEINVALIDLP, GlobalParams.INVALID_LICENSE_PLATE));
 					}
-				}
+				} else {
+					scanFlag = GlobalParams.FLAG_ACTIVE;
+				}			
 			}
 		}
 	}
@@ -228,6 +234,7 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 	        if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_SCANNER_ARRIVAL))
 	        {
 	        	imgScan.setVisibility(View.GONE);
+	        	scanFlag = GlobalParams.FLAG_ACTIVE;
 	        }
 	        
 	        // a Scanner has disconnected
@@ -240,9 +247,11 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				edtLp.setText(new String(data));
-				GetLPNumberAsyncTask getLPNumberAsyncTask = new GetLPNumberAsyncTask();
-				getLPNumberAsyncTask.execute();
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					edtLp.setText(new String(data));
+					GetLPNumberAsyncTask getLPNumberAsyncTask = new GetLPNumberAsyncTask();
+					getLPNumberAsyncTask.execute();
+				}
 	        }
 	    }
 	};
@@ -300,5 +309,34 @@ public class AcReceiverScanLP extends Activity implements OnClickListener{
 	 */
 	public String getLanguage(String key, String value){
 		return languagePrefs.getPreferencesString(key, value);
+	}
+	
+	public void showPopUp(final Context mContext,
+			final Class<?> newClass, final String strMessages) {
+		String message;
+		if (strMessages.equals(GlobalParams.BLANK)) {
+			message = GlobalParams.WRONG_USER;
+		} else {
+			message = strMessages;
+		}
+		
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(message);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
 	}
 }
