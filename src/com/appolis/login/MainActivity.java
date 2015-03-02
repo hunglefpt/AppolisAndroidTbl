@@ -84,7 +84,8 @@ public class MainActivity extends Activity implements OnClickListener, Animation
 	private ImageView imgCancel, imgCancelTwo;
 	private AppPreferences _appPrefs;
 	private String scanFlag;
-	
+    long lastClickTime = 0;
+    
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -427,115 +428,121 @@ public class MainActivity extends Activity implements OnClickListener, Animation
 	 */
 	@Override
 	public void onClick(View v) {		
-		Intent intent;			
-		switch (v.getId()) {
-		
-		case R.id.imgHome:
-			// retrieve the scanner name and start the EZ Pair Process
-			intent = new Intent(_context, EzPairActivity.class);
-			startActivityForResult(intent, GlobalParams.SCAN_SOCKET);
-			break;
-			
-		case R.id.img_main_menu_scan_barcode:
-			intent = new Intent(this, CaptureBarcodeCamera.class);
-			startActivityForResult(intent, GlobalParams.AC_MAIN);
-			break;
-			
-		case R.id.button_next:
-			 viewPager.setCurrentItem(1, true);
-			 setStatusButtonsNextPrevious(true);
-			break;
-			
-		case R.id.button_previous:
-			 viewPager.setCurrentItem(0, true);
-			 setStatusButtonsNextPrevious(false);
-			break;
-			
-		case R.id.imgCancel:
-			linTip.setVisibility(View.GONE);
-			_appPrefs.saveTipMain(GlobalParams.TRUE);
-			break;
-			
-		case R.id.imgCancelTwo:
-			linTipTwo.setVisibility(View.GONE);
-			_appPrefs.saveTipMainTwo(GlobalParams.TRUE);
-			break;
-			
-		case 0: // Receiving	
-			setButtonId(v.getId());
-			break;
-			
-		case 1: // Put away
-			setButtonId(v.getId());
-			break;
-			
-		case 2:
-			setButtonId(v.getId());
-			break;
-			
-		case 3: // Move
-			setButtonId(v.getId());
-			break;
-			
-		case 4:
-			setButtonId(v.getId());
-			break;
-			
-		case 5: // Cycle count
-			setButtonId(v.getId());
-			break;
-			
-		case 6:
-			setButtonId(v.getId());
-			break;
-			
-		case 7:
-			setButtonId(v.getId());
-			break;
-			
-		case 8: // Logout
-			setButtonId(v.getId());
-			break;
-			
-		case 9:
-			setButtonId(v.getId());
-			break;
-			
-		case 10: // User profile
-			setButtonId(v.getId());
-			break;
-			
-		case 11:
-			setButtonId(v.getId());
-			break;
-			
-		case 12:
-			setButtonId(v.getId());
-			break;
-			
-		case 13:
-			setButtonId(v.getId());
-			break;
-			
-		case 14:
-			setButtonId(v.getId());
-			break;	
-			
-		case 15: // Receiver inventory		
-			setButtonId(v.getId());
-			break;
-			
-		case 16: // Create bins		
-			setButtonId(v.getId());
-			break;
-			
-		case 17: // Create Items
-			setButtonId(v.getId());
-			break;
-			
-		default:
-			break;
-		}
+		Intent intent;
+		long clickTime = System.currentTimeMillis();
+        if (clickTime - lastClickTime < GlobalParams.DOUBLE_CLICK_TIME_DELTA){
+            //onDoubleClick(v);
+        } else {
+        	switch (v.getId()) {
+    		
+    		case R.id.imgHome:
+    			// retrieve the scanner name and start the EZ Pair Process
+    			intent = new Intent(_context, EzPairActivity.class);
+    			startActivityForResult(intent, GlobalParams.SCAN_SOCKET);
+    			break;
+    			
+    		case R.id.img_main_menu_scan_barcode:
+    			intent = new Intent(this, CaptureBarcodeCamera.class);
+    			startActivityForResult(intent, GlobalParams.AC_MAIN);
+    			break;
+    			
+    		case R.id.button_next:
+    			 viewPager.setCurrentItem(1, true);
+    			 setStatusButtonsNextPrevious(true);
+    			break;
+    			
+    		case R.id.button_previous:
+    			 viewPager.setCurrentItem(0, true);
+    			 setStatusButtonsNextPrevious(false);
+    			break;
+    			
+    		case R.id.imgCancel:
+    			linTip.setVisibility(View.GONE);
+    			_appPrefs.saveTipMain(GlobalParams.TRUE);
+    			break;
+    			
+    		case R.id.imgCancelTwo:
+    			linTipTwo.setVisibility(View.GONE);
+    			_appPrefs.saveTipMainTwo(GlobalParams.TRUE);
+    			break;
+    			
+    		case 0: // Receiving	
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 1: // Put away
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 2:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 3: // Move
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 4:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 5: // Cycle count
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 6:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 7:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 8: // Logout
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 9:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 10: // User profile
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 11:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 12:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 13:
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 14:
+    			setButtonId(v.getId());
+    			break;	
+    			
+    		case 15: // Receiver inventory		
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 16: // Create bins		
+    			setButtonId(v.getId());
+    			break;
+    			
+    		case 17: // Create Items
+    			setButtonId(v.getId());
+    			break;
+    			
+    		default:
+    			break;
+    		}
+        }
+        lastClickTime = clickTime;
 	}
 
 	/**

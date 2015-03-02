@@ -23,6 +23,7 @@ public final class GlobalParams {
 	public static final int SWIPE_MIN_DISTANCE = 120;
 	public static final int SWIPE_MAX_OFF_PATH = 250;
 	public static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	public static final long DOUBLE_CLICK_TIME_DELTA = 500;//milliseconds
 	public static final int TOAT_TIME = 4000;
 	public static final String USERNAME = "username";
 	public static final String PASSWORD = "password";
