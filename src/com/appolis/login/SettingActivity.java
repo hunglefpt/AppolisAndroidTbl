@@ -40,11 +40,13 @@ public class SettingActivity extends Activity implements OnClickListener {
 	private AppPreferences _appPrefs;
 	private AsyncTask<?, ?, ?> myAynstask;
 	private String URL;
+	private boolean activityIsRunning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		_appPrefs = new AppPreferences(getApplicationContext());
 		setContentView(R.layout.setting_activity);
+		activityIsRunning = true;
 		initLayout();
 		super.onCreate(savedInstanceState);
 	}
@@ -121,6 +123,18 @@ public class SettingActivity extends Activity implements OnClickListener {
 		dialog.show();
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		activityIsRunning = true;
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		activityIsRunning = false;
+	}
+	
 	/**
 	 * Check url
 	 * @author hoangnh11
@@ -181,15 +195,17 @@ public class SettingActivity extends Activity implements OnClickListener {
 
 			@Override
 			protected void onPostExecute(Integer result) {
-				myAynstask = null;
-				dialog.dismiss();
-				
-				if(result==200)	{
-					_appPrefs.saveURLFirstLogin(URL);
-					finish();
-				} else {
-					showPopUpSetting(SettingActivity.this, getResources().getString(R.string.INVALID_URL));
-				}
+				if (activityIsRunning) {
+					myAynstask = null;
+					dialog.dismiss();
+					
+					if(result==200)	{
+						_appPrefs.saveURLFirstLogin(URL);
+						finish();
+					} else {
+						showPopUpSetting(SettingActivity.this, getResources().getString(R.string.INVALID_URL));
+					}
+				}				
 			}
 		}
 	}
