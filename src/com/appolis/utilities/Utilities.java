@@ -209,10 +209,10 @@ public class Utilities {
 	                } else if (mPreviousHeight < newHeight) {
 	                    // Height increased: keyboard was hidden
 	                    keyboardVisibilityListener.onKeyboardVisibilityChanged(false);
-	                    Logger.error("4444444: " + newHeight + " : " + mPreviousHeight);
+//	                    Logger.error("4444444: " + newHeight + " : " + mPreviousHeight);
 	                } else {
 	                    // No change
-	                	Logger.error("555555555: " + newHeight + " : " + mPreviousHeight);
+//	                	Logger.error("555555555: " + newHeight + " : " + mPreviousHeight);
 	                }
 	            }
 	            mPreviousHeight = newHeight;
