@@ -118,12 +118,15 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 	
 	private boolean isConnectSocket;
 	private int typeScan;
+	private boolean isScanning = true;
+	private boolean isActivityRunning = false;
 	
 	private LanguagePreferences languagePrefs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		isActivityRunning = true;
 		setContentView(R.layout.ac_cycle_location);
 		Intent intent = getIntent();
 		objectCycleCount = (ObjectCycleCount) intent
@@ -254,21 +257,22 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-
+			if (!isCancelled() && isActivityRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 		}
 
 		@Override
@@ -301,7 +305,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -473,6 +477,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		isActivityRunning = true;
 		switch (requestCode) {
 		case GlobalParams.AC_CYCLE_COUNT_ADJUSMENT_ACTIVITY:
 			if (RESULT_OK == resultCode || resultCode == RESULT_CANCELED) {
@@ -550,7 +555,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (!isCancelled()) {
+			if (!isCancelled() && isActivityRunning) {
 				progressDialog = new ProgressDialog(context);
 				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
 						"Loading..."));
@@ -631,7 +636,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -654,12 +659,14 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						String messUnSupported = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE,
 								GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY);
 						Utilities.showPopUp(context, null, messUnSupported);
+						isScanning = true;
 						break;
 
 					case 4:// Unsupported barcode
 						String messNotLPOrItem = languagePrefs.getPreferencesString(GlobalParams.JOBPART_VALIDATEITEMORLP_KEY,
 																				GlobalParams.JOBPART_VALIDATEITEMORLP_VALUE);
 						Utilities.showPopUp(context, null, messNotLPOrItem);
+						isScanning = true;
 						break;
 
 					case 1: // no network
@@ -667,6 +674,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 								GlobalParams.ERRORUNABLETOCONTACTSERVER,
 								GlobalParams.ERROR_INVALID_NETWORK);
 						Utilities.showPopUp(context, null, msg);
+						isScanning = true;
 						break;
 
 					case 5: // If call was ambiguous, PONumber, OrderNumber,
@@ -679,7 +687,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						String msgs = languagePrefs.getPreferencesString("error",
 								"error");
 						Utilities.showPopUp(context, null, msgs);
-
+						isScanning = true;
 						Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
 								+ result);
 						break;
@@ -689,6 +697,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 							GlobalParams.MESSAGE_SCAN_LP_OR_ITEM_KEY,
 							GlobalParams.MESSAGE_SCAN_LP_OR_ITEM_VALUE);
 					Utilities.showPopUp(context, null, msg);
+					isScanning = true;
 				}
 			}
 		}
@@ -739,7 +748,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (!isCancelled()) {
+			if (!isCancelled() && isActivityRunning) {
 				progressDialog = new ProgressDialog(context);
 				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
 						"Loading..."));
@@ -808,7 +817,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -828,12 +837,14 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 					String messUnSupported = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE,
 							GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY);
 					Utilities.showPopUp(context, null, messUnSupported);
+					isScanning = true;
 					break;
 
 				case 4:// Unsupported barcode
 					String messLot = languagePrefs.getPreferencesString(GlobalParams.USER_SCAN_LOTNUMBER_KEY,
 							GlobalParams.USER_SCAN_LOTNUMBER_VALUE);
 					Utilities.showPopUp(context, null, messLot);
+					isScanning = true;
 					break;
 
 				case 1: // no network
@@ -841,6 +852,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 							GlobalParams.ERRORUNABLETOCONTACTSERVER,
 							GlobalParams.ERROR_INVALID_NETWORK);
 					Utilities.showPopUp(context, null, msg);
+					isScanning = true;
 					break;
 
 				default:
@@ -849,6 +861,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 					CommontDialog.showErrorDialog(context, msgs, null);
 					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
 							+ result);
+					isScanning = true;
 					break;
 				}
 			}
@@ -881,20 +894,22 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivityRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 
 		}
 
@@ -920,10 +935,10 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
-
+			
 			if (!isCancelled()) {
 				if (result == 0) {
 					ObjectCountCycleCurrent currentSelected = getLPFromItemNumber();
@@ -980,21 +995,22 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-
+			if (!isCancelled() && isActivityRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 		}
 
 		@Override
@@ -1021,7 +1037,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -1037,6 +1053,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						// if size > 1 then ItemNumber has two more than and it
 						// only has different Lot in first list
 						else {
+							isScanning = true;
 							String message = languagePrefs.getPreferencesString(GlobalParams.MESSAGE_SCAN_LOCATION_KEY,
 											GlobalParams.MESSAGE_SCAN_LOCATION_VALUE);
 							String contentMessage = message.replace("{0}", barcode);
@@ -1201,20 +1218,22 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivityRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 
 		}
 
@@ -1248,7 +1267,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -1276,6 +1295,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 	@Override
 	protected void onPause() {
 		super.onPause();
+		isActivityRunning = false;
 		// unregister the notifications
 		unregisterReceiver(_newItemsReceiver);
 		// indicate this view has been destroyed
@@ -1287,6 +1307,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
+		isActivityRunning = true;
 		typeScan = CommonData.SCAN_LP;
 		// register to receive notifications from SingleEntryApplication
         // these notifications originate from ScanAPI 
@@ -1335,10 +1356,14 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
 				String barcode = new String(data);
-				if(typeScan == CommonData.SCAN_LP) {
-					processScanData(barcode);
-				} else {
-					processScanDataWithLot(barcode);
+				
+				if(isScanning) {
+					isScanning = false;
+					if(typeScan == CommonData.SCAN_LP) {
+						 processScanData(barcode);
+					} else {
+						processScanDataWithLot(barcode);
+					}
 				}
 	        }
 	    }

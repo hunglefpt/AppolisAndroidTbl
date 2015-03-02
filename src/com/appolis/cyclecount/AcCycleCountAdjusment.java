@@ -98,12 +98,14 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 	private boolean isUpdateCycleCount;
 	private boolean isBinPath;
 	private boolean isExistInList;
+	private boolean isActivityRunning = false;
 	
 	private LanguagePreferences languagePrefs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		isActivityRunning = true;
 		setContentView(R.layout.ac_cycle_adjustment);
 		Intent intent =  this.getIntent();
 		objCurrentPre = (ObjectCountCycleCurrent) intent.getSerializableExtra("cycleItemCurrent");
@@ -281,20 +283,22 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivityRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 		}
 
 		@Override
@@ -317,7 +321,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 			
@@ -422,20 +426,22 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivityRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 
 		}
 
@@ -462,7 +468,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 			
@@ -539,20 +545,22 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivityRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 
 		}
 
@@ -624,7 +632,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 			
@@ -688,4 +696,20 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 		location.setSubPath(subPath);
 		return location;
 	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		isActivityRunning = false;
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		isActivityRunning = true;
+	}
+	
+	
 }

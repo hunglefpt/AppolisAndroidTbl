@@ -81,12 +81,14 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 	
 	private int typeScan;
 	private boolean isConnectSocket;
+	private boolean isActivityRunning = false;
 	private LanguagePreferences languagePrefs;
 	private ObjectCycleItemDetail itemDetail;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_cycle_adjustment_option);
+		isActivityRunning = true;
 		newLocation = getIntent().getStringExtra("location");
 		bin = (ObjectInstanceRealTimeBin) getIntent().getSerializableExtra("BinCycleCount");
 		ObjectBinList bins = (ObjectBinList) getIntent().getSerializableExtra("binList");
@@ -231,6 +233,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		isActivityRunning = true;
 		switch (requestCode) {
 			case GlobalParams.CAPTURE_BARCODE_CAMERA_ACTIVITY:
 				if (resultCode == RESULT_OK) {
@@ -301,7 +304,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (!isCancelled()) {
+			if (!isCancelled() && isActivityRunning) {
 				progressDialog = new ProgressDialog(context);
 				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
 						"Loading..."));
@@ -371,7 +374,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -449,7 +452,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (!isCancelled()) {
+			if (!isCancelled() && isActivityRunning) {
 				progressDialog = new ProgressDialog(context);
 				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
 						"Loading..."));
@@ -494,7 +497,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -620,6 +623,19 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 		dialog.show();
 	}
 	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		isActivityRunning = false;
+		// unregister the notifications
+		unregisterReceiver(_newItemsReceiver);
+		// indicate this view has been destroyed
+		// if the reference count becomes 0 ScanAPI can
+		// be closed if this is not a screen rotation scenario
+		SingleEntryApplication.getApplicationInstance().decreaseViewCount();
+	}
+
 	/**
 	 * Get data Count cycle current
 	 * @return
@@ -666,6 +682,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 	@Override
 	protected void onResume() {
 		super.onResume();
+		isActivityRunning = true;
 		// register to receive notifications from SingleEntryApplication
         // these notifications originate from ScanAPI
 		typeScan = CommonData.SCAN_ITEM;

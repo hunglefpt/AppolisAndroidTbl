@@ -70,7 +70,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 	private String loc;
 	private ObjectInstanceRealTimeBin bin;
 	private ObjectCountCycleCurrent binCurrent;
-	
+	private boolean isActivtyRunning = false;
 	private LanguagePreferences languagePrefs;
 	
 	@Override
@@ -82,6 +82,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 		binCurrent = (ObjectCountCycleCurrent) getIntent().getSerializableExtra("objectCycleCurrent");
 		isLocationScreen = getIntent().getBooleanExtra("isLocationScreen", false);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
+		isActivtyRunning = true;
 		//BTLrequireScan = LoginActivity.itemUser.get_isForceCycleCountScan();
 		initLayout();
 		setText();
@@ -199,6 +200,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		isActivtyRunning = true;
 		switch (requestCode) {
 			case GlobalParams.CAPTURE_BARCODE_CAMERA_ACTIVITY:
 				if (resultCode == RESULT_OK) {
@@ -253,7 +255,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (!isCancelled()) {
+			if (!isCancelled() && isActivtyRunning) {
 				progressDialog = new ProgressDialog(context);
 				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
 						"Loading..."));
@@ -323,7 +325,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivtyRunning) {
 				progressDialog.dismiss();
 			}
 
@@ -400,21 +402,22 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-
+			if (!isCancelled() && isActivtyRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 		}
 
 		@Override
@@ -442,7 +445,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivtyRunning) {
 				progressDialog.dismiss();
 			}
 			
@@ -528,19 +531,21 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivtyRunning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 
 		}
 
@@ -578,7 +583,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivtyRunning) {
 				progressDialog.dismiss();
 			}
 			
@@ -634,6 +639,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 	@Override
 	protected void onPause() {
 		super.onPause();
+		isActivtyRunning = false;
 		// unregister the notifications
 		unregisterReceiver(_newItemsReceiver);
 		// indicate this view has been destroyed
@@ -645,6 +651,7 @@ public class AcCycleAdjustmentOption extends Activity implements OnClickListener
 	@Override
 	protected void onResume() {
 		super.onResume();
+		isActivtyRunning = true;
 		// register to receive notifications from SingleEntryApplication
         // these notifications originate from ScanAPI 
         IntentFilter filter;

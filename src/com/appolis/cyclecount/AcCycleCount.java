@@ -76,10 +76,13 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	private LanguagePreferences languagePrefs;
 	public static boolean isPhysicalInventoryCycleCount;
 	public static int cycleCountInstanceID;
+	private boolean isScanning = true;
+	private boolean isActivityRuning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		isActivityRuning = true;
 		setContentView(R.layout.ac_cycle_count);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		initLayout();
@@ -150,6 +153,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	@Override
 	protected void onPause() {
 		super.onPause();
+		isActivityRuning = false;
 		// unregister the notifications
 		unregisterReceiver(_newItemsReceiver);
 		// indicate this view has been destroyed
@@ -161,6 +165,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
+		isActivityRuning = true;
 		// register to receive notifications from SingleEntryApplication
         // these notifications originate from ScanAPI 
         IntentFilter filter;
@@ -208,7 +213,10 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
 				String barcode = new String(data);
-				processScanData(barcode);
+				if(isScanning) {
+					isScanning =  false;
+					processScanData(barcode);
+				}
 	        }
 	    }
 	};
@@ -229,20 +237,22 @@ public class AcCycleCount extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivityRuning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 
 		}
 
@@ -275,7 +285,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRuning) {
 				progressDialog.dismiss();
 			}
 
@@ -314,6 +324,8 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		isScanning = true;
+		isActivityRuning = true;
 		switch (requestCode) {
 			case GlobalParams.AC_CYCLE_COUNT_LOCATION_ACTIVITY:
 				if(RESULT_OK == resultCode || resultCode == RESULT_CANCELED){
@@ -445,20 +457,22 @@ public class AcCycleCount extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressDialog = new ProgressDialog(context);
-			progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
-					"Loading..."));
-			progressDialog
-					.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							cancel(true);
-						}
-					});
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			if (!isCancelled() && isActivityRuning) {
+				progressDialog = new ProgressDialog(context);
+				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
+						"Loading..."));
+				progressDialog
+						.setOnCancelListener(new DialogInterface.OnCancelListener() {
+	
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								cancel(true);
+							}
+						});
+				progressDialog.setCanceledOnTouchOutside(false);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 
 		}
 
@@ -481,7 +495,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (null != progressDialog && (progressDialog.isShowing())) {
+			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRuning) {
 				progressDialog.dismiss();
 			}
 			
@@ -530,7 +544,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if(!isCancelled()){
+			if(!isCancelled() && isActivityRuning){
 				progressDialog = new ProgressDialog(context);
 				progressDialog.setMessage(languagePrefs.getPreferencesString(GlobalParams.LOADING_DATA + "...",
 						"Loading..."));
@@ -597,7 +611,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			
-			if(null != progressDialog && (progressDialog.isShowing())){
+			if(null != progressDialog && (progressDialog.isShowing()) && isActivityRuning){
 				progressDialog.dismiss();
 			}
 			
@@ -613,28 +627,33 @@ public class AcCycleCount extends Activity implements OnClickListener,
 					} else {
 						String mss = languagePrefs.getPreferencesString(GlobalParams.ERRORBINNOTFOUND_KEY, GlobalParams.ERRORBINNOTFOUND_VALUE);
 						Utilities.showPopUp(context, null, mss);
+						isScanning = true;
 					}
 					break;
 					
 				case 3:// error scan
 					String mss = languagePrefs.getPreferencesString(GlobalParams.ERRORBINNOTFOUND_KEY, GlobalParams.ERRORBINNOTFOUND_VALUE);
 					Utilities.showPopUp(context, null, mss);
+					isScanning = true;
 					break;
 				
 				case 4:// Unsupported barcode 
 					String mss1 = languagePrefs.getPreferencesString(GlobalParams.BIN_NOT_EXIST_KEY, GlobalParams.BIN_NOT_EXIST_VALUE);
 					Utilities.showPopUp(context, null, mss1);
+					isScanning = true;
 					break;
 					
 				case 1: //no network
 					String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
 					Utilities.showPopUp(context, null, msg);
+					isScanning = true;
 					break;
 					
 				default:
 					String msgs = languagePrefs.getPreferencesString("error", "error");
 					Utilities.showPopUp(context, null, msgs);
 					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: " + result);
+					isScanning = true;
 					break;
 				}
 			}
