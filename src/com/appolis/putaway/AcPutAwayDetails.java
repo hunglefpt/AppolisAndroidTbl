@@ -12,6 +12,7 @@ import java.util.List;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -92,6 +93,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private EnPutAway passPutAway;
 	DecimalFormat df = new DecimalFormat("#0.00");
 	private boolean activityIsRunning = false;
+	private String scanFlag;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -312,7 +314,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	 * SingleEntryApplication.
 	 * Update the UI accordingly when we receive a notification
 	 */
-	private final BroadcastReceiver _newItemsReceiver = new BroadcastReceiver() {   
+	private final BroadcastReceiver _newItemsReceiver = new BroadcastReceiver() {
 	    
 		@Override  
 	    public void onReceive(Context context, Intent intent) {
@@ -335,9 +337,11 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				et_move_to.setText(new String(data));
-				BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
-	            barcodeAsyncTask.execute();
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					et_move_to.setText(new String(data));
+					BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+		            barcodeAsyncTask.execute();
+				}				
 	        }
 	    }
 	};
@@ -404,7 +408,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.setMessage(getLanguage(GlobalParams.LOADING_MSG, GlobalParams.LOADING_DATA));
 			dialog.show();
 			dialog.setCancelable(false); 
-			dialog.setCanceledOnTouchOutside(false);			
+			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -530,12 +535,15 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								return false;
 							}
 						});
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -555,6 +563,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -679,12 +688,15 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								return false;
 							}
 						});
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -704,6 +716,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -856,14 +869,16 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							public void afterTextChanged(Editable s) {
 							}
 						});
-						
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 					
 				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -883,6 +898,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -914,7 +930,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
-					if (itemNumber != null && StringUtils.isNotBlank(itemNumber.get_LotNumber())) {					
+					if (itemNumber != null && StringUtils.isNotBlank(itemNumber.get_LotNumber())) {
 						edt_move_from.setOnEditorActionListener(new OnEditorActionListener() {
 							
 							@Override
@@ -927,18 +943,21 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								return false;
 							}
 						});
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcPutAwayDetails.this, null,
+						showPopUp(AcPutAwayDetails.this, null,
 								getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 										GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 						edtLotValue.setText(GlobalParams.BLANK_CHARACTER);						
 					}
 				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null,
+					showPopUp(AcPutAwayDetails.this, null,
 							getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 									GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 					edtLotValue.setText(GlobalParams.BLANK_CHARACTER);				
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -958,6 +977,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -1045,16 +1065,19 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						});
 						
 						checkFirstUom = true;
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						Utilities.showPopUp(AcPutAwayDetails.this, null,
+						showPopUp(AcPutAwayDetails.this, null,
 								getLanguage(GlobalParams.ERRORINVALIDLOTNUMFORITEM,	GlobalParams.INVALID_LOT));
 						edt_move_from.setText(GlobalParams.BLANK_CHARACTER);						
 					}
 				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null,
+					showPopUp(AcPutAwayDetails.this, null,
 							getLanguage(GlobalParams.ERRORINVALIDLOTNUMFORITEM,	GlobalParams.INVALID_LOT));
 					edt_move_from.setText(GlobalParams.BLANK_CHARACTER);
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -1074,6 +1097,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -1105,7 +1129,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 				if (result.equals(GlobalParams.TRUE)) {
 					if (edt_move_from.getEditableText().toString().trim().equalsIgnoreCase
 							(et_move_to.getEditableText().toString().trim())) {
-						Utilities.showPopUp(AcPutAwayDetails.this, null,
+						showPopUp(AcPutAwayDetails.this, null,
 								getLanguage(GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE,
 										GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE));
 					} else {
@@ -1124,25 +1148,27 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								} else {
 									btnOK.setEnabled(true);
 								}
-								
+								scanFlag = GlobalParams.FLAG_ACTIVE;
 							} else {							
-								Utilities.showPopUp(AcPutAwayDetails.this, null,
+								showPopUp(AcPutAwayDetails.this, null,
 										getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 												GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 							}
 						
 						} else {
-							Utilities.showPopUp(AcPutAwayDetails.this, null,
+							showPopUp(AcPutAwayDetails.this, null,
 									getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 											GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 						}
 					}
 					
 				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null,
+					showPopUp(AcPutAwayDetails.this, null,
 							getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 									GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -1162,6 +1188,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
 			dialog.show();
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -1188,19 +1215,22 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			if (activityIsRunning) {
 				dialog.dismiss();
 				// If not cancel by user
-				if (!isCancelled()) {				
+				if (!isCancelled()) {
 					if (result.equals("true")) {				
 						if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
 							AcPutAwayDetails.this.finish();
 							intent = new Intent(AcPutAwayDetails.this, AcPutAway.class);
 							intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(intent);
+							scanFlag = GlobalParams.FLAG_ACTIVE;
 						} else {
-							Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+							showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
 						}
 					} else {
-						Utilities.showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
 					}					
+				} else {
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
 			}
 		}
@@ -1288,6 +1318,35 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		listBinTransfer.add(enBinTransfer);
 		binTransfer = DataParser.convertObjectToString(listBinTransfer);
 		Logger.error(binTransfer);
+	}
+	
+	public void showPopUp(final Context mContext,
+			final Class<?> newClass, final String strMessages) {
+		String message;
+		if (strMessages.equals(GlobalParams.BLANK)) {
+			message = GlobalParams.WRONG_USER;
+		} else {
+			message = strMessages;
+		}
+		
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(message);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
 	}
 	
 	/**

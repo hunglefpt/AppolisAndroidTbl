@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -73,6 +74,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	private int checkPos = -1;
 	private EnPutAway passPutAway;
 	private EnPassPutAway enPassPutAway;
+	private String scanFlag;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -268,9 +270,11 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	        // decoded Data received from a scanner
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
-				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);		
-				BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(new String(data));
-	            barcodeAsyncTask.execute();
+				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(new String(data));
+		            barcodeAsyncTask.execute();
+				}				
 	        }
 	    }
 	};
@@ -340,6 +344,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -379,12 +384,12 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 								&& enBarcodeExistences.getOrderCount() == 0
 								&& enBarcodeExistences.getPoCount() == 0
 								&& enBarcodeExistences.getUOMBarcodeCount() == 0) {
-							Utilities.showPopUp(AcPutAwayBin.this, null,
+							showPopUp(AcPutAwayBin.this, null,
 									getLanguage(GlobalParams.SCAN_NOTFOUND_VALUE,
 											GlobalParams.SCAN_NOTFOUND_VALUE));
 						} else if (enBarcodeExistences.getOrderCount() != 0 || enBarcodeExistences.getLotOnlyCount() != 0
 								|| enBarcodeExistences.getPoCount() != 0) {
-							Utilities.showPopUp(AcPutAwayBin.this, null,
+							showPopUp(AcPutAwayBin.this, null,
 									getLanguage(GlobalParams.PLEASE_SCAN_BIN_OR_LP,
 											GlobalParams.PLEASE_SCAN_BIN_OR_LP));
 						} else if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
@@ -395,20 +400,52 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 							intent.putExtra(GlobalParams.PUT_AWAY_BIN_DATA, passPutAway);
 							intent.putExtra(GlobalParams.PUT_PASS_AWAY_BIN_DATA, enPassPutAway);
 							startActivity(intent);
+							scanFlag = GlobalParams.FLAG_ACTIVE;
 						} else {
-							Utilities.showPopUp(AcPutAwayBin.this, null,
+							showPopUp(AcPutAwayBin.this, null,
 									getLanguage(GlobalParams.PLEASE_SCAN_BIN_OR_LP,
 											GlobalParams.PLEASE_SCAN_BIN_OR_LP));
 						}
 						
 					} else {
-						Utilities.showPopUp(AcPutAwayBin.this, null, GlobalParams.INVALID_SCAN);
+						showPopUp(AcPutAwayBin.this, null, GlobalParams.INVALID_SCAN);
 					}
 				} else {
-					Utilities.showPopUp(AcPutAwayBin.this, null, GlobalParams.INVALID_SCAN);
+					showPopUp(AcPutAwayBin.this, null, GlobalParams.INVALID_SCAN);
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
+	}
+	
+	public void showPopUp(final Context mContext,
+			final Class<?> newClass, final String strMessages) {
+		String message;
+		if (strMessages.equals(GlobalParams.BLANK)) {
+			message = GlobalParams.WRONG_USER;
+		} else {
+			message = strMessages;
+		}
+		
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(message);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
 	}
 	
 	/**
