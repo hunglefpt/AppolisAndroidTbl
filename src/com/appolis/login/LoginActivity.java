@@ -73,6 +73,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private boolean internetConnected = false;
 	private LinearLayout linTip;
 	private ImageView imgCancel;
+	private boolean activityIsRunning = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		_appPrefs = new AppPreferences(getApplicationContext());
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		setContentView(R.layout.login_acivity);
+		activityIsRunning = true;
 		itemUser = new ObjectUser();
 		dialog = new ProgressDialog(this);
 		initLayout();		
@@ -281,7 +283,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+		activityIsRunning = true;
 		if (requestCode == GlobalParams.LOGINSCREEN_TO_MAINSCREEN) {
 			
 			if (resultCode == RESULT_FIRST_USER) {
@@ -295,6 +297,18 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		activityIsRunning = true;
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		activityIsRunning = false;
+	}
+
 	/**
 	 * Check Login
 	 * @author hoangnh11
@@ -342,27 +356,28 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			
-			// If not cancel by user
-			if (!isCancelled()) {
-				
-				if (result.equals(GlobalParams.TRUE)) {
+			if (activityIsRunning) {
+				dialog.dismiss();			
+				// If not cancel by user
+				if (!isCancelled()) {
 					
-					if (data.substring(1, data.length() - 1).length() > 0) {
-						GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask();
-						getUserAsyncTask.execute();
+					if (result.equals(GlobalParams.TRUE)) {
 						
-					} else {
+						if (data.substring(1, data.length() - 1).length() > 0) {
+							GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask();
+							getUserAsyncTask.execute();
+							
+						} else {
+							showPopUp(LoginActivity.this, GlobalParams.WRONG_USER, edtLogin);
+						}
+						
+					} else if (data.equals(GlobalParams.BLANK_CHARACTER)) {
 						showPopUp(LoginActivity.this, GlobalParams.WRONG_USER, edtLogin);
+					} else {
+						showPopUp(LoginActivity.this, GlobalParams.NETWORK_ERROR, edtLogin);
 					}
-					
-				} else if (data.equals(GlobalParams.BLANK_CHARACTER)) {
-					showPopUp(LoginActivity.this, GlobalParams.WRONG_USER, edtLogin);
-				} else {
-					showPopUp(LoginActivity.this, GlobalParams.NETWORK_ERROR, edtLogin);
 				}
-			}
+			}			
 		}
 	}
 	
@@ -423,29 +438,30 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			
-			// If not cancel by user
-			if (!isCancelled()) {
-				
-				if (result.equals(GlobalParams.TRUE)) {
+			if (activityIsRunning) {
+				dialog.dismiss();			
+				// If not cancel by user
+				if (!isCancelled()) {
 					
-					if (itemUser != null && itemUser.get_PIN() != null) {
-						listItemMain = itemUser.get_userRoles();
-						Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-						startActivityForResult(mainIntent, GlobalParams.LOGINSCREEN_TO_MAINSCREEN);
-						_appPrefs.saveUsername(edtLogin.getText().toString());
-						_appPrefs.savePIN(edtPin.getText().toString());
-						_appPrefs.saveSite(edtSite.getText().toString());
+					if (result.equals(GlobalParams.TRUE)) {
+						
+						if (itemUser != null && itemUser.get_PIN() != null) {
+							listItemMain = itemUser.get_userRoles();
+							Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+							startActivityForResult(mainIntent, GlobalParams.LOGINSCREEN_TO_MAINSCREEN);
+							_appPrefs.saveUsername(edtLogin.getText().toString());
+							_appPrefs.savePIN(edtPin.getText().toString());
+							_appPrefs.saveSite(edtSite.getText().toString());
+							
+						} else {
+							showPopUp(LoginActivity.this, GlobalParams.WRONG_PIN, edtPin);
+						}
 						
 					} else {
-						showPopUp(LoginActivity.this, GlobalParams.WRONG_PIN, edtPin);
+						showPopUp(LoginActivity.this, GlobalParams.NETWORK_ERROR, edtPin);
 					}
-					
-				} else {
-					showPopUp(LoginActivity.this, GlobalParams.NETWORK_ERROR, edtPin);
 				}
-			}
+			}			
 		}
 	}
 	
