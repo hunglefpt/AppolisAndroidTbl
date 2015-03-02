@@ -80,7 +80,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
-		setContentView(R.layout.put_away);
+		setContentView(R.layout.put_away);		
 		intLayout();
 	}
 	
@@ -258,7 +258,8 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	        // a Scanner has connected
 	        if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_SCANNER_ARRIVAL))
 	        {
-	        	imgScan.setVisibility(View.GONE);
+	        	imgScan.setVisibility(View.GONE);	
+	        	scanFlag = GlobalParams.FLAG_ACTIVE;
 	        }
 	        
 	        // a Scanner has disconnected

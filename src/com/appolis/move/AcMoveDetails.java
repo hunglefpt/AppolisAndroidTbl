@@ -99,6 +99,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		setContentView(R.layout.move_details_layout);
+		scanFlag = GlobalParams.BLANK_CHARACTER;
 		activityIsRunning = true;
 		initLayout();
 		if (bundle.containsKey(GlobalParams.BARCODE_MOVE)) {

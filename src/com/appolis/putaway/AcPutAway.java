@@ -87,7 +87,8 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
-		setContentView(R.layout.put_away);		
+		setContentView(R.layout.put_away);
+		scanFlag = GlobalParams.BLANK_CHARACTER;
 		intLayout();
 		PutawayAsyncTask putawayAsyncTask = new PutawayAsyncTask();
         putawayAsyncTask.execute();
