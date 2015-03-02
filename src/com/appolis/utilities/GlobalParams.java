@@ -502,6 +502,7 @@ public final class GlobalParams {
 	public static final String RD_RETRIEVEPO_MSG_KEY = "rd_retrievePO_msg";
 	public static final String RD_LBL_LOTS_KEY = "rd_lbl_Lots";
 	public static final String DAMAGED_KEY = "Damaged";
+	public static final String ARITHMETIC_OVERFLOW = "Arithmetic overflow error converting numeric to data type numeric";
 	
 	/* number of status app */
 	public static final int ONE_STATUS = 1; // cusseccfull

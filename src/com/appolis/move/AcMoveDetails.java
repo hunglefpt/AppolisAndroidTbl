@@ -680,9 +680,15 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 						showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
-					String msg = languagePrefs.getPreferencesString
-							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					showPopUp(AcMoveDetails.this, null, msg);
+					if (tvTransfer.getText().toString().equals(GlobalParams.BLANK_CHARACTER)) {
+						String msg = languagePrefs.getPreferencesString
+								(GlobalParams.ARITHMETIC_OVERFLOW, GlobalParams.ARITHMETIC_OVERFLOW);
+						showPopUp(AcMoveDetails.this, null, msg);
+					} else {
+						String msg = languagePrefs.getPreferencesString
+								(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
+						showPopUp(AcMoveDetails.this, null, msg);
+					}					
 				}
 			} else {
 				scanFlag = GlobalParams.FLAG_ACTIVE;

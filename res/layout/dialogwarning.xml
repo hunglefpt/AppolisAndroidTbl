@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:background="@drawable/btn_cancel"
-            android:text="Ok" />
+            android:text="OK" />
 
         <Button
             android:id="@+id/dialogButtonNo"
