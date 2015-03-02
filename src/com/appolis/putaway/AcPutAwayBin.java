@@ -275,7 +275,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
 					BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(new String(data));
 		            barcodeAsyncTask.execute();
-				}				
+				}
 	        }
 	    }
 	};
