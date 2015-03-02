@@ -244,7 +244,7 @@ public class Utilities {
 		dialogButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				dialog.dismiss();          
+				dialog.dismiss();
 			}
 		});
 		dialog.show();
