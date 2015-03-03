@@ -23,6 +23,7 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -102,6 +103,7 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 	private String uom;
 	private double maxQty = 0;
 	private LanguagePreferences languagePrefs;
+	private String scanFlag = "";
 	
 	//define string multiple language
 	String scanQty;
@@ -116,6 +118,7 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.move_details_layout);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
+		scanFlag = GlobalParams.FLAG_ACTIVE;
 		
 		Bundle bundle = getIntent().getExtras();
 		if(bundle.containsKey(GlobalParams.PARAM_EN_PURCHASE_ORDER_INFOS)){
@@ -212,8 +215,10 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 					linScan.setVisibility(View.VISIBLE);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				} else {
-					linScan.setVisibility(View.GONE);						
+					linScan.setVisibility(View.GONE);
+					scanFlag = GlobalParams.FLAG_INACTIVE;
 				}
 			}
 		});
@@ -347,9 +352,10 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				String message = new String(data);
-				edtMoveTo.setText(message);
-				//checkAndCommitData();
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					String message = new String(data);
+					edtMoveTo.setText(message);
+				}
 	        }
 	    }
 	};
@@ -446,6 +452,32 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 	}
 	
 	/**
+	 * show alert dialog
+	 * @param mContext
+	 * @param strMessages
+	 */
+	public void showPopUp(final Context mContext, final String strMessages) {
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(strMessages);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
+	}
+	
+	/**
 	 * Set value to Object EnBinTransfer
 	 * @throws JSONException
 	 */
@@ -512,6 +544,7 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -590,15 +623,16 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				switch (result) {
 				case ErrorCode.STATUS_SUCCESS:
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					if (response.equalsIgnoreCase(GlobalParams.TRUE)) {
 						setResult(RESULT_OK);
 						finish();
 					} else {
 						if(StringUtils.isNotBlank(response)){
-							CommontDialog.showErrorDialog(context, response, null);
+							showPopUp(context, response);
 						} else {
 							String msg = languagePrefs.getPreferencesString(GlobalParams.MV_MOVEFAILED_KEY, GlobalParams.MV_MOVEFAILED_VALUE);
-							CommontDialog.showErrorDialog(context, msg, null);
+							showPopUp(context, msg);
 						}
 					}
 					break;
@@ -606,11 +640,12 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 				case ErrorCode.STATUS_NETWORK_NOT_CONNECT:
 				case ErrorCode.STATUS_JSON_EXCEPTION:
 					String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+					showPopUp(context, msg);
 					break;
 					
 				case ErrorCode.STATUS_SCAN_ERROR:
 				case ErrorCode.STATUS_SCAN_UNSUPPORTED_BARCODE:
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					String confirmMsg = languagePrefs.getPreferencesString(GlobalParams.MV_LOCATION_NOT_FOUND_MSG_KEY, GlobalParams.MV_LOCATION_NOT_FOUND_MSG_VALUE);
 					confirmMsg = MessageFormat.format(confirmMsg, locationTo);
 					DialogInterface.OnClickListener onOkClickListener = new DialogInterface.OnClickListener() {
@@ -630,9 +665,11 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 					
 				default:
 					String msgFail = languagePrefs.getPreferencesString(GlobalParams.MV_MOVEFAILED_KEY, GlobalParams.MV_MOVEFAILED_VALUE);
-					CommontDialog.showErrorDialog(context, msgFail, null);
+					showPopUp(context, msgFail);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -663,6 +700,7 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -709,20 +747,23 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				switch (result) {
 				case ErrorCode.STATUS_SUCCESS:
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					commitData(newLicensePalte);
 					break;
 				case ErrorCode.STATUS_FAIL:
 					String message = languagePrefs.getPreferencesString(GlobalParams.BIN_MESSAGE_BOX_CREATE_LP_ERROR_KEY
 							, GlobalParams.BIN_MESSAGE_BOX_CREATE_LP_ERROR_VALUE);
-					CommontDialog.showErrorDialog(contextAsyn, message, "Warning");
+					showPopUp(contextAsyn, message);
 					break;
 					
 				default:
 					String messageDefault = languagePrefs.getPreferencesString(GlobalParams.ERROR_CONNECTING_TO_WEB_SERVICE_KEY
 							, GlobalParams.ERROR_CONNECTING_TO_WEB_SERVICE_KEY);
-					CommontDialog.showErrorDialog(contextAsyn, messageDefault, "Warning");
+					showPopUp(contextAsyn, messageDefault);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -806,10 +847,10 @@ public class AcReceiveOptionMove extends Activity implements OnClickListener{
 							}
 						});
 					} else {
-						CommontDialog.showErrorDialog(context, getResources().getString(R.string.LOADING_FAIL), null);
+						showPopUp(context, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
-					CommontDialog.showErrorDialog(context,getResources().getString(R.string.LOADING_FAIL), null);
+					showPopUp(context,getResources().getString(R.string.LOADING_FAIL));
 				}
 			}
 		}
