@@ -305,6 +305,11 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
         SingleEntryApplication.getApplicationInstance().decreaseViewCount();
 	}
 	
+	/**
+	 * show alert dialog
+	 * @param mContext
+	 * @param strMessages
+	 */
 	public void showPopUp(final Context mContext, final String strMessages) {
 		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
 		dialog.setContentView(R.layout.dialogwarning);

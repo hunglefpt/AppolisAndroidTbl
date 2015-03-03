@@ -105,6 +105,7 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 	private double itemQtyReceived;
 	private double itemQtyLeft;
 	private double itemQtyToReceive;
+	private String scanFlag = "";
 	
 	//text multiple language
 	private String textUOM;
@@ -120,9 +121,9 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_receive_item_details);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
+		scanFlag = GlobalParams.FLAG_ACTIVE;
 		
 		Bundle bundle = getIntent().getExtras();
-		
 		if(bundle.containsKey(GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS)){
 			enPurchaseOrderItemInfo = (EnPurchaseOrderItemInfo) bundle.get(GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS);
 		}
@@ -350,10 +351,10 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				String message = new String(data);
-				receivingItemDetailAdapter.updateScanResult(message);
-				//edtLp.setText(new String(data));
-				//processScanData(message);
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					String message = new String(data);
+					receivingItemDetailAdapter.updateScanResult(message);
+				}
 	        }
 	    }
 	};
@@ -820,6 +821,31 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 		return enPurchaseOrderReceiptInfo;
 	}
 	/**
+	 *  show alert dialog
+	 * @param mContext
+	 * @param strMessages
+	 */
+	public void showPopUp(final Context mContext, final String strMessages) {
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(strMessages);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
+	}
+	/**
 	 * commit item details
 	 * @param netParameters
 	 */
@@ -910,7 +936,7 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			progressDialog.setCanceledOnTouchOutside(false);
 			progressDialog.setCancelable(false);
 			progressDialog.show();
-			
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -923,9 +949,6 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			try{
 				if(!isCancelled()){
 					Log.e("Appolis", "################## ReceiveClikOKAsyn : SATRT #########################");
-					for (NetParameter net : netParameters) {
-						Log.e("Appolis", "key: " + net.getName() + "-" + "value: " + net.getValue());
-					}
 					response = HttpNetServices.Instance.commitReceiveItemDetail(netParameters);
 					Log.e("Appolis", "ReceiveClikOKAsyn #response:" + response);
 					listReceptInfo  = DataParser.getListEnPurchaseOrderReceiptInfo(response);
@@ -954,6 +977,7 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			if(!isCancelled()){
 				switch (result) {
 				case 0: //success
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					canCommitReceiptInfo = false;
 					hadChangeFlag = true;
 					if(null == receiptInfoSelectedAsyn && null == listReceiptSelectedAsyn){
@@ -982,20 +1006,20 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 						intentMove.putExtra(GlobalParams.PARAM_LIST_EN_PURCHASE_ORDER_RECEIPT_INFO, listReceiptSelectedAsyn);
 						startActivityForResult(intentMove, GlobalParams.AC_RECEIVE_OPTION_MOVE_ACTIVITY);
 					}
-					
 					break;
 				
 				case 1: //no network
 					String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+					showPopUp(context, msg);
 					break;
 					
 				default:
-					String msgs = languagePrefs.getPreferencesString("Error", GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msgs, null);
-					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: " + result);
+					String msgs = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
+					showPopUp(context, msgs);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -1013,7 +1037,6 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 		
 		public ReceiveClikUndoAsyn(Context mContext){
 			this.context = mContext;
-			
 			String removeList = "";
 			int indexRemoList = 0;
 			ArrayList<EnPurchaseOrderReceiptInfo> listReceift = receivingItemDetailAdapter.getListReceiptSelectedWithOutLastItem();
@@ -1048,6 +1071,7 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			progressDialog.setCanceledOnTouchOutside(false);
 			progressDialog.setCancelable(false);
 			progressDialog.show();
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -1087,26 +1111,28 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			if(!isCancelled()){
 				switch (result) {
 				case 0: //success
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					setResult(RESULT_OK);
 					finish();
 					break;
 				
 				case ErrorCode.STATUS_FAIL: //undo fails
 					String msgFail = response;
-					CommontDialog.showErrorDialog(context, msgFail, null);
+					showPopUp(context, msgFail);
 					break;
 					
 				case 1: //no network
 					String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+					showPopUp(context, msg);
 					break;
 					
 				default:
-					String msgs = languagePrefs.getPreferencesString("Error", GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msgs, null);
-					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: " + result);
+					String msgs = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
+					showPopUp(context, msgs);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
