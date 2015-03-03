@@ -30,7 +30,9 @@ public final class GlobalParams {
 	public static final String Authorization = "Authorization";
 	public static final String PIN = "9999";
 	public static final String CONFIGURE = "configure";
-	public static final String WAREHOUSE = "warehouse";
+	public static final String WAREHOUSE = "warehouse";	
+	public static final String SKYLINE_SNOWBOARD_REPAIR = "Skyline Snowboard Repair";
+	public static final String COPPERHEAD_MTN_SKY_LODGE = "Copperhead Mtn Sky Lodge";
 	public static final String BASIC = "Basic ";
 	public static final String VERTICAL_TWO_DOT = ":";
 	public static final String DOT = ".";
@@ -57,6 +59,7 @@ public final class GlobalParams {
 	public static final String BLANK_CONTENT ="";
 	public static final String WRONG_USER = "Invalid User. Please try again.";
 	public static final String WRONG_PIN = "Invalid Pin. Please try again.";
+	public static final String WRONG_SITE = "Invalid Site. Please try again.";
 	public static final String offline_warnMsg = "offline_warnMsg";
 	public static final String offlinenetwork = "The Internet connection appears to be offline. Please try again.";
 	public static final String WARMING = "Warning";
