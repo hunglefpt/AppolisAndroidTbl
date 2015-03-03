@@ -19,6 +19,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.conn.ConnectTimeoutException;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +37,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -79,6 +81,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 	private LanguagePreferences languagePrefs;
 	private int checkPos = -1;
 	private boolean activityIsRunning = false;
+	private String scanFlag = "";
 	
 	//text multiple language
 	private String strLoading;
@@ -90,6 +93,8 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 		setContentView(R.layout.ac_receive_list);
 		languagePrefs = new LanguagePreferences(getApplicationContext());
 		activityIsRunning = true;
+		scanFlag = GlobalParams.BLANK_CHARACTER;
+		
 		getLanguage();
 		initLayout();
 	}
@@ -281,9 +286,10 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				String message = new String(data);
-				//edtLp.setText(new String(data));
-				processScanData(message);
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					String message = new String(data);
+					processScanData(message);
+				}
 	        }
 	    }
 	};
@@ -298,6 +304,27 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
         // if the reference count becomes 0 ScanAPI can
         // be closed if this is not a screen rotation scenario
         SingleEntryApplication.getApplicationInstance().decreaseViewCount();
+	}
+	
+	public void showPopUp(final Context mContext, final String strMessages) {
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(strMessages);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
 	}
 	
 	/**
@@ -343,6 +370,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.setCancelable(false);
 				progressDialog.show();
+				scanFlag = GlobalParams.FLAG_INACTIVE;
 			}
 			
 		}
@@ -387,25 +415,28 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 			if(!isCancelled()){
 				switch (result) {
 				case ErrorCode.STATUS_SUCCESS: //success
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					receivingListAdapter.updateListReciver(listReceiveInfo);
 					receivingListAdapter.notifyDataSetChanged();
 					break;
 				
 				case ErrorCode.STATUS_FAIL: //Po list empty
-					CommontDialog.showErrorDialog(context, strPoEmpty, null);
+					showPopUp(context, strPoEmpty);
 					break;
 					
 				case ErrorCode.STATUS_NETWORK_NOT_CONNECT: //no network
 					String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+					showPopUp(context, msg);
 					break;
 					
 				case ErrorCode.STATUS_EXCEPTION:
 					String dialogMsg = languagePrefs.getPreferencesString( GlobalParams.RD_RETRIEVEPO_MSG_KEY, 
 							GlobalParams.RD_RETRIEVEPO_MSG_VALUE);
-					CommontDialog.showErrorDialog(context, dialogMsg, null);
+					showPopUp(context, dialogMsg);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -450,6 +481,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.setCancelable(false);
 				progressDialog.show();
+				scanFlag = GlobalParams.FLAG_INACTIVE;
 			}
 		}
 		
@@ -525,27 +557,29 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 					// error scan
 					String strUnSupport = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY
 							, GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE);
-					CommontDialog.showErrorDialog(context, strUnSupport, null);
+					showPopUp(context, strUnSupport);
 					break;
 				
 				case ErrorCode.STATUS_SCAN_UNSUPPORTED_BARCODE:
 					// Unsupported barcode 
 					String strErrorScan = languagePrefs.getPreferencesString(
 							GlobalParams.RE_SCANPO_MSG_KEY, GlobalParams.RE_SCANPO_MSG_VALUE);
-					CommontDialog.showErrorDialog(context, strErrorScan, null);
+					showPopUp(context, strErrorScan);
 					break;
 					
 				case ErrorCode.STATUS_NETWORK_NOT_CONNECT: //no network
 					String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+					showPopUp(context, msg);
 					break;
 					
 				case ErrorCode.STATUS_EXCEPTION:
 					String msgs = response;
 					//languagePrefs.getPreferencesString(GlobalParams.ERROR_OCCURRED_KEY, GlobalParams.ERROR_OCCURRED_VALUE);
-					CommontDialog.showErrorDialog(context, msgs, null);
+					showPopUp(context, msgs);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
