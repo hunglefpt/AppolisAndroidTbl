@@ -257,6 +257,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		case R.id.imgHome:
 			Utilities.hideKeyboard(this);
 			intent = new Intent(AcPutAwayDetails.this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivityForResult(intent, GlobalParams.LOGINSCREEN_TO_MAINSCREEN);
 			break;
 			

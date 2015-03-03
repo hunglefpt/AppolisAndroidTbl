@@ -25,10 +25,10 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -51,7 +51,6 @@ import com.appolis.scan.EzPairActivity;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.userprofile.UserProfileActivity;
 import com.appolis.utilities.GlobalParams;
-import com.appolis.utilities.Logger;
 import com.appolis.utilities.Utilities;
 
 /**
