@@ -76,7 +76,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	private LanguagePreferences languagePrefs;
 	public static boolean isPhysicalInventoryCycleCount;
 	public static int cycleCountInstanceID;
-	private boolean isScanning = true;
+	private boolean isScanning = false;
 	private boolean isActivityRuning = false;
 	
 	@Override
@@ -106,8 +106,10 @@ public class AcCycleCount extends Activity implements OnClickListener,
 		imgClearTextSearch.setVisibility(View.GONE);
 		imgClearTextSearch.setOnClickListener(this);
 		lvCycleCountList = (ListView) findViewById(R.id.lvCycleCountList);
-		if((!LoginActivity.itemUser.get_isForceCycleCountScan()) && LoginActivity.itemUser != null) {
-			lvCycleCountList.setOnItemClickListener(this);
+		if(LoginActivity.itemUser != null) {
+			if((!LoginActivity.itemUser.get_isForceCycleCountScan())) {
+				lvCycleCountList.setOnItemClickListener(this);
+			}
 		}
 		
 		// Capture Text in EditText
@@ -297,6 +299,7 @@ public class AcCycleCount extends Activity implements OnClickListener,
 					cycleCountAdapter = new CycleCountAdapter(getApplicationContext(), binList);
 					lvCycleCountList.setAdapter(cycleCountAdapter);
 					cycleCountAdapter.notifyDataSetChanged();
+					isScanning = true;
 				} else {
 					Utilities.dialogShow(errorMss, AcCycleCount.this);
 				}
@@ -324,7 +327,6 @@ public class AcCycleCount extends Activity implements OnClickListener,
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		isScanning = true;
 		isActivityRuning = true;
 		switch (requestCode) {
 			case GlobalParams.AC_CYCLE_COUNT_LOCATION_ACTIVITY:
@@ -626,34 +628,29 @@ public class AcCycleCount extends Activity implements OnClickListener,
 						startActivityForResult(intentAcCycleLocation, GlobalParams.AC_CYCLE_COUNT_LOCATION_ACTIVITY);
 					} else {
 						String mss = languagePrefs.getPreferencesString(GlobalParams.ERRORBINNOTFOUND_KEY, GlobalParams.ERRORBINNOTFOUND_VALUE);
-						Utilities.showPopUp(context, null, mss);
-						isScanning = true;
+						showPopUp(context, null, mss);
 					}
 					break;
 					
 				case 3:// error scan
 					String mss = languagePrefs.getPreferencesString(GlobalParams.ERRORBINNOTFOUND_KEY, GlobalParams.ERRORBINNOTFOUND_VALUE);
-					Utilities.showPopUp(context, null, mss);
-					isScanning = true;
+					showPopUp(context, null, mss);
 					break;
 				
 				case 4:// Unsupported barcode 
 					String mss1 = languagePrefs.getPreferencesString(GlobalParams.BIN_NOT_EXIST_KEY, GlobalParams.BIN_NOT_EXIST_VALUE);
-					Utilities.showPopUp(context, null, mss1);
-					isScanning = true;
+					showPopUp(context, null, mss1);
 					break;
 					
 				case 1: //no network
 					String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-					Utilities.showPopUp(context, null, msg);
-					isScanning = true;
+					showPopUp(context, null, msg);
 					break;
 					
 				default:
 					String msgs = languagePrefs.getPreferencesString("error", "error");
-					Utilities.showPopUp(context, null, msgs);
+					showPopUp(context, null, msgs);
 					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: " + result);
-					isScanning = true;
 					break;
 				}
 			}
@@ -674,6 +671,35 @@ public class AcCycleCount extends Activity implements OnClickListener,
 			}
 		}
 		return null;
+	}
+	
+	public void showPopUp(final Context mContext,
+			final Class<?> newClass, final String strMessages) {
+		String message;
+		if (strMessages.equals(GlobalParams.BLANK)) {
+			message = GlobalParams.WRONG_USER;
+		} else {
+			message = strMessages;
+		}
+		
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(message);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				isScanning = true;
+			}
+		});
+		dialog.show();
 	}
 
 }

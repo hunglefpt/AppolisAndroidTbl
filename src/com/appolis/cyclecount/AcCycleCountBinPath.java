@@ -121,7 +121,7 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 	
 	private boolean isConnectSocket;
 	private int typeScan;
-	private boolean isScanning =  true;
+	private boolean isScanning =  false;
 	private boolean isActivityRunning = false;
 	
 	private LanguagePreferences languagePrefs;
@@ -594,32 +594,29 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 				case 3:// error scan
 					String messUnSupported = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE,
 							GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY);
-					Utilities.showPopUp(context, null, messUnSupported);
-					isScanning = true;
+					showPopUp(context, null, messUnSupported);
 					break;
 
 				case 4:// Unsupported barcode
 					String messLot = languagePrefs.getPreferencesString(GlobalParams.USER_SCAN_LOTNUMBER_KEY,
 							GlobalParams.USER_SCAN_LOTNUMBER_VALUE);
-					Utilities.showPopUp(context, null, messLot);
-					isScanning = true;
+					showPopUp(context, null, messLot);
 					break;
 
 				case 1: // no network
 					String msg = languagePrefs.getPreferencesString(
 							GlobalParams.ERRORUNABLETOCONTACTSERVER,
 							GlobalParams.ERROR_INVALID_NETWORK);
-					Utilities.showPopUp(context, null, msg);
-					isScanning = true;
+					showPopUp(context, null, msg);
 					break;
 
 				default:
 					String msgs = languagePrefs.getPreferencesString("error",
 							"error");
-					CommontDialog.showErrorDialog(context, msgs, null);
+					showPopUp(context, null, msgs);
 					Log.e("Appolis", "ProcessScanDataWithLotAsyn #onPostExecute: "
 							+ result);
-					isScanning = true;
+					
 					break;
 				}
 			}
@@ -761,43 +758,37 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 					case 3:// error scan
 						String messUnSupported = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE,
 								GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY);
-						Utilities.showPopUp(context, null, messUnSupported);
-						isScanning = true;
+						showPopUp(context, null, messUnSupported);
 						break;
 					
 					case 4:// Unsupported barcode 
 						String messNotLPOrItem = languagePrefs.getPreferencesString(GlobalParams.JOBPART_VALIDATEITEMORLP_KEY,
 								GlobalParams.JOBPART_VALIDATEITEMORLP_VALUE);
-						Utilities.showPopUp(context, null, messNotLPOrItem);
-						isScanning = true;
+						showPopUp(context, null, messNotLPOrItem);
 						break;
 						
 					case 1: //no network
 						String msg = languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-						CommontDialog.showErrorDialog(context, msg, null);
-						isScanning = true;
+						showPopUp(context, null, msg);
 						break;
 						
 					case 5: //If call was ambiguous, PONumber, OrderNumber, LotOnly, BinOnly 
 						String messNotLPOrItem1 = languagePrefs.getPreferencesString(GlobalParams.JOBPART_VALIDATEITEMORLP_KEY,
 								GlobalParams.JOBPART_VALIDATEITEMORLP_VALUE);
-							Utilities.showPopUp(context, null, messNotLPOrItem1);
-							isScanning = true;
+							showPopUp(context, null, messNotLPOrItem1);
 						break;	
 						
 					default:
 						String msgs = languagePrefs.getPreferencesString("error", "error");
-						CommontDialog.showErrorDialog(context, msgs, null);
+						showPopUp(context, null, msgs);
 						Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: " + result);
-						isScanning = true;
 						break;
 					}
 				} else {
 					String msg = languagePrefs.getPreferencesString(
 							GlobalParams.MESSAGE_SCAN_LP_OR_ITEM_KEY,
 							GlobalParams.MESSAGE_SCAN_LP_OR_ITEM_VALUE);
-					Utilities.showPopUp(context, null, msg);
-					isScanning = true;
+					showPopUp(context, null, msg);
 				}
 			}
 		}
@@ -870,7 +861,6 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 			if (null != progressDialog && (progressDialog.isShowing()) && isActivityRunning) {
 				progressDialog.dismiss();
 			}
-			isScanning = true;
 			if (!isCancelled()) {
 				if (result == 0) {
 					ObjectCountCycleCurrent currentSelected = getLPFromItemNumber();
@@ -881,19 +871,16 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 				} else if (result == 1) {
 					setResult(RESULT_OK);
 					AcCycleCountBinPath.this.finish();
-					isScanning = true;
 				} else {
 					String msgs = languagePrefs.getPreferencesString("error",
 							"error");
-					CommontDialog.showErrorDialog(context, msgs, null);
+					showPopUp(context, null, msgs);
 					Log.e("Appolis", "LoadLPAsyn #onPostExecute: " + result);
-					isScanning = true;
 				}
 			} else {
 				String msgs = languagePrefs.getPreferencesString("error", "error");
-				CommontDialog.showErrorDialog(context, msgs, null);
+				showPopUp(context, null, msgs);
 				Log.e("Appolis", "LoadLPAsyn #onPostExecute: " + result);
-				isScanning = true;
 			}
 		}
 
@@ -978,7 +965,7 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 
 			if (!isCancelled()) {
 				if (result == 0) {
-					isScanning = true;
+					
 					if (countCycleCurrents.size() > 0) {
 						// if size > 1 then ItemNumber is single in first list
 						if (countCycleCurrents.size() == 1) {
@@ -997,19 +984,17 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 					}
 
 				} else if (result == 1) {
-					isScanning = true;
 					setResult(RESULT_OK);
 					AcCycleCountBinPath.this.finish();
 				} else {
-					isScanning = true;
 					String msgs = languagePrefs.getPreferencesString("error",
 							"error");
-					CommontDialog.showErrorDialog(context, msgs, null);
+					showPopUp(context, null, msgs);
 					Log.e("Appolis", "LoadItemAsyn #onPostExecute: " + result);
 				}
 			} else {
 				String msgs = languagePrefs.getPreferencesString("error", "error");
-				CommontDialog.showErrorDialog(context, msgs, null);
+				showPopUp(context, null, msgs);
 				Log.e("Appolis", "LoadItemAsyn #onPostExecute: " + result);
 			}
 		}
@@ -1059,6 +1044,7 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
+				isScanning = true;
 			}
 		});
 
@@ -1066,6 +1052,7 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
+				isScanning = true;
 				if(!isConnectSocket) {
 					Intent intentScan = new Intent(AcCycleCountBinPath.this,
 							CaptureBarcodeCamera.class);
@@ -1369,4 +1356,33 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 	        }
 	    }
 	};
+	
+	public void showPopUp(final Context mContext,
+			final Class<?> newClass, final String strMessages) {
+		String message;
+		if (strMessages.equals(GlobalParams.BLANK)) {
+			message = GlobalParams.WRONG_USER;
+		} else {
+			message = strMessages;
+		}
+		
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(message);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				isScanning = true;
+			}
+		});
+		dialog.show();
+	}
 }

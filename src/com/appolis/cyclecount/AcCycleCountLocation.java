@@ -118,7 +118,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 	
 	private boolean isConnectSocket;
 	private int typeScan;
-	private boolean isScanning = true;
+	private boolean isScanning = false;
 	private boolean isActivityRunning = false;
 	
 	private LanguagePreferences languagePrefs;
@@ -321,6 +321,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 					//default get index for zero count : 0
 					if(binList != null && binList.size() > 0) {
 						objectCurrentSelected = binList.get(0);
+						isScanning = true;
 					}
 				} else if (result == 1) {
 					setResult(RESULT_OK);
@@ -659,22 +660,19 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						String messUnSupported = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE,
 								GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY);
 						Utilities.showPopUp(context, null, messUnSupported);
-						isScanning = true;
 						break;
 
 					case 4:// Unsupported barcode
 						String messNotLPOrItem = languagePrefs.getPreferencesString(GlobalParams.JOBPART_VALIDATEITEMORLP_KEY,
 																				GlobalParams.JOBPART_VALIDATEITEMORLP_VALUE);
-						Utilities.showPopUp(context, null, messNotLPOrItem);
-						isScanning = true;
+						showPopUp(context, null, messNotLPOrItem);
 						break;
 
 					case 1: // no network
 						String msg = languagePrefs.getPreferencesString(
 								GlobalParams.ERRORUNABLETOCONTACTSERVER,
 								GlobalParams.ERROR_INVALID_NETWORK);
-						Utilities.showPopUp(context, null, msg);
-						isScanning = true;
+						showPopUp(context, null, msg);
 						break;
 
 					case 5: // If call was ambiguous, PONumber, OrderNumber,
@@ -686,8 +684,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 					default:
 						String msgs = languagePrefs.getPreferencesString("error",
 								"error");
-						Utilities.showPopUp(context, null, msgs);
-						isScanning = true;
+						showPopUp(context, null, msgs);
 						Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
 								+ result);
 						break;
@@ -696,8 +693,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 					String msg = languagePrefs.getPreferencesString(
 							GlobalParams.MESSAGE_SCAN_LP_OR_ITEM_KEY,
 							GlobalParams.MESSAGE_SCAN_LP_OR_ITEM_VALUE);
-					Utilities.showPopUp(context, null, msg);
-					isScanning = true;
+					showPopUp(context, null, msg);
 				}
 			}
 		}
@@ -836,23 +832,20 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 				case 3:// error scan
 					String messUnSupported = languagePrefs.getPreferencesString(GlobalParams.SCAN_BARCODE_UNSUPPORTED_VALUE,
 							GlobalParams.SCAN_BARCODE_UNSUPPORTED_KEY);
-					Utilities.showPopUp(context, null, messUnSupported);
-					isScanning = true;
+					showPopUp(context, null, messUnSupported);
 					break;
 
 				case 4:// Unsupported barcode
 					String messLot = languagePrefs.getPreferencesString(GlobalParams.USER_SCAN_LOTNUMBER_KEY,
 							GlobalParams.USER_SCAN_LOTNUMBER_VALUE);
-					Utilities.showPopUp(context, null, messLot);
-					isScanning = true;
+					showPopUp(context, null, messLot);
 					break;
 
 				case 1: // no network
 					String msg = languagePrefs.getPreferencesString(
 							GlobalParams.ERRORUNABLETOCONTACTSERVER,
 							GlobalParams.ERROR_INVALID_NETWORK);
-					Utilities.showPopUp(context, null, msg);
-					isScanning = true;
+					showPopUp(context, null, msg);
 					break;
 
 				default:
@@ -1053,7 +1046,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 						// if size > 1 then ItemNumber has two more than and it
 						// only has different Lot in first list
 						else {
-							isScanning = true;
+							
 							String message = languagePrefs.getPreferencesString(GlobalParams.MESSAGE_SCAN_LOCATION_KEY,
 											GlobalParams.MESSAGE_SCAN_LOCATION_VALUE);
 							String contentMessage = message.replace("{0}", barcode);
@@ -1134,6 +1127,7 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 					startActivityForResult(intentScan,
 							GlobalParams.CAPTURE_BARCODE_CAMERA_ACTIVITY_WITH_LOT);
 				} else {
+					isScanning = true;
 					typeScan = CommonData.SCAN_LOT;
 				}
 				
@@ -1368,4 +1362,33 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 	        }
 	    }
 	};
+	
+	public void showPopUp(final Context mContext,
+			final Class<?> newClass, final String strMessages) {
+		String message;
+		if (strMessages.equals(GlobalParams.BLANK)) {
+			message = GlobalParams.WRONG_USER;
+		} else {
+			message = strMessages;
+		}
+		
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(message);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				isScanning = true;
+			}
+		});
+		dialog.show();
+	}
 }
