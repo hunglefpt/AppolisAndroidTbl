@@ -19,6 +19,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.conn.ConnectTimeoutException;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -90,6 +91,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 	private LanguagePreferences languagePrefs;
 	private int checkPos = -1;
 	private boolean activityIsRunning = false;
+	private String scanFlag = "";
 	
 	// multiple language
 	private String strTextOk;
@@ -103,6 +105,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		setContentView(R.layout.ac_receive_details);
 		
 		activityIsRunning = true;
+		scanFlag = GlobalParams.BLANK_CHARACTER;
 		Bundle bundle = getIntent().getExtras();
 		if (bundle.containsKey(GlobalParams.PARAM_EN_RECIVING_INFO_PO_NUMBER)) {
 			poNumber = bundle
@@ -400,11 +403,11 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 			// decoded Data received from a scanner
 			else if (intent.getAction().equalsIgnoreCase(
 					SingleEntryApplication.NOTIFY_DECODED_DATA)) {
-				char[] data = intent
-						.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				String message = new String(data);
-				// edtLp.setText(new String(data));
-				processScanData(message);
+				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					String message = new String(data);
+					processScanData(message);
+				}
 			}
 		}
 	};
@@ -421,6 +424,32 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 		SingleEntryApplication.getApplicationInstance().decreaseViewCount();
 	}
 
+	/**
+	 * function to show alert dialog on receive details screen
+	 * @param mContext
+	 * @param strMessages
+	 */
+	public void showPopUp(final Context mContext, final String strMessages) {
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(strMessages);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
+	}
+	
 	/**
 	 * get EnPurchaseOrderItemInfo from list object
 	 * 
@@ -498,6 +527,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.setCancelable(false);
 				progressDialog.show();
+				scanFlag = GlobalParams.FLAG_INACTIVE;
 			}
 		}
 
@@ -547,6 +577,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 				lvReceiveDetailList.onRefreshComplete();
 				switch (result) {
 				case 0: // success
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					if (null != enPurchaseOrderInfos
 							&& null != listEnPurchaseOrderItemInfo) {
 						if (StringUtils.isNotBlank(enPurchaseOrderInfos
@@ -569,13 +600,15 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 					String msg = languagePrefs.getPreferencesString(
 							GlobalParams.ERRORUNABLETOCONTACTSERVER,
 							GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+					showPopUp(context, msg);
 					break;
 
 				default:
-					CommontDialog.showErrorDialog(context, response, null);
+					showPopUp(context, response);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -622,6 +655,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.setCancelable(false);
 				progressDialog.show();
+				scanFlag = GlobalParams.FLAG_INACTIVE;
 			}
 		}
 
@@ -639,11 +673,8 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 							URLEncoder.encode(barcode, GlobalParams.UTF_8));
 					response = HttpNetServices.Instance
 							.getBarcode(netParameters);
-					Log.e("Appolis",
-							"LoadReceiveDetailAsyn #getBarcode #response:"
-									+ response);
-					EnBarcodeExistences enBarcodeExistences = DataParser
-							.getBarcode(response);
+					Logger.error("LoadReceiveDetailAsyn #getBarcode #response:" + response);
+					EnBarcodeExistences enBarcodeExistences = DataParser.getBarcode(response);
 					if (null != enBarcodeExistences) {
 						if (enBarcodeExistences.getBinOnlyCount() == 0
 								&& enBarcodeExistences.getGtinCount() == 0
@@ -663,11 +694,8 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 								|| (enBarcodeExistences.getUOMBarcodeCount() != 0)) {
 							// Item Number, UOM or ItemIdentification
 							response = HttpNetServices.Instance
-									.getReceiveItemDetailWithBarcode(URLEncoder
-											.encode(barcode, GlobalParams.UTF_8));
-							Log.e("Appolis",
-									"LoadReceiveDetailAsyn #getReceiveItemDetailWithBarcode #response:"
-											+ response);
+									.getReceiveItemDetailWithBarcode(URLEncoder.encode(barcode, GlobalParams.UTF_8));
+							Logger.error("LoadReceiveDetailAsyn #getReceiveItemDetailWithBarcode #response:" + response);
 
 							enItemLotInfo = DataParser
 									.getEnItemLotInfo(response);
@@ -710,79 +738,60 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 			if (!isCancelled()) {
 				switch (result) {
 				case 0: // success
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					EnPurchaseOrderItemInfo item = getEnPurchaseOrderItemInfoFromList(
 							listEnPurchaseOrderItemInfo, enItemLotInfo);
 					if (null != item) {
 						// item in PO list
 						if (checkItemIsCompleted(item)) {
 							// item is completed
-							Toast.makeText(
-									context,
-									languagePrefs
-											.getPreferencesString(
-													GlobalParams.CMM_COMPLETE_MSG_KEY,
-													GlobalParams.CMM_COMPLETE_MSG_VALUE),
+							Toast.makeText(context,
+									languagePrefs.getPreferencesString(
+											GlobalParams.CMM_COMPLETE_MSG_KEY,GlobalParams.CMM_COMPLETE_MSG_VALUE),
 									GlobalParams.TOAT_TIME).show();
 						} else {
 							// item is not complete
-							Intent itemDetailsIntent = new Intent(
-									AcReceivingDetails.this,
-									AcReceiveItemDetail.class);
-							itemDetailsIntent
-									.putExtra(
-											GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS,
-											item);
-							itemDetailsIntent.putExtra(
-									GlobalParams.PARAM_EN_PURCHASE_ORDER_INFOS,
-									enPurchaseOrderInfos);
-							itemDetailsIntent.putExtra(
-									GlobalParams.PARAM_EN_ITEM_LOT_INFO,
-									enItemLotInfo);
-							startActivityForResult(
-									itemDetailsIntent,
-									GlobalParams.AC_RECEIVING_ITEM_DETAILS_ACTIVITY);
+							Intent itemDetailsIntent = new Intent( AcReceivingDetails.this, AcReceiveItemDetail.class);
+							itemDetailsIntent.putExtra(GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS, item);
+							itemDetailsIntent.putExtra(GlobalParams.PARAM_EN_PURCHASE_ORDER_INFOS, enPurchaseOrderInfos);
+							itemDetailsIntent.putExtra(GlobalParams.PARAM_EN_ITEM_LOT_INFO, enItemLotInfo);
+							startActivityForResult(itemDetailsIntent, GlobalParams.AC_RECEIVING_ITEM_DETAILS_ACTIVITY);
 						}
 					} else {
 						// item not in PO list
-						String strErrorScan = languagePrefs
-								.getPreferencesString(
-										GlobalParams.ITEM_NOT_IN_PO_KEY,
-										GlobalParams.ITEM_NOT_IN_PO_VALUE);
-						CommontDialog.showErrorDialog(context, strErrorScan, null);
+						String strErrorScan = languagePrefs.getPreferencesString( 
+								GlobalParams.ITEM_NOT_IN_PO_KEY, GlobalParams.ITEM_NOT_IN_PO_VALUE);
+						showPopUp(context, strErrorScan);
 					}
-
 					break;
 
 				case ErrorCode.STATUS_SCAN_ERROR:
 					// error scan
 					String strErrorScan = languagePrefs.getPreferencesString(
-							GlobalParams.SCAN_NOTFOUND_KEY,
-							GlobalParams.SCAN_NOTFOUND_VALUE);
-					CommontDialog.showErrorDialog(context, strErrorScan, null);
+							GlobalParams.SCAN_NOTFOUND_KEY, GlobalParams.SCAN_NOTFOUND_VALUE);
+					showPopUp(context, strErrorScan);
 					break;
 
 				case ErrorCode.STATUS_SCAN_UNSUPPORTED_BARCODE:
 					// Unsupported barcode
 					String strUnSupport = languagePrefs.getPreferencesString(
-							GlobalParams.RD_INVALID_BARCODE_MSG_KEY,
-							GlobalParams.RD_INVALID_BARCODE_MSG_VALUE);
-					CommontDialog.showErrorDialog(context, strUnSupport, null);
+							GlobalParams.RD_INVALID_BARCODE_MSG_KEY, GlobalParams.RD_INVALID_BARCODE_MSG_VALUE);
+					showPopUp(context, strUnSupport);
 					break;
 
 				case ErrorCode.STATUS_NETWORK_NOT_CONNECT: // no network
 					String msg = languagePrefs.getPreferencesString(
-							GlobalParams.ERRORUNABLETOCONTACTSERVER,
-							GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+							GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
+					showPopUp(context, msg);
 					break;
 
 				default:
 					String msgFail = response;
-					// languagePrefs.getPreferencesString(GlobalParams.ERRORUNABLETOCONTACTSERVER,
-					// GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msgFail, null);
+					showPopUp(context, msgFail);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -868,6 +877,7 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 				progressDialog.setCanceledOnTouchOutside(false);
 				progressDialog.setCancelable(false);
 				progressDialog.show();
+				scanFlag = GlobalParams.FLAG_INACTIVE;
 			}
 		}
 
@@ -909,26 +919,25 @@ public class AcReceivingDetails extends Activity implements OnClickListener,
 			if (!isCancelled()) {
 				switch (result) {
 				case 0: // success
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					setResult(RESULT_OK);
 					AcReceivingDetails.this.finish();
 					break;
 
 				case 1: // no network
 					String msg = languagePrefs.getPreferencesString(
-							GlobalParams.ERRORUNABLETOCONTACTSERVER,
-							GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+							GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
+					showPopUp(context, msg);
 					break;
 
 				default:
-					Log.e("Appolis", "LoadReceiveListAsyn #onPostExecute: "
-							+ result);
 					String mssg = languagePrefs.getPreferencesString(
-							GlobalParams.ERRORUNABLETOCONTACTSERVER,
-							GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, mssg, null);
+							GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
+					showPopUp(context, mssg);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}

@@ -54,7 +54,6 @@ import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
-import com.appolis.utilities.CommontDialog;
 import com.appolis.utilities.DataParser;
 import com.appolis.utilities.GlobalParams;
 import com.appolis.utilities.Logger;
