@@ -368,7 +368,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 							getUserAsyncTask.execute();
 							
 						} else {
-							showPopUp(LoginActivity.this, GlobalParams.WRONG_USER, edtLogin);
+							if (edtSite.getEditableText().toString().equalsIgnoreCase(GlobalParams.WAREHOUSE)
+									|| edtSite.getEditableText().toString().equalsIgnoreCase(GlobalParams.SKYLINE_SNOWBOARD_REPAIR)
+									|| edtSite.getEditableText().toString().equalsIgnoreCase(GlobalParams.COPPERHEAD_MTN_SKY_LODGE)) {
+								showPopUp(LoginActivity.this, GlobalParams.WRONG_USER, edtLogin);
+							} else {							
+								showPopUp(LoginActivity.this, GlobalParams.WRONG_SITE, edtLogin);
+							}
 						}
 						
 					} else if (data.equals(GlobalParams.BLANK_CHARACTER)) {
