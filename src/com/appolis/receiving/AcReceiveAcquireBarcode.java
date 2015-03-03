@@ -19,6 +19,7 @@ import org.apache.http.conn.ConnectTimeoutException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,8 +33,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,7 +72,7 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 	private EnPurchaseOrderItemInfo enPurchaseOrderItemInfo;
 	private LanguagePreferences languagePrefs;
 	private ArrayList<EnUom> enUom;
-	private String uom;
+	private String scanFlag = "";
 	private ProgressDialog dialog;
 	private String textLoading;
 	private boolean activityIsRunning = false;
@@ -84,6 +83,7 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_receive_acquire_barcode);
 		activityIsRunning = true;
+		scanFlag = GlobalParams.FLAG_ACTIVE;
 		
 		Bundle bundle = getIntent().getExtras();
 		if (bundle.containsKey(GlobalParams.PARAM_EN_PURCHASE_ORDER_ITEM_INFOS)) {
@@ -133,8 +133,10 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(hasFocus){
 					linScan.setVisibility(View.VISIBLE);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				} else {
 					linScan.setVisibility(View.INVISIBLE);
+					scanFlag = GlobalParams.FLAG_INACTIVE;
 				}
 			}
 		});
@@ -238,8 +240,10 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 	        else if(intent.getAction().equalsIgnoreCase(SingleEntryApplication.NOTIFY_DECODED_DATA))
 	        {
 				char[] data = intent.getCharArrayExtra(SingleEntryApplication.EXTRA_DECODEDDATA);
-				String message = new String(data);
-				edtBarcodeValue.setText(message.trim());
+				if (scanFlag.equals(GlobalParams.FLAG_ACTIVE)) {
+					String message = new String(data);
+					edtBarcodeValue.setText(message.trim());
+				}
 	        }
 	    }
 	};
@@ -298,6 +302,32 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 	}
 	
 	/**
+	 * show alert dialog
+	 * @param mContext
+	 * @param strMessages
+	 */
+	public void showPopUp(final Context mContext, final String strMessages) {
+		final Dialog dialog = new Dialog(mContext, R.style.Dialog_NoTitle);
+		dialog.setContentView(R.layout.dialogwarning);
+		// set the custom dialog components - text, image and button		
+		TextView text2 = (TextView) dialog.findViewById(R.id.tvScantitle2);		
+		text2.setText(strMessages);
+		
+		LanguagePreferences langPref = new LanguagePreferences(mContext);
+		Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+		dialogButtonOk.setText(langPref.getPreferencesString(GlobalParams.OK, GlobalParams.OK));
+		
+		dialogButtonOk.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		});
+		dialog.show();
+	}
+	
+	/**
 	 * 
 	 * @author Do Thin
 	 *
@@ -316,6 +346,7 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
 		}
 		
 		@Override
@@ -358,18 +389,21 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 			if(!isCancelled() && activityIsRunning){
 				switch (result) {
 				case ErrorCode.STATUS_SUCCESS:
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 					edtBarcodeValue.setText("");
 					break;
 				case ErrorCode.STATUS_FAIL:
-					CommontDialog.showErrorDialog(context, response, null);
+					showPopUp(context, response);
 					break;
 					
 				default:
 					String msg = languagePrefs.getPreferencesString(
 							GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-					CommontDialog.showErrorDialog(context, msg, null);
+					showPopUp(context, msg);
 					break;
 				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
 			}
 		}
 	}
@@ -457,34 +491,23 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(context,
 								R.layout.custom_spinner_item, listUom);
 						spnMoveUOM.setAdapter(uomAdapter);
-						spnMoveUOM.setOnItemSelectedListener(new OnItemSelectedListener() {
-							
-							@Override
-							public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-								uom = spnMoveUOM.getSelectedItem().toString();
-							}
-
-							@Override
-							public void onNothingSelected(AdapterView<?> arg0) {
-							}
-						});
 					} else {
-						CommontDialog.showErrorDialog(context, getResources().getString(R.string.LOADING_FAIL), null);
+						showPopUp(context, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
 					switch (errorCode) {
 						case ErrorCode.STATUS_NETWORK_NOT_CONNECT:
 							String msg = languagePrefs.getPreferencesString(
 									GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);
-							CommontDialog.showErrorDialog(context, msg, null);
+							showPopUp(context, msg);
 							break;
 						
 						case ErrorCode.STATUS_EXCEPTION:
-							CommontDialog.showErrorDialog(context, dataUOM, null);
+							showPopUp(context, dataUOM);
 							break;
 							
 						default:
-							CommontDialog.showErrorDialog(context, getResources().getString(R.string.LOADING_FAIL), null);
+							showPopUp(context, getResources().getString(R.string.LOADING_FAIL));
 							break;
 					}
 				}
