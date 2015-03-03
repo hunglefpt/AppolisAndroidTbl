@@ -239,7 +239,8 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 				
 				enPurchaseOrderReceiptInfo.set_itemID(enItemLotInfo.get_itemID());
 				enPurchaseOrderReceiptInfo.set_purchaseOrderItemShipID(-1);
-				enPurchaseOrderReceiptInfo.set_quantityReceived(enItemLotInfo.get_quantityOnHand());
+				enPurchaseOrderReceiptInfo.set_quantityReceived(itemQtyLeft);
+				//enPurchaseOrderReceiptInfo.set_quantityReceived(enItemLotInfo.get_quantityOnHand());
 				// fix bug : Bug #13020 - START 
 				//remove quantity on hand
 				//enPurchaseOrderReceiptInfo.set_quantityReceived(enItemLotInfo.get_quantityOnHand());

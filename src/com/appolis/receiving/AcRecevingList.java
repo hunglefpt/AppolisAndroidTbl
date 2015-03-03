@@ -52,6 +52,7 @@ import com.appolis.entities.EnBarcodeExistences;
 import com.appolis.entities.EnReceivingInfo;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
+import com.appolis.receiverinventory.AcReceiverScanLP;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -229,9 +230,14 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 			checkPos = -1;
 		} else {
 			EnReceivingInfo enReceivingInfo = receivingListAdapter.getItem(position-1);
-			Intent intentReceiveDeail = new Intent(AcRecevingList.this, AcReceivingDetails.class);
-			intentReceiveDeail.putExtra(GlobalParams.PARAM_EN_RECIVING_INFO_PO_NUMBER, enReceivingInfo.get_poNumber());
-			startActivityForResult(intentReceiveDeail, GlobalParams.AC_RECEIVING_DETAILS_ACTIVITY);
+			if("TR".equalsIgnoreCase(enReceivingInfo.get_purchaseOrderTypeCode())){
+				Intent intentReceiveInventory = new Intent(AcRecevingList.this, AcReceiverScanLP.class);
+				startActivityForResult(intentReceiveInventory, GlobalParams.AC_RECEIVER_SCAN_LP);
+			} else {
+				Intent intentReceiveDeail = new Intent(AcRecevingList.this, AcReceivingDetails.class);
+				intentReceiveDeail.putExtra(GlobalParams.PARAM_EN_RECIVING_INFO_PO_NUMBER, enReceivingInfo.get_poNumber());
+				startActivityForResult(intentReceiveDeail, GlobalParams.AC_RECEIVING_DETAILS_ACTIVITY);
+			}
 			checkPos = position;
 		}
 	}
@@ -249,9 +255,11 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 			break;
 		
 		case GlobalParams.AC_RECEIVING_DETAILS_ACTIVITY:
-			//if(resultCode == RESULT_OK){
-				refreshData();
-			//}
+			refreshData();
+			break;
+			
+		case GlobalParams.AC_RECEIVER_SCAN_LP:
+			refreshData();
 			break;
 			
 		default:

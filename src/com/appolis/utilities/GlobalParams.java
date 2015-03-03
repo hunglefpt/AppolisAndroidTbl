@@ -160,7 +160,8 @@ public final class GlobalParams {
 	public static final int AC_PUT_AWAY_LEVEL_ONE = 11;
 	public static final int AC_PUT_AWAY_LEVEL_TWO = 12;
 	public static final int AC_PUT_AWAY_BIN_LEVEL_ONE = 11;
-	public static final int AC_RECEIVE_ACQUIRE_BARCODE = 31;
+	public static final int AC_RECEIVE_ACQUIRE_BARCODE = 35;
+	public static final int AC_RECEIVER_SCAN_LP = 36;
 	
 	/*item for main screen*/	
 	public static final String RECEIVE = "Receive";
