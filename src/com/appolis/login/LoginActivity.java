@@ -361,7 +361,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				// If not cancel by user
 				if (!isCancelled()) {
 					
-					if (result.equals(GlobalParams.TRUE)) {
+					if (result.equals(GlobalParams.TRUE) && data != null) {
 						
 						if (data.substring(1, data.length() - 1).length() > 0) {
 							GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask();
@@ -377,7 +377,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 							}
 						}
 						
-					} else if (data.equals(GlobalParams.BLANK_CHARACTER)) {
+					} else if (data.equals(GlobalParams.BLANK_CHARACTER) && data != null) {
 						
 						if (edtSite.getEditableText().toString().equalsIgnoreCase(GlobalParams.WAREHOUSE)
 								|| edtSite.getEditableText().toString().equalsIgnoreCase(GlobalParams.SKYLINE_SNOWBOARD_REPAIR)
