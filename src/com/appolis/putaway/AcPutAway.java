@@ -684,11 +684,12 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
-					
-					if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {					
-						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(_barCode, _bin);
+					if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {	
+						Logger.error("2"+data.replace("\"", ""));
+						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(data.replace("\"", ""), _bin);
 						getPutAwayBinAsyncTask.execute();
-					} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {					
+					} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {	
+						Logger.error("3"+data.replace("\"", ""));
 						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(_barCode, _bin);
 						getPutAwayBinAsyncTask.execute();
 					} else {

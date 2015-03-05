@@ -183,8 +183,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		enLPNumber = new EnLPNumber();
 		itemNumber = new EnItemNumber();
 		enUom = new ArrayList<>();
-		enBarcodeExistences = new EnBarcodeExistences();
-		listBinTransfer = new ArrayList<EnBinTransfer>();
+		enBarcodeExistences = new EnBarcodeExistences();		
 		passPutAway = new EnPutAway();
 		bundle = this.getBundle();		
 		
@@ -1317,6 +1316,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");
 		enBinTransfer.setUomDescription(uom);
+		listBinTransfer = new ArrayList<EnBinTransfer>();
 		listBinTransfer.add(enBinTransfer);
 		binTransfer = DataParser.convertObjectToString(listBinTransfer);
 		Logger.error(binTransfer);
