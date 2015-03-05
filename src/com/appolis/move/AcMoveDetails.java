@@ -1043,15 +1043,19 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 				diaglogPost.dismiss();
 				// If not cancel by user
 				if (!isCancelled()) {
-					if (result.equals("true")) {				
-						if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
+					if (result.equals("true")) {
+						if (data != null && data.equalsIgnoreCase(GlobalParams.TRUE)) {
 							AcMoveDetails.this.finish();
 							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else if (data.equalsIgnoreCase(GlobalParams.SELECTED_BIN_TO_DOES_NOT_ALLOW_TRANSFERS_TO)) {
+							showPopUp(AcMoveDetails.this, null,
+									getLanguage(GlobalParams.CANNOT_TRANSFER_ITEMS,
+											GlobalParams.CANNOT_TRANSFER_ITEMS));
 						} else {
-							showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+							showPopUp(AcMoveDetails.this, null, ""+data);
 						}
 					} else {
-						showPopUp(AcMoveDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+						showPopUp(AcMoveDetails.this, null, ""+data);
 					}
 				} else {
 					scanFlag = GlobalParams.FLAG_ACTIVE;

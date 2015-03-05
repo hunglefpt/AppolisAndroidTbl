@@ -507,6 +507,8 @@ public final class GlobalParams {
 	public static final String RD_LBL_LOTS_KEY = "rd_lbl_Lots";
 	public static final String DAMAGED_KEY = "Damaged";
 	public static final String ARITHMETIC_OVERFLOW = "Arithmetic overflow error converting numeric to data type numeric";
+	public static final String CANNOT_TRANSFER_ITEMS = "Cannot transfer items into a WIP bin";
+	public static final String SELECTED_BIN_TO_DOES_NOT_ALLOW_TRANSFERS_TO = "Selected Bin To Does Not Allow Transfers To";
 	
 	/* number of status app */
 	public static final int ONE_STATUS = 1; // cusseccfull
