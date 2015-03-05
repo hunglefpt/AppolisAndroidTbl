@@ -1218,17 +1218,17 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 				// If not cancel by user
 				if (!isCancelled()) {
 					if (result.equals("true")) {				
-						if (data.equalsIgnoreCase(GlobalParams.TRUE)) {
+						if (data != null && data.equalsIgnoreCase(GlobalParams.TRUE)) {
 							AcPutAwayDetails.this.finish();
 							intent = new Intent(AcPutAwayDetails.this, AcPutAway.class);
 							intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(intent);
 							scanFlag = GlobalParams.FLAG_ACTIVE;
 						} else {
-							showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+							showPopUp(AcPutAwayDetails.this, null, ""+data);
 						}
 					} else {
-						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.SUBMIT_FAILE));
+						showPopUp(AcPutAwayDetails.this, null, ""+data);
 					}					
 				} else {
 					scanFlag = GlobalParams.FLAG_ACTIVE;
