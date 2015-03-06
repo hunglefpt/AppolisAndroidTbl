@@ -595,7 +595,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {					
-					if (enLPNumber != null) {					
+					if (enLPNumber != null && passPutAway != null) {					
 						edt_move_from.setEnabled(false);
 						edt_move_from.setBackgroundResource(R.color.transparent);
 						ArrayList<String> listUom = new ArrayList<String>();

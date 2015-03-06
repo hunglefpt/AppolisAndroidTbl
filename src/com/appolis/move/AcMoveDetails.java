@@ -592,7 +592,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
-					if (itemNumber != null) {
+					if (itemNumber != null && enUom != null) {
 						tvTransfer.setText(itemNumber.get_itemNumber());
 						tvItemDescription.setText(itemNumber.get_itemDescription());
 						ArrayList<String> listUom = new ArrayList<String>();
