@@ -9,6 +9,7 @@ package com.appolis.adapter;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,10 @@ public class ReceivingListAdapter extends ArrayAdapter<EnReceivingInfo> {
 		return listReceive.get(position);
 	}
 	
+	/**
+	 * update list PO
+	 * @param list
+	 */
 	public void updateListReciver(ArrayList<EnReceivingInfo> list){
 		if(null != list){
 			this.listReceive = new ArrayList<EnReceivingInfo>();
@@ -74,7 +79,7 @@ public class ReceivingListAdapter extends ArrayAdapter<EnReceivingInfo> {
 		TextView tvReceiveVendorName;
 	}
 	
-	@Override
+	@SuppressLint("InflateParams") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ReceiveListHolder receiveListHolder;
 		
@@ -109,10 +114,19 @@ public class ReceivingListAdapter extends ArrayAdapter<EnReceivingInfo> {
 		return convertView;
 	}
 	
+	/**
+	 * getFilter
+	 */
 	public FilterList getFilter(){
 		return filterList;
 	}
 	
+	/**
+	 * filter list PO
+	 * @author Do Thin
+	 *
+	 */
+	@SuppressLint("DefaultLocale") 
 	public class FilterList extends Filter {
 		
 		@Override

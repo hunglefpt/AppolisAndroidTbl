@@ -38,6 +38,7 @@ import com.appolis.receiving.AcReceiveItemDetail;
 import com.appolis.utilities.BuManagement;
 import com.appolis.utilities.DecimalDigitsInputFilter;
 import com.appolis.utilities.GlobalParams;
+import com.appolis.utilities.Logger;
 import com.appolis.utilities.StringUtils;
 import com.appolis.utilities.Utilities;
 
@@ -50,7 +51,6 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 	private Context context;
 	private ArrayList<EnPurchaseOrderReceiptInfo> listReceiptInfos = new ArrayList<EnPurchaseOrderReceiptInfo>();
 	private ArrayList<Integer> listPossitionSelected = new ArrayList<>();
-	
 	private boolean lotTraked;
 	private boolean enableButtonOk = true;
 	private double receiLeft;
@@ -145,6 +145,10 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 		return listPossitionSelected;
 	}
 	
+	/**
+	 * get list Item
+	 * @return
+	 */
 	public ArrayList<Integer> getListPurchaseOrderItemId(){
 		ArrayList<Integer> list = new ArrayList<>();
 		for (EnPurchaseOrderReceiptInfo item : listReceiptInfos) {
@@ -155,6 +159,11 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 		
 		return list;
 	}
+	
+	/**
+	 * get list receipt which is selected
+	 * @return
+	 */
 	public ArrayList<EnPurchaseOrderReceiptInfo> getListReceiptSelected(){
 		if(null == listPossitionSelected || listPossitionSelected.size() <= 0){
 			return null;
@@ -168,6 +177,10 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 		return list;
 	}
 	
+	/**
+	 * getListReceiptSelectedWithOutLastItem
+	 * @return
+	 */
 	public ArrayList<EnPurchaseOrderReceiptInfo> getListReceiptSelectedWithOutLastItem(){
 		if(null == listPossitionSelected || listPossitionSelected.size() <= 0){
 			return null;
@@ -179,12 +192,15 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 				//item not last item
 				list.add(getItem(item));
 			}
-			
 		}
 		
 		return list;
 	}
 	
+	/**
+	 * get item at the end of listview
+	 * @return
+	 */
 	public EnPurchaseOrderReceiptInfo getLastItem(){
 		if(null == listReceiptInfos || listReceiptInfos.size() == 0){
 			return null;
@@ -198,7 +214,6 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 	 * @param response value to update
 	 */
 	public void updateScanResult(String response){
-		Log.e("Appolis", "updateScanResult: " + response);
 		if(StringUtils.isNotBlank(response)){
 			listReceiptInfos.get(listReceiptInfos.size()-1).set_lotNumber(response);
 			notifyDataSetChanged();
@@ -238,8 +253,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 	@SuppressLint("InflateParams") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ReceiptInfoHolder  receiptInfoHolder;
-		Log.e("Appolis", "================================================");
-		Log.e("Appolis", "ReceivingItemDetailAdapter #position:" + position);
+
 		if(null == convertView){
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.receve_item_details_item, null);
@@ -253,7 +267,6 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
 					int viewPosition = (int) receiptInfoHolder.tvLocation.getTag();
-					Log.e("Appolis", "edtItemLot.addTextChangedListener:" + viewPosition + "*Text:" + s.toString());
 					if(viewPosition != getCount() -1){
 						return;
 					}
@@ -480,7 +493,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 			    
 				if(lotTraked){
 					//require lot
-					Log.e("Appolis", "Last item Lot focus");
+					Logger.error("Receive Item Detail Adapter: Last item Lot focus");
 					receiptInfoHolder.edtItemLot.requestFocus();
 					if(StringUtils.isNotBlank(getItem(listReceiptInfos.size()-1).get_lotNumber())){
 						receiptInfoHolder.edtItemQty.requestFocus();
@@ -514,7 +527,7 @@ public class ReceivingItemDetailAdapter extends ArrayAdapter<EnPurchaseOrderRece
 					}
 				} else {
 					//don't require lot
-					Log.e("Appolis", "Last Item Qty focus");
+					Logger.error("Receive Item Detail Adapter: Last Item Qty focus");
 					receiptInfoHolder.linItemLot.setVisibility(View.INVISIBLE);
 					receiptInfoHolder.edtItemQty.requestFocus();
 					receiptInfoHolder.edtItemQty.setText(BuManagement.formatDecimal(listReceiptInfos.get(position).get_quantityReceived()).trim());
