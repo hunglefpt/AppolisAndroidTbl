@@ -834,7 +834,11 @@ public class MainActivity extends Activity implements OnClickListener, Animation
 		return languagePrefs.getPreferencesString(key, value);
 	}
 	
-	// Show dialog
+	/**
+	 * Show dialog
+	 * @param message
+	 * @param activity
+	 */
     public void dialogShow(String message, Activity activity)
     {
     	final Dialog dialog = new Dialog(activity);
