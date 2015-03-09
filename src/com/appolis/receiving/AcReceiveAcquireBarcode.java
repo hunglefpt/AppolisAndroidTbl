@@ -29,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -49,7 +48,6 @@ import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
-import com.appolis.utilities.CommontDialog;
 import com.appolis.utilities.DataParser;
 import com.appolis.utilities.GlobalParams;
 import com.appolis.utilities.Logger;
@@ -291,7 +289,6 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 		case GlobalParams.CAPTURE_BARCODE_CAMERA_ACTIVITY:
 			if (resultCode == RESULT_OK) {
 				String message = data.getStringExtra(GlobalParams.RESULTSCAN);
-				Log.e("Appolis", "CAPTURE_BARCODE_CAMERA_ACTIVITY #RESULT_OK:" + message);
 				edtBarcodeValue.setText(message.trim());
 			}
 			break;
@@ -449,7 +446,6 @@ public class AcReceiveAcquireBarcode extends Activity implements OnClickListener
 					netParameterUOM[0] = new NetParameter("itemNumber", itemNumber);
 					dataUOM = HttpNetServices.Instance.getUOMItemNumber(netParameterUOM);
 					enUom =  DataParser.getUom(dataUOM);
-					Logger.error(dataUOM);
 					result = "true";
 				} catch (Exception e) {
 					result = "false";
