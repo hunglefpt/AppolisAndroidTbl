@@ -9,10 +9,10 @@ package com.appolis.adapter;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +32,6 @@ import com.appolis.receiving.AcReceivingDetails;
 import com.appolis.utilities.GlobalParams;
 import com.appolis.utilities.Logger;
 import com.appolis.utilities.StringUtils;
-import com.google.gson.Gson;
 
 /**
  * 
@@ -51,6 +50,12 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 	private String srtDamage;
 	private String lotTracked;
 	
+	/**
+	 * constructor
+	 * @param context
+	 * @param list
+	 * @param enPurchaseOrderInfo
+	 */
 	public ReceivingDetailAdapter(Context context, ArrayList<EnPurchaseOrderItemInfo> list, EnPurchaseOrderInfo enPurchaseOrderInfo) {
 		super(context, R.layout.receive_detail_item_with_swipe);
 		this.context = context;
@@ -60,6 +65,9 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 		getLanguage();
 	}
 	
+	/**
+	 * get language from language package
+	 */
 	public void getLanguage(){
 		strLot = languagePrefs.getPreferencesString(GlobalParams.RD_LBL_LOTS_KEY, GlobalParams.RD_LBL_LOTS_VALUE);
 		lotTracked = languagePrefs.getPreferencesString(GlobalParams.RD_TXT_LOTTRACKEDIND_KEY, GlobalParams.RD_TXT_LOTTRACKEDIND_VALUE);
@@ -81,15 +89,24 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 		if(null == listPurchaseOrderInfos){
 			return null;
 		}
+		
 		return listPurchaseOrderInfos.get(position);
 	}
 	
+	/**
+	 * update list
+	 * @param list
+	 */
 	public void updateListReciver(ArrayList<EnPurchaseOrderItemInfo> list){
 		if(null != list){
 			this.listPurchaseOrderInfos = list;
 		}
 	}
 	
+	/**
+	 * updateEnPuscharInfo
+	 * @param enPurchaseOrderInfo
+	 */
 	public void updateEnPuscharInfo(EnPurchaseOrderInfo enPurchaseOrderInfo){
 		this.enPurchaseOrderInfo = enPurchaseOrderInfo;
 	}
@@ -107,6 +124,7 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 		LinearLayout linItemFront;
 	}
 	
+	@SuppressLint("InflateParams") 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		ReceivingDetailHolder receivedetailHolder;
@@ -131,13 +149,6 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 		}
 		
 		EnPurchaseOrderItemInfo item = getItem(position);
-		try {
-			Gson gson = new Gson();
-			String srtItem = gson.toJson(item);
-			Logger.error("ReceiveDetailAdaper position:" + position + " value:" + srtItem);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		if(null != item){
 			if(null != item.get_itemDesc() && StringUtils.isNotBlank(item.get_itemNumber())){
 				receivedetailHolder.tvReceiveItemNumber.setText(item.get_itemDesc() + " - " + item.get_itemNumber());
@@ -197,7 +208,6 @@ public class ReceivingDetailAdapter extends ArrayAdapter<EnPurchaseOrderItemInfo
 			}
 			
 			receivedetailHolder.tvReceiveItemExpDate.setVisibility(View.INVISIBLE);
-			
 			receivedetailHolder.tvReceiveItemWeight.setText(String.format("%.2f", item.get_quantityOrdered()));
 			receivedetailHolder.tvReceiveItemBinType.setText(item.get_uomDesc());
 		
