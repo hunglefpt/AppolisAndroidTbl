@@ -435,10 +435,8 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 				//check condition to configure option
 				if(receivingItemDetailAdapter.getCount() > 1){
 					if(listPositionSelected.size() == 1) {
-						Log.e("Appolis", "configLayoutOption: false true true true");
 						configLayoutOption(false, true, true, true);
 					} else {
-						Log.e("Appolis", "configLayoutOption: false true true true");
 						configLayoutOption(false, false, true, true);
 					}
 				} else {
@@ -447,18 +445,14 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 					if (enPurchaseOrderItemInfo.is_lotTrackingInd()){
 						if(null == receiptInfoLast || (StringUtils.isBlank(receiptInfoLast.get_lotNumber()))
 								|| (receiptInfoLast.get_quantityReceived() <= 0)){
-							Log.e("Appolis", "configLayoutOption: false false false false");
 							configLayoutOption(false, false, false, false);
 						} else {
-							Log.e("Appolis", "configLayoutOption: false true true true");
 							configLayoutOption(false, true, true, true);
 						}
 					} else {
 						if(null == receiptInfoLast || (receiptInfoLast.get_quantityReceived() <= 0)){
-							Log.e("Appolis", "configLayoutOption: false false false false");
 							configLayoutOption(false, false, false, false);
 						} else {
-							Log.e("Appolis", "configLayoutOption: false true true true");
 							configLayoutOption(false, true, true, true);
 						}
 					}
@@ -470,21 +464,18 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 		
 		case R.id.tvDialogCancel:
 			if(null != dialogOptions){
-				Log.e("Appolis", "Dialog cancel #Cancel");
 				dialogOptions.dismiss();
 			}
 			break;
 		
 		case R.id.lin_layout_print:
 			if(null != dialogOptions){
-				Log.e("Appolis", "Dialog cancel #lin_layout_print");
 				dialogOptions.dismiss();
 			}
 			break;
 		
 		case R.id.lin_layout_damage:
 			if(null != dialogOptions){
-				Log.e("Appolis", "Dialog cancel #lin_layout_damage");
 				dialogOptions.dismiss();
 				processDamageClick();
 			}
@@ -492,7 +483,6 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			
 		case R.id.lin_layout_undo:
 			if(null != dialogOptions){
-				Log.e("Appolis", "Dialog cancel #lin_layout_damage");
 				dialogOptions.dismiss();
 				createDialogConfirmUndo();
 			}
@@ -500,7 +490,6 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 		
 		case R.id.lin_layout_move:
 			if(null != dialogOptions){
-				Log.e("Appolis", "Dialog cancel #lin_layout_move");
 				dialogOptions.dismiss();
 				processMoveClick();
 			}
@@ -562,8 +551,6 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 					}
 				}
 			}
-		} else {
-			Log.e("Appolis", "#lin_layout_damage receiptInfoLast NULL");
 		}
 	}
 	
@@ -607,15 +594,12 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 					startActivityForResult(intentMove, GlobalParams.AC_RECEIVE_OPTION_MOVE_ACTIVITY);
 				}
 			}
-		} else {
-			//do nothing
-			Log.e("Appolis", "#lin_layout_damage receiptInfoLast NULL");
 		}
 	}
 	
 	@Override
 	public void onItemClick(android.widget.AdapterView<?> parentView, View view, int position, long id) {
-		Log.e("Appolis", "AcReceiveItemDetail #onItemClick:" + position);
+		Logger.error("AcReceiveItemDetail #onItemClick:" + position);
 		receivingItemDetailAdapter.setSelectedPosition(position);
 	}
 	
@@ -626,10 +610,8 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 		case GlobalParams.CAPTURE_BARCODE_CAMERA_ACTIVITY:
 			String  message = data.getStringExtra(GlobalParams.RESULTSCAN);
 			if(resultCode == RESULT_OK){
-				Log.e("Uniphy", "#onActivityResult OK");
 				receivingItemDetailAdapter.updateScanResult(message);
 			} else {
-				Log.e("Uniphy", "#onActivityResult CANCEL");
 			}
 			break;
 			
@@ -691,7 +673,6 @@ public class AcReceiveItemDetail extends Activity implements OnClickListener, On
 			
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				Log.e("Uniphy", "Undo item");
 				ReceiveClikUndoAsyn receiveClikUndoAsyn = new ReceiveClikUndoAsyn(AcReceiveItemDetail.this);
 				receiveClikUndoAsyn.execute();
 			}
