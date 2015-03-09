@@ -420,6 +420,12 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 		}
 	}
 	
+	/**
+	 * 
+	 * @param mContext
+	 * @param newClass
+	 * @param strMessages
+	 */
 	public void showPopUp(final Context mContext,
 			final Class<?> newClass, final String strMessages) {
 		String message;

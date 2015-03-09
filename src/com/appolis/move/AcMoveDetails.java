@@ -1155,6 +1155,12 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		Logger.error(binTransfer);
 	}
 	
+	/**
+	 * 
+	 * @param mContext
+	 * @param newClass
+	 * @param strMessages
+	 */
 	public void showPopUp(final Context mContext,
 			final Class<?> newClass, final String strMessages) {
 		String message;

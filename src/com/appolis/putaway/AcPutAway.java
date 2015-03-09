@@ -408,7 +408,6 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 						listPutAway = new ArrayList<EnPutAway>(enPutAway);
 						Collections.sort(listPutAway, new PutAwayComparator());						
 						adapterPutAway = new PutAwayAdapter(AcPutAway.this, listPutAway);
-//						adapterPutAway.setOnItemClickHandler(onItemClick);
 						lsPutAway.setAdapter(adapterPutAway);						
 						edtItem.setText(GlobalParams.BLANK_CHARACTER);
 						adapterPutAway.getFilter().filter(GlobalParams.BLANK_CHARACTER);	
@@ -788,6 +787,12 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 		}
 	}
 	
+	/**
+	 * 
+	 * @param mContext
+	 * @param newClass
+	 * @param strMessages
+	 */
 	public void showPopUp(final Context mContext,
 			final Class<?> newClass, final String strMessages) {
 		String message;

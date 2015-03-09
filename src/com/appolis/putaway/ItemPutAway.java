@@ -7,7 +7,6 @@ package com.appolis.putaway;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.appolis.androidtablet.R;
 import com.appolis.utilities.BaseLinearLayout;
@@ -17,7 +16,6 @@ import com.appolis.utilities.BaseLinearLayout;
  */
 public class ItemPutAway extends BaseLinearLayout{
 	private int _position;
-	private LinearLayout linItem;
 	private OnClickListener _onItemClick;
 
 	/**
@@ -25,9 +23,7 @@ public class ItemPutAway extends BaseLinearLayout{
 	 */
 	public ItemPutAway(Context context) {
 		super(context);
-		initControl(R.layout.item_list_put_away, context);
-		linItem = (LinearLayout) findViewById(R.id.linItem);
-//		linItem.setOnClickListener(onItemClick);
+		initControl(R.layout.item_list_put_away, context);	
 	}
 
 	/**
