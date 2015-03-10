@@ -519,8 +519,8 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 							scanFlag = GlobalParams.FLAG_ACTIVE;
 						} else if ((enBarcodeExistences.getItemOnlyCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())								
 								|| (enBarcodeExistences.getUOMBarcodeCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())) {					
-							GetLPDataAsyncTask getLPDataAsyncTask = new GetLPDataAsyncTask(_barCode, _bin);
-							getLPDataAsyncTask.execute();
+							GetNotLPDataAsyncTask getNotLPDataAsyncTask = new GetNotLPDataAsyncTask(_barCode, _bin);
+							getNotLPDataAsyncTask.execute();
 						} else if (enBarcodeExistences.getItemIdentificationCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins()) {
 							CheckItemLotNumberAsyncTask checkItemLotNumberAsyncTask = new CheckItemLotNumberAsyncTask(_barCode);
 							checkItemLotNumberAsyncTask.execute();
@@ -694,6 +694,81 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 						intent.putExtra(GlobalParams.CHECK_LP_BLANK, GlobalParams.TRUE);
 						startActivity(intent);
 						scanFlag = GlobalParams.FLAG_ACTIVE;
+					} else {
+						scanFlag = GlobalParams.FLAG_ACTIVE;
+					}
+					
+				} else {
+					String msg = languagePrefs.getPreferencesString
+							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
+					showPopUp(AcPutAway.this, null, msg);
+				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		}
+	}
+	
+	/**
+	 * Get data License plate
+	 * @author hoangnh11
+	 */
+	class GetNotLPDataAsyncTask extends AsyncTask<Void, Void, String> {
+		String data, _barCode, _bin, dataTwo;	
+		Intent intent;
+		
+		private GetNotLPDataAsyncTask(String barCode, String bin){
+			_barCode = barCode;
+			_bin = bin;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(AcPutAway.this);
+			dialog.setMessage(getLanguage(GlobalParams.LOADING_MSG, GlobalParams.LOADING_DATA));
+			dialog.show();
+			dialog.setCancelable(false); 
+			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
+		}
+		
+		@Override
+		protected String doInBackground(Void... params) {
+			String result;
+			if (!isCancelled()) {
+				
+				try {
+					NetParameter[] netParameter = new NetParameter[1];
+					netParameter[0] = new NetParameter("licensePlateNumber", URLEncoder.encode(_barCode, GlobalParams.UTF_8));
+					data = HttpNetServices.Instance.getLpByBarcode(netParameter);
+					Logger.error(data);
+
+					result = GlobalParams.TRUE;
+				} catch (AppolisException e) {
+					result = GlobalParams.FALSE;
+				} catch (Exception e) {
+					result = GlobalParams.FALSE;
+				}
+				
+			} else {
+				result = GlobalParams.FALSE;
+			}
+			
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			dialog.dismiss();
+			// If not cancel by user
+			if (!isCancelled()) {
+				if (result.equals(GlobalParams.TRUE)) {
+					if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {
+						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(data.replace("\"", ""), _bin);
+						getPutAwayBinAsyncTask.execute();
+					} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {
+						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(_barCode, _bin);
+						getPutAwayBinAsyncTask.execute();
 					} else {
 						scanFlag = GlobalParams.FLAG_ACTIVE;
 					}
