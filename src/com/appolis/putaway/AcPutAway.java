@@ -683,14 +683,17 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 			// If not cancel by user
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
-					if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {	
-						Logger.error("2"+data.replace("\"", ""));
+					if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {
 						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(data.replace("\"", ""), _bin);
 						getPutAwayBinAsyncTask.execute();
-					} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {	
-						Logger.error("3"+data.replace("\"", ""));
-						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(_barCode, _bin);
-						getPutAwayBinAsyncTask.execute();
+					} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {
+						intent = new Intent(AcPutAway.this, AcPutAwayDetails.class);
+						intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
+						intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.TRUE);
+						intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.FALSE);	
+						intent.putExtra(GlobalParams.CHECK_LP_BLANK, GlobalParams.TRUE);
+						startActivity(intent);
+						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
 						scanFlag = GlobalParams.FLAG_ACTIVE;
 					}

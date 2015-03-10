@@ -71,7 +71,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private ImageView imgHome, imgScan;
 	private Button btnCancel, btnOK;
 	Bundle bundle;
-	private String barCode, checkLP, checkBin, message, binTransfer;
+	private String barCode, checkLP, checkBin, message, binTransfer, checkLPBlank;
 	private ProgressDialog dialog;
 	private EnItemNumber itemNumber;
 	private TextView tvTransfer, tvItemDescription, tvmaxQty;
@@ -119,9 +119,18 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 				lpNumber = bundle.getString(GlobalParams.LP_NUMBER);
 			}
 			
+			if (bundle.containsKey(GlobalParams.CHECK_LP_BLANK)) {
+				checkLPBlank = bundle.getString(GlobalParams.CHECK_LP_BLANK);
+			}
+			
 			if (checkLP.equalsIgnoreCase(GlobalParams.TRUE)) {
-				GetLPDataAsyncTask getLPDataAsyncTask = new GetLPDataAsyncTask();
-				getLPDataAsyncTask.execute();
+				if (checkLPBlank.equalsIgnoreCase(GlobalParams.TRUE)) {
+					GetLPBlankDataAsyncTask getLPBlankDataAsyncTask = new GetLPBlankDataAsyncTask();
+					getLPBlankDataAsyncTask.execute();
+				} else {
+					GetLPDataAsyncTask getLPDataAsyncTask = new GetLPDataAsyncTask();
+					getLPDataAsyncTask.execute();
+				}				
 				
 				et_move_to.setOnFocusChangeListener(new OnFocusChangeListener() {
 					
@@ -524,6 +533,91 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						
 						btnOK.setEnabled(true);
 						et_move_to.setText(barCode);
+						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
+							
+							@Override
+							public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+								if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
+										|| (actionId == EditorInfo.IME_ACTION_DONE)) {
+									BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+						            barcodeAsyncTask.execute();
+					            }
+								return false;
+							}
+						});
+						scanFlag = GlobalParams.FLAG_ACTIVE;
+					} else {
+						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					}
+				} else {
+					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+				}
+			} else {
+				scanFlag = GlobalParams.FLAG_ACTIVE;
+			}
+		}
+	}
+	
+	/**
+	 * Get data License plate
+	 * @author hoangnh11
+	 */
+	class GetLPBlankDataAsyncTask extends AsyncTask<Void, Void, String> {
+		String data;
+		Intent intent;
+		
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(AcPutAwayDetails.this);
+			dialog.setMessage(getLanguage(GlobalParams.LOADING_MSG, GlobalParams.LOADING_DATA));
+			dialog.show();
+			dialog.setCancelable(false); 
+			dialog.setCanceledOnTouchOutside(false);
+			scanFlag = GlobalParams.FLAG_INACTIVE;
+		}
+		
+		@Override
+		protected String doInBackground(Void... params) {
+			String result;
+			if (!isCancelled()) {
+				try {
+					NetParameter[] netParameter = new NetParameter[1];
+					netParameter[0] = new NetParameter("barcode", barCode);
+					data = HttpNetServices.Instance.getLpByBarcode(netParameter);
+					enLPNumber = DataParser.getBinLPNumber(data);
+					Logger.error(data);
+					result = GlobalParams.TRUE;
+				} catch (AppolisException e) {
+					result = GlobalParams.FALSE;
+				} catch (Exception e) {
+					result = GlobalParams.FALSE;
+				}
+			} else {
+				result = GlobalParams.FALSE;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {						
+			dialog.dismiss();
+			// If not cancel by user
+			if (!isCancelled()) {
+				if (result.equals(GlobalParams.TRUE)) {
+					if (enLPNumber != null) {
+						linMaxQty.setVisibility(View.INVISIBLE);
+						linUOM.setVisibility(View.INVISIBLE);
+						linLot.setVisibility(View.INVISIBLE);
+						edt_move_from.setEnabled(false);
+						edt_move_from.setBackgroundResource(R.color.transparent);
+						et_move_qty.setEnabled(false);
+						et_move_qty.setBackgroundResource(R.color.transparent);
+
+						tvTransfer.setText(enLPNumber.get_binNumber());
+						tvItemDescription.setText(GlobalParams.LICENSE_PLATE);
+						edt_move_from.setText(enLPNumber.get_parentBinNumber());
+						et_move_qty.setText("1");
+						et_move_to.setText(GlobalParams.BLANK_CHARACTER);
 						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
 							
 							@Override

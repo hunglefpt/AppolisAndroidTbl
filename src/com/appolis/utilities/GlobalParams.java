@@ -550,6 +550,7 @@ public final class GlobalParams {
 	public static final String BARCODE_MOVE = "BARCODE MOVE";
 	public static final String CHECK_LP_OR_NOT_LP = "CHECK LP OR NOT LP";
 	public static final String CHECK_BIN_OR_NOT_BIN = "CHECK BIN OR NOT BIN";
+	public static final String CHECK_LP_BLANK = "CHECK LP BLANK";
 	public static final String LOT_NUMBER = "LOT NUMBER";
 	public static final String BIN_NUMBER = "BIN NUMBER";
 	public static final String QTY_NUMBER = "QTY NUMBER";
