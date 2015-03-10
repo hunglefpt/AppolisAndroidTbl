@@ -216,6 +216,8 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 			break;
 			
 		case R.id.img_main_menu_scan_barcode:
+			edtItem.setText(GlobalParams.BLANK_CHARACTER);
+			adapterPutAway.getFilter().filter(GlobalParams.BLANK_CHARACTER);
 			intent = new Intent(this, CaptureBarcodeCamera.class);		
 			startActivityForResult(intent, GlobalParams.AC_PUT_AWAY_LEVEL_ONE);
 			break;
