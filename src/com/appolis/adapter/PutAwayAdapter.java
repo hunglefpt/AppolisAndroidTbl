@@ -66,12 +66,13 @@ public class PutAwayAdapter extends BaseAdapter{
 			((ItemPutAway) convertView).setOnThisItemClickHandler(onItemClickHandler);
 			
 			holder = new ViewHolder();
+			holder.linItem = (LinearLayout) convertView.findViewById(R.id.linItem);
 			holder.tvItemDes = (TextView) convertView.findViewById(R.id.tvItemDes);
 			holder.tvQty = (TextView) convertView.findViewById(R.id.tvQty);
 			holder.tvBinNumber = (TextView) convertView.findViewById(R.id.tvBinNumber);
 			holder.tvUomDes = (TextView) convertView.findViewById(R.id.tvUomDes);
 			holder.tvLotNumber = (TextView) convertView.findViewById(R.id.tvLotNumber);
-
+			
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -80,19 +81,24 @@ public class PutAwayAdapter extends BaseAdapter{
 		items = _data.get(position);
 
 		if (items != null) {
-			holder.tvItemDes.setText(items.get_itemDesc() + " - " + items.get_itemNumber());
-			holder.tvQty.setText(String.valueOf(df.format(items.get_qty())));
-			holder.tvBinNumber.setText(mActivity.getResources().getString(R.string.loc)
-					+ GlobalParams.SPACE + items.get_binNumber());
-			holder.tvUomDes.setText(items.get_uomDescription());
-			
-			if (StringUtils.isBlank(items.get_lotNumber())) {
-				holder.tvLotNumber.setVisibility(View.INVISIBLE);
-			} else {
-				holder.tvLotNumber.setText(mActivity.getResources().getString(R.string.LOTS)
-						+ GlobalParams.SPACE + items.get_lotNumber());
-				holder.tvLotNumber.setVisibility(View.VISIBLE);
-			}
+//			if (!String.valueOf(df.format(items.get_qty())).equals("0.00")) {
+				holder.linItem.setVisibility(View.VISIBLE);				
+				holder.tvItemDes.setText(items.get_itemDesc() + " - " + items.get_itemNumber());			
+				holder.tvQty.setText(String.valueOf(df.format(items.get_qty())));
+				holder.tvBinNumber.setText(mActivity.getResources().getString(R.string.loc)
+						+ GlobalParams.SPACE + items.get_binNumber());
+				holder.tvUomDes.setText(items.get_uomDescription());
+				
+				if (StringUtils.isBlank(items.get_lotNumber())) {
+					holder.tvLotNumber.setVisibility(View.INVISIBLE);
+				} else {
+					holder.tvLotNumber.setText(mActivity.getResources().getString(R.string.LOTS)
+							+ GlobalParams.SPACE + items.get_lotNumber());
+					holder.tvLotNumber.setVisibility(View.VISIBLE);
+				}
+//			} else {
+//				holder.linItem.setVisibility(View.GONE);				
+//			}
 		}
 		
 		((ItemPutAway) convertView).set_position(position);
@@ -105,7 +111,7 @@ public class PutAwayAdapter extends BaseAdapter{
 	 */
 	static class ViewHolder {
 		LinearLayout linItem;
-		TextView tvItemDes, tvQty, tvBinNumber, tvUomDes, tvLotNumber;
+		TextView tvItemDes, tvQty, tvBinNumber, tvUomDes, tvLotNumber;	
 	}
 
 	/**

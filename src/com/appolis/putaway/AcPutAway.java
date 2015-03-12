@@ -6,6 +6,7 @@
 package com.appolis.putaway;
 
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -407,6 +408,14 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 				
 				if (result.equals(GlobalParams.TRUE)) {
 					if (enPutAway != null) {
+						DecimalFormat df = new DecimalFormat("#0.00");
+						
+						for (int i = 0; i < enPutAway.size(); i++) {
+							if (String.valueOf(df.format(enPutAway.get(i).get_qty())).equals("0.00")) {
+								enPutAway.remove(i);
+							}
+						}
+						
 						listPutAway = new ArrayList<EnPutAway>(enPutAway);
 						Collections.sort(listPutAway, new PutAwayComparator());						
 						adapterPutAway = new PutAwayAdapter(AcPutAway.this, listPutAway);
