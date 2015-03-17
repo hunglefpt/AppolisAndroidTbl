@@ -100,6 +100,12 @@ public final class HttpNetServices implements INetServices {
 	}
 	
 	@Override
+	public String getPickOrderList(String orderType) throws Exception {
+		HttpFunctionInfo functionInfo = HttpFunctionFactory.getPickOrderList(orderType);
+		return executer(functionInfo);
+	}
+	
+	@Override
 	public String getReceiveDetail(String poID) throws Exception {
 		HttpFunctionInfo functionInfo = HttpFunctionFactory.getReceiveDetail(poID);
 		return executer(functionInfo);

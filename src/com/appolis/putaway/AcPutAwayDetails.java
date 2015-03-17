@@ -108,13 +108,18 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			checkLP = bundle.getString(GlobalParams.CHECK_LP_OR_NOT_LP);
 			checkBin = bundle.getString(GlobalParams.CHECK_BIN_OR_NOT_BIN);
 			passPutAway = (EnPutAway) bundle.getSerializable(GlobalParams.PUT_AWAY_BIN_DATA);			
-			if (bundle.containsKey(GlobalParams.LOT_NUMBER) && bundle.containsKey(GlobalParams.BIN_NUMBER)
-					&& bundle.containsKey(GlobalParams.QTY_NUMBER)) {
+ 			if (bundle.containsKey(GlobalParams.LOT_NUMBER)) {
 				lotNumber = bundle.getString(GlobalParams.LOT_NUMBER);
-				binNumber = bundle.getString(GlobalParams.BIN_NUMBER);
-				qtyNumber = bundle.getString(GlobalParams.QTY_NUMBER);
 			}			
 		
+			if(bundle.containsKey(GlobalParams.BIN_NUMBER)){
+				binNumber = bundle.getString(GlobalParams.BIN_NUMBER);
+			}
+			
+			if(bundle.containsKey(GlobalParams.QTY_NUMBER)){
+				qtyNumber = bundle.getString(GlobalParams.QTY_NUMBER);
+			}
+			
 			if (bundle.containsKey(GlobalParams.LP_NUMBER)) {
 				lpNumber = bundle.getString(GlobalParams.LP_NUMBER);
 			}

@@ -290,6 +290,13 @@ public final class HttpFunctionFactory {
 		return functionInfo;
 	}
 	
+	public static HttpFunctionInfo getPickOrderList(String orderType) throws Exception{
+		HttpFunctionInfo functionInfo = createGetMethod("getPickOrderList");
+		functionInfo.setUrl(AppPreferences.getURLFirstLogin() + "/api/order?orderType=" + orderType);
+		functionInfo.setHeader(new NetParameter[] {HttpUtilities.getHeaderAuthorization()});
+		return functionInfo;
+	}
+	
 	public static HttpFunctionInfo putAcquireBarcode(NetParameter[] netParameters) throws Exception{
 		HttpFunctionInfo functionInfo = createPutMethod("putAcquireBarcode");
 		String params = getParamWithEncode(netParameters);

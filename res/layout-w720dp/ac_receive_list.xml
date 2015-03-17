@@ -95,7 +95,7 @@
 	
 	<!-- list item -->
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/lvReceiveList"
+        android:id="@+id/lvPickOrderList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#fff"

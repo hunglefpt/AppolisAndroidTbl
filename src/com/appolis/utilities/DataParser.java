@@ -16,6 +16,7 @@ import com.appolis.entities.EnItemLotInfo;
 import com.appolis.entities.EnItemNumber;
 import com.appolis.entities.EnItemPODetails;
 import com.appolis.entities.EnLPNumber;
+import com.appolis.entities.EnOrderPickSwitchInfo;
 import com.appolis.entities.EnPO;
 import com.appolis.entities.EnPassPutAway;
 import com.appolis.entities.EnPurchaseOrderInfo;
@@ -84,6 +85,16 @@ public final class DataParser {
 		Type collectionType = new TypeToken<List<ObjectSettingLanguage>>() {
 		}.getType();
 		List<ObjectSettingLanguage> details = gson.fromJson(jsonData, collectionType);
+		return details;
+	}
+	public static ArrayList<EnOrderPickSwitchInfo> getListOrderPickSwitchInfos(String jsonData) throws JsonSyntaxException {
+		if (StringUtils.isBlank(jsonData)) {
+			return null;
+		}
+		
+		Gson gson = new Gson();
+		Type collectionType = new TypeToken<ArrayList<EnOrderPickSwitchInfo>>(){}.getType();
+		ArrayList<EnOrderPickSwitchInfo> details = gson.fromJson(jsonData, collectionType);
 		return details;
 	}
 	

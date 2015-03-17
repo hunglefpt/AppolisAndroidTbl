@@ -616,11 +616,32 @@ public final class BuManagement
      * @param s :string format "abc"
      * @return abc
      */
-    public static String getDataBarcode(String s) {
-    	   if(s.indexOf("\"") > -1) {
-    	    s = s.substring(1, s.length() - 1);
-    	   }
-    	   
-    	   return s;
-    	  }
+	public static String getDataBarcode(String s) {
+		if (s.indexOf("\"") > -1) {
+			s = s.substring(1, s.length() - 1);
+		}
+
+		return s;
+	}
+    /**
+     * converDatePatern
+     * @param strDate date to convert
+     * @param paternIn patern in put
+     * @param paternOut patern out put
+     * @return
+     */
+    @SuppressLint("SimpleDateFormat") 
+    public static String converDatePatern(String strDate, String paternIn, String paternOut){
+    	try{
+    		SimpleDateFormat sdfIn = new SimpleDateFormat(paternIn);
+    		SimpleDateFormat sdfOut = new SimpleDateFormat(paternOut);
+    		Date date = sdfIn.parse(strDate);
+    		String result = sdfOut.format(date);
+    		return result;
+    	} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+    }
+    
 }

@@ -21,4 +21,5 @@ public interface ErrorCode {
 	public static final int STATUS_SCAN_ERROR = 3;
 	public static final int STATUS_SCAN_UNSUPPORTED_BARCODE = 4;
 	public static final int STATUS_JSON_EXCEPTION = 5;
+	public static final int STATUS_RESPONSE_BLANK = 6;
 }

@@ -49,4 +49,5 @@ public interface INetServices {
 	String creareLpOption(NetParameter []netParameter) throws Exception;
 	String createNewLisecePlate(NetParameter[] netParameters) throws Exception;
 	String putAcquireBarcode(NetParameter[] netParameters) throws Exception;
+	String getPickOrderList(String orderType) throws Exception;
 }

@@ -42,7 +42,7 @@ public final class GlobalParams {
 	public static final String dateFormatYYYY_MM_DD_T_HHMMSS = "yyyy-MM-dd'T'HH:mm:ss";
 	public static final String dateFormatYYYY_MM_DD = "yyyy-MM-dd";
 	public static final String dateFormatMM_DD_YYYY = "MM-dd-yyyy";
-	
+	public static final String dateFormatMMDDYYYY = "MM/dd/yyyy";
 	/*set min qty*/
 	public static final int MIN_QTY = 1;	
 	
@@ -272,6 +272,7 @@ public final class GlobalParams {
 	public static final String CYCLE_COUNT_VALUE = "Cycle Count";
 	public static final String NO_MORE_COUNTS_VALUE = "No More Counts";
 	public static final String COMPLETED_VALUE = "Completed";
+	public static final String PICK_TITLE_PICK_VALUE = "Pick";
 	public static final String INVALID_PO_SCANNED_VALUE = "Invalid PO scanned, please scan a PO on the list";
 	public static final String MNP_MSG_INVALIDQTY_VALUE = "Invalid Quantity. Please try again.";
 	public static final String MISS_LOT_MSG_VALUE = "Please enter or scan Lot # to continue.";
@@ -296,6 +297,8 @@ public final class GlobalParams {
 	public static final String DAMAGED_VALUE = "Damaged";
 	public static final String PLEASE_SCAN_BIN_OR_LP = "Please scan Bin or LP";
 	public static final String LICENSE_PLATE = "License Plate";
+	public static final String PICK_TXT_COMPLETE_VALUE = "Complete"; 
+	public static final String ZONE_VALUE = "Zone"; 
 	
 	/*key to support multiple language*/
 	public static final String JOB_TITLE_JOB = "job_title_Job";
@@ -481,6 +484,8 @@ public final class GlobalParams {
 	public static final String ACQUIRE_BARCODE_KEY = "acquire_Barcode";
 	public static final String SCAN_OR_ENTER_BARCODE_KEY = "scan_or_Enter_Barcode";
 	public static final String SCAN_NOTFOUND_KEY = "scan_notFound";
+	public static final String PICK_TXT_COMPLETE_KEY = "pick_txt_Complete"; 
+	public static final String ZONE_KEY = "Zone"; 
 	public static final String RD_INVALID_BARCODE_MSG_KEY = "rd_invalid_barcode_msg";
 	public static final String ITEM_NOT_YOUR_PO_KEY = "item_not_your_po_key";
 	public static final String RID_LBL_PRINTLABELS_KEY = "rid_lbl_PrintLabels";
@@ -505,6 +510,7 @@ public final class GlobalParams {
 	public static final String MAINLIST_MENLOADING_KEY = "MainList_menLoading";
 	public static final String RD_RETRIEVEPO_MSG_KEY = "rd_retrievePO_msg";
 	public static final String RD_LBL_LOTS_KEY = "rd_lbl_Lots";
+	public static final String PICK_TITLE_PICK_KEY = "pick_title_Pick";
 	public static final String DAMAGED_KEY = "Damaged";
 	public static final String ARITHMETIC_OVERFLOW = "Arithmetic overflow error converting numeric to data type numeric";
 	public static final String CANNOT_TRANSFER_ITEMS = "Cannot transfer items into a WIP bin";

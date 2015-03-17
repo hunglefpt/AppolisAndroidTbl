@@ -43,6 +43,7 @@ import com.appolis.common.LanguagePreferences;
 import com.appolis.cyclecount.AcCycleCount;
 import com.appolis.entities.ObjectIconMainScreen;
 import com.appolis.move.AcMove;
+import com.appolis.pick.AcPick;
 import com.appolis.putaway.AcPutAway;
 import com.appolis.receiverinventory.AcReceiverScanLP;
 import com.appolis.receiving.AcRecevingList;
@@ -630,8 +631,9 @@ public class MainActivity extends Activity implements OnClickListener, Animation
     			intent = new Intent(MainActivity.this, AcPutAway.class);
 				startActivity(intent);
     			break;
-    		case 2:
-
+    		case 2: //Pick
+    			intent = new Intent(MainActivity.this, AcPick.class);
+    			startActivity(intent);
     			break;
     			
     		case 3: // Move
@@ -673,7 +675,7 @@ public class MainActivity extends Activity implements OnClickListener, Animation
     			break;
     			
     		case 11:
-
+    			
     			break;
     			
     		case 12:

@@ -187,6 +187,13 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan|stateHidden" >
         </activity>
+        <activity
+            android:name="com.appolis.pick.AcPick"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        
     </application>
 
 </manifest>
