@@ -478,7 +478,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	class PutawayAsyncTask extends AsyncTask<Void, Void, String> {
 				
 		@Override
-		protected void onPreExecute() {		
+		protected void onPreExecute() {
 		}
 		
 		@Override

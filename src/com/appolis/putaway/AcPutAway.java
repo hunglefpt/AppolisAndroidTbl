@@ -85,7 +85,7 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	private int positonItem;
 	private String scanFlag;
 	
-	private static final long DOUBLE_CLICK_TIME_DELTA = 3000;//milliseconds
+	private static final long DOUBLE_CLICK_TIME_DELTA = 1000;//milliseconds
 	long lastClickTime = 0;
 	
 	@Override
@@ -178,25 +178,12 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	 */
 	@Override
 	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {		
-//		Logger.error(String.valueOf(position));
-//		positonItem = position - 1;
-//		if (checkPos == positonItem) {
-//			checkPos = -1;
-//		} else {
-//			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask
-//					(((EnPutAway) adapterPutAway.getItem(positonItem)).get_itemNumber(), positonItem,
-//					((EnPutAway) adapterPutAway.getItem(positonItem)).get_binNumber());
-//			barcodeAsyncTask.execute();
-//			passPutAway = ((EnPutAway) adapterPutAway.getItem(positonItem));
-//			checkPos = positonItem;
-//		}
-		
 		long clickTime = System.currentTimeMillis();
-		
+		Logger.error("gdfhdfhfghfjhgfj:    " + lastClickTime);
         if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
-        	Logger.error("1111111111111111111111111111111:    " + clickTime);
+        	Logger.error("clickTime:    " + clickTime);
         } else {
-        	Logger.error("2222222222222222222222222222222222222    " + lastClickTime);
+        	Logger.error("lastClickTime:    " + lastClickTime);
 			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask
 			(((EnPutAway) adapterPutAway.getItem(positonItem)).get_itemNumber(), positonItem,
 			((EnPutAway) adapterPutAway.getItem(positonItem)).get_binNumber());
