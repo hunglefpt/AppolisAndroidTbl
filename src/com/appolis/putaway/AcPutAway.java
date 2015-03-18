@@ -45,6 +45,7 @@ import com.appolis.entities.EnPutAwayBin;
 import com.appolis.login.LoginActivity;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
+import com.appolis.putaway.AcPutAwayBin.BarcodeAsyncTask;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -83,6 +84,9 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	private EnPassPutAway enPassPutAway; 
 	private int positonItem;
 	private String scanFlag;
+	
+	private static final long DOUBLE_CLICK_TIME_DELTA = 3000;//milliseconds
+	long lastClickTime = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -173,19 +177,34 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	 * Process click event in List view
 	 */
 	@Override
-	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {
-		Logger.error(String.valueOf(position));
-		positonItem = position - 1;
-		if (checkPos == positonItem) {
-			checkPos = -1;
-		} else {
+	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {		
+//		Logger.error(String.valueOf(position));
+//		positonItem = position - 1;
+//		if (checkPos == positonItem) {
+//			checkPos = -1;
+//		} else {
+//			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask
+//					(((EnPutAway) adapterPutAway.getItem(positonItem)).get_itemNumber(), positonItem,
+//					((EnPutAway) adapterPutAway.getItem(positonItem)).get_binNumber());
+//			barcodeAsyncTask.execute();
+//			passPutAway = ((EnPutAway) adapterPutAway.getItem(positonItem));
+//			checkPos = positonItem;
+//		}
+		
+		long clickTime = System.currentTimeMillis();
+		
+        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
+        	Logger.error("1111111111111111111111111111111:    " + clickTime);
+        } else {
+        	Logger.error("2222222222222222222222222222222222222    " + lastClickTime);
 			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask
-					(((EnPutAway) adapterPutAway.getItem(positonItem)).get_itemNumber(), positonItem,
-					((EnPutAway) adapterPutAway.getItem(positonItem)).get_binNumber());
+			(((EnPutAway) adapterPutAway.getItem(positonItem)).get_itemNumber(), positonItem,
+			((EnPutAway) adapterPutAway.getItem(positonItem)).get_binNumber());
 			barcodeAsyncTask.execute();
-			passPutAway = ((EnPutAway) adapterPutAway.getItem(positonItem));
-			checkPos = positonItem;
-		}
+			passPutAway = ((EnPutAway) adapterPutAway.getItem(positonItem));	
+        }
+        
+        lastClickTime = clickTime;
 	}
 	
 	/**
@@ -209,6 +228,7 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 			break;
 			
 		case R.id.btnCancel:
+			Utilities.hideKeyboard(this);
 			finish();
 			break;
 			

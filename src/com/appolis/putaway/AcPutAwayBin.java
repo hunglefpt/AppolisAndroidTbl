@@ -76,6 +76,9 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	private EnPassPutAway enPassPutAway;
 	private String scanFlag;
 	
+	private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
+	long lastClickTime = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -169,15 +172,27 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	
 	@Override
 	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {
-		Logger.error(String.valueOf(position));
-		positonItem = position - 1;
-		if (checkPos == positonItem) {
-			checkPos = -1;
-		} else {
-			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(enPutAwayBin.get(positonItem).get_binNumber());
-			barcodeAsyncTask.execute();
-			checkPos = positonItem;
-		}
+//		Logger.error(String.valueOf(position));
+//		positonItem = position - 1;
+//		if (checkPos == positonItem) {
+//			checkPos = -1;
+//		} else {
+//			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(enPutAwayBin.get(positonItem).get_binNumber());
+//			barcodeAsyncTask.execute();
+//			checkPos = positonItem;
+//		}
+		
+		long clickTime = System.currentTimeMillis();
+		
+        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
+        	Logger.error("1111111111111111111111111111111:    " + clickTime);
+        } else {
+        	Logger.error("2222222222222222222222222222222222222    " + lastClickTime);
+        	BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(enPutAwayBin.get(positonItem).get_binNumber());
+			barcodeAsyncTask.execute();			
+        }
+        
+        lastClickTime = clickTime;
 	}
 	
 	/**
@@ -201,6 +216,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 			break;
 			
 		case R.id.btnCancel:
+			Utilities.hideKeyboard(this);
 			finish();
 			break;
 			

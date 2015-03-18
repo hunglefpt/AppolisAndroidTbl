@@ -280,6 +280,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			break;
 			
 		case R.id.btnCancel:
+			Utilities.hideKeyboard(this);
 			finish();
 			break;
 			
