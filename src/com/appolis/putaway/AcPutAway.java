@@ -178,8 +178,7 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	 */
 	@Override
 	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {		
-		long clickTime = System.currentTimeMillis();
-		Logger.error("gdfhdfhfghfjhgfj:    " + lastClickTime);
+		long clickTime = System.currentTimeMillis();		
         if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
         	Logger.error("clickTime:    " + clickTime);
         } else {
