@@ -172,22 +172,12 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	
 	@Override
 	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {
-//		Logger.error(String.valueOf(position));
-//		positonItem = position - 1;
-//		if (checkPos == positonItem) {
-//			checkPos = -1;
-//		} else {
-//			BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(enPutAwayBin.get(positonItem).get_binNumber());
-//			barcodeAsyncTask.execute();
-//			checkPos = positonItem;
-//		}
-		
 		long clickTime = System.currentTimeMillis();
 		
         if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
-        	Logger.error("1111111111111111111111111111111:    " + clickTime);
+        	Logger.error("clickTime:    " + clickTime);
         } else {
-        	Logger.error("2222222222222222222222222222222222222    " + lastClickTime);
+        	Logger.error("lastClickTime    " + lastClickTime);
         	BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(enPutAwayBin.get(positonItem).get_binNumber());
 			barcodeAsyncTask.execute();			
         }
@@ -387,52 +377,55 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enBarcodeExistences != null) {
-						if (enBarcodeExistences.getBinOnlyCount() == 0 
-								&& enBarcodeExistences.getGtinCount() == 0
-								&& enBarcodeExistences.getItemIdentificationCount() == 0 
-								&& enBarcodeExistences.getItemOnlyCount() == 0
-								&& enBarcodeExistences.getLotOnlyCount() == 0
-								&& enBarcodeExistences.getLPCount() == 0
-								&& enBarcodeExistences.getOrderCount() == 0
-								&& enBarcodeExistences.getPoCount() == 0
-								&& enBarcodeExistences.getUOMBarcodeCount() == 0) {
-							showPopUp(AcPutAwayBin.this, null,
-									getLanguage(GlobalParams.SCAN_NOTFOUND_VALUE,
-											GlobalParams.SCAN_NOTFOUND_VALUE));
-						} else if (enBarcodeExistences.getOrderCount() != 0 || enBarcodeExistences.getLotOnlyCount() != 0
-								|| enBarcodeExistences.getPoCount() != 0) {
-							showPopUp(AcPutAwayBin.this, null,
-									getLanguage(GlobalParams.PLEASE_SCAN_BIN_OR_LP,
-											GlobalParams.PLEASE_SCAN_BIN_OR_LP));
-						} else if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
-							intent = new Intent(AcPutAwayBin.this, AcPutAwayDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
-							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
-							intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.TRUE);
-							intent.putExtra(GlobalParams.PUT_AWAY_BIN_DATA, passPutAway);
-							intent.putExtra(GlobalParams.PUT_PASS_AWAY_BIN_DATA, enPassPutAway);
-							startActivity(intent);
-							scanFlag = GlobalParams.FLAG_ACTIVE;
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (enBarcodeExistences != null) {
+							if (enBarcodeExistences.getBinOnlyCount() == 0 
+									&& enBarcodeExistences.getGtinCount() == 0
+									&& enBarcodeExistences.getItemIdentificationCount() == 0 
+									&& enBarcodeExistences.getItemOnlyCount() == 0
+									&& enBarcodeExistences.getLotOnlyCount() == 0
+									&& enBarcodeExistences.getLPCount() == 0
+									&& enBarcodeExistences.getOrderCount() == 0
+									&& enBarcodeExistences.getPoCount() == 0
+									&& enBarcodeExistences.getUOMBarcodeCount() == 0) {
+								showPopUp(AcPutAwayBin.this, null,
+										getLanguage(GlobalParams.SCAN_NOTFOUND_VALUE,
+												GlobalParams.SCAN_NOTFOUND_VALUE));
+							} else if (enBarcodeExistences.getOrderCount() != 0 || enBarcodeExistences.getLotOnlyCount() != 0
+									|| enBarcodeExistences.getPoCount() != 0) {
+								showPopUp(AcPutAwayBin.this, null,
+										getLanguage(GlobalParams.PLEASE_SCAN_BIN_OR_LP,
+												GlobalParams.PLEASE_SCAN_BIN_OR_LP));
+							} else if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
+								intent = new Intent(AcPutAwayBin.this, AcPutAwayDetails.class);
+								intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
+								intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
+								intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.TRUE);
+								intent.putExtra(GlobalParams.PUT_AWAY_BIN_DATA, passPutAway);
+								intent.putExtra(GlobalParams.PUT_PASS_AWAY_BIN_DATA, enPassPutAway);
+								startActivity(intent);
+								scanFlag = GlobalParams.FLAG_ACTIVE;
+							} else {
+								showPopUp(AcPutAwayBin.this, null,
+										getLanguage(GlobalParams.PLEASE_SCAN_BIN_OR_LP,
+												GlobalParams.PLEASE_SCAN_BIN_OR_LP));
+							}
+							
 						} else {
-							showPopUp(AcPutAwayBin.this, null,
-									getLanguage(GlobalParams.PLEASE_SCAN_BIN_OR_LP,
-											GlobalParams.PLEASE_SCAN_BIN_OR_LP));
+							showPopUp(AcPutAwayBin.this, null, GlobalParams.INVALID_SCAN);
 						}
-						
 					} else {
 						showPopUp(AcPutAwayBin.this, null, GlobalParams.INVALID_SCAN);
 					}
 				} else {
-					showPopUp(AcPutAwayBin.this, null, GlobalParams.INVALID_SCAN);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {				
+			}			
 		}
 	}
 	

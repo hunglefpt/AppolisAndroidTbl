@@ -45,7 +45,6 @@ import com.appolis.entities.EnPutAwayBin;
 import com.appolis.login.LoginActivity;
 import com.appolis.network.NetParameter;
 import com.appolis.network.access.HttpNetServices;
-import com.appolis.putaway.AcPutAwayBin.BarcodeAsyncTask;
 import com.appolis.scan.CaptureBarcodeCamera;
 import com.appolis.scan.SingleEntryApplication;
 import com.appolis.utilities.DataParser;
@@ -622,27 +621,30 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals("true")) {
-					if (itemNumber != null && itemNumber.get_LotNumber() != null 
-							&& StringUtils.isNotBlank(itemNumber.get_LotNumber())) {
-						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(itemNumber.get_itemNumber(),
-								GlobalParams.BLANK_CHARACTER);
-						getPutAwayBinAsyncTask.execute();
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals("true")) {
+						if (itemNumber != null && itemNumber.get_LotNumber() != null 
+								&& StringUtils.isNotBlank(itemNumber.get_LotNumber())) {
+							GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(itemNumber.get_itemNumber(),
+									GlobalParams.BLANK_CHARACTER);
+							getPutAwayBinAsyncTask.execute();
+						} else {
+							showPopUp(AcPutAway.this, null,
+									getLanguage(GlobalParams.INVALID_SCAN,	GlobalParams.INVALID_SCAN));
+						}
 					} else {
-						showPopUp(AcPutAway.this, null,
-								getLanguage(GlobalParams.INVALID_SCAN,	GlobalParams.INVALID_SCAN));
+						String msg = languagePrefs.getPreferencesString
+								(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
+						showPopUp(AcPutAway.this, null, msg);	
 					}
 				} else {
-					String msg = languagePrefs.getPreferencesString
-							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					showPopUp(AcPutAway.this, null, msg);	
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {				
+			}			
 		}
 	}
 	

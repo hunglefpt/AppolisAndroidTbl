@@ -1380,20 +1380,23 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (itemNumber != null) {
-						tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
-						et_move_qty.setText(GlobalParams.BLANK_CHARACTER);					
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (itemNumber != null) {
+							tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
+							et_move_qty.setText(GlobalParams.BLANK_CHARACTER);					
+						} else {
+							Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.NETWORK_ERROR);										
+						}
 					} else {
-						Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.NETWORK_ERROR);										
+						Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.NETWORK_ERROR);					
 					}
-				} else {
-					Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.NETWORK_ERROR);					
 				}
-			}
+			} catch (Exception e) {				
+			}			
 		}
 	}
 	
