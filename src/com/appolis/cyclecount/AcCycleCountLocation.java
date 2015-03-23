@@ -702,15 +702,13 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 		private boolean checkBarcodeInList(String barcode) {
 			if(bin != null && binList.size() > 0) {
 				for (ObjectCountCycleCurrent objectCountCycleCurrent : binList) {
+					
+					String barcodeAndLot = objectCountCycleCurrent.get_itemNumber() + objectCountCycleCurrent.get_lotNumber();
 					if (objectCountCycleCurrent.get_itemNumber().equalsIgnoreCase(
-							barcode)) {
+							barcode.trim())) {
 						return true; 
-					} else if (barcode.indexOf(objectCountCycleCurrent.get_itemNumber()) > -1) {
-						String lot = barcode.substring(objectCountCycleCurrent.get_itemNumber().length());
-						
-						if(lot.equalsIgnoreCase(objectCountCycleCurrent.get_lotNumber())) {
-							return true;
-						}
+					} else if (barcode.equalsIgnoreCase(barcodeAndLot.trim())) {
+						return true;
 					}
 				}
 			}
