@@ -91,7 +91,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private EnPutAway passPutAway;
-	DecimalFormat df = new DecimalFormat("#0.00");
+	String _significantDigits;
+	DecimalFormat df;
 	private boolean activityIsRunning = false;
 	private String scanFlag;
 	
@@ -467,6 +468,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						tvTransfer.setText(passPutAway.get_itemNumber());
 						tvItemDescription.setText(passPutAway.get_itemDesc());
 						edt_move_from.setText(passPutAway.get_binNumber());
+						_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
+						df = new DecimalFormat(_significantDigits);
 						tvmaxQty.setText(df.format(passPutAway.get_qty()));
 						listUom.add(passPutAway.get_uomDescription());
 						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
@@ -706,6 +709,10 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						tvTransfer.setText(passPutAway.get_itemNumber());
 						tvItemDescription.setText(passPutAway.get_itemDesc());
 						edt_move_from.setText(passPutAway.get_binNumber());
+						
+						_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
+						df = new DecimalFormat(_significantDigits);
+						
 						tvmaxQty.setText(df.format(passPutAway.get_qty()));
 						listUom.add(passPutAway.get_uomDescription());
 						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
@@ -861,6 +868,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						ArrayList<String> listUom = new ArrayList<String>();
 						for (int i = 0; i < enUom.size(); i++) {
 							listUom.add(enUom.get(i).getUomDescription());
+							_significantDigits = Utilities.getSignificantDigits(enUom.get(i).getSignificantDigits());
 						}
 						
 						try {
@@ -906,6 +914,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							edt_move_from.setEnabled(false);
 							edt_move_from.setBackgroundResource(R.color.transparent);
 							edt_move_from.setText(binNumber);
+							
+							df = new DecimalFormat(_significantDigits);
 							tvmaxQty.setText(df.format(qtyNumber));
 							et_move_qty.setEnabled(true);
 							et_move_qty.setText(df.format(qtyNumber));
@@ -918,6 +928,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							edt_move_from.setEnabled(false);
 							edt_move_from.setBackgroundResource(R.color.transparent);
 							edt_move_from.setText(binNumber);
+							
+							df = new DecimalFormat(_significantDigits);
 							tvmaxQty.setText(df.format(qtyNumber));
 							et_move_qty.setEnabled(true);
 							et_move_qty.setText(df.format(qtyNumber));
@@ -930,6 +942,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							edt_move_from.setEnabled(false);
 							edt_move_from.setBackgroundResource(R.color.transparent);
 							edt_move_from.setText(binNumber);
+							
+							df = new DecimalFormat(_significantDigits);
 							tvmaxQty.setText(df.format(qtyNumber));
 							et_move_qty.setEnabled(true);
 							et_move_qty.setText(df.format(qtyNumber));
@@ -1114,6 +1128,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 			if (!isCancelled()) {
 				if (result.equals("true")) {
 					if (itemNumber != null) {
+						_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
+						df = new DecimalFormat(_significantDigits);
 						tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
 						et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
 						et_move_qty.setEnabled(true);
@@ -1386,6 +1402,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 				if (!isCancelled()) {
 					if (result.equals(GlobalParams.TRUE)) {
 						if (itemNumber != null) {
+							_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
+							df = new DecimalFormat(_significantDigits);
 							tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
 							et_move_qty.setText(GlobalParams.BLANK_CHARACTER);					
 						} else {

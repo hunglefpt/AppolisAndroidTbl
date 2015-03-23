@@ -8,6 +8,7 @@
 package com.appolis.move;
 
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +93,9 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	private LanguagePreferences languagePrefs;
 	private TextView textView_move, tvTitleTransfer, tvTitleMaxQty, tvUOM, tvLot, tvFrom, tvQtyView, tvTo;
 	private boolean activityIsRunning = false;
-	private String scanFlag;
+	private String scanFlag;	
+	DecimalFormat df;
+	String _significantDigits;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -782,7 +785,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	 */
 	class CheckFromBinAsyncTask extends AsyncTask<Void, Void, String> {
 		String data;
-		Intent intent;
+		Intent intent;		
 		
 		@Override
 		protected void onPreExecute() {
@@ -832,7 +835,9 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				if (result.equals("true")) {
 					if (itemNumber != null) {
-						tvmaxQty.setText(String.valueOf(itemNumber.get_quantityOnHand()));
+						_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
+						df = new DecimalFormat(_significantDigits);
+						tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));					
 						et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
 						et_move_qty.setEnabled(true);
 						et_move_qty.requestFocus();
@@ -1113,7 +1118,9 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			if (!isCancelled()) {
 				if (result.equals(GlobalParams.TRUE)) {
 					if (itemNumber != null) {
-						tvmaxQty.setText(String.valueOf(itemNumber.get_quantityOnHand()));
+						_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
+						df = new DecimalFormat(_significantDigits);
+						tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
 						et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
