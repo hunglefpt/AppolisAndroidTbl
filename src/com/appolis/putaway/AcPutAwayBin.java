@@ -172,6 +172,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	
 	@Override
 	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {
+		positonItem = position - 1;
 		long clickTime = System.currentTimeMillis();
 		
         if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){

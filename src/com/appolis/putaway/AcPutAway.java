@@ -176,7 +176,8 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	 * Process click event in List view
 	 */
 	@Override
-	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {		
+	public void onItemClick(AdapterView<?> parenView, View view, int position, long id) {	
+		positonItem = position - 1;
 		long clickTime = System.currentTimeMillis();		
         if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
         	Logger.error("clickTime:    " + clickTime);
