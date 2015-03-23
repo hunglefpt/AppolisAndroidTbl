@@ -139,6 +139,8 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:paddingTop="10dp"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:background="@drawable/edit_cycle_holo_light_white"
