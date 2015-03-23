@@ -166,7 +166,8 @@ public class CycleCountCurrentAdapter extends BaseAdapter {
 			binList.addAll(arrayList);
 		} else {
 			for (ObjectCountCycleCurrent bin : arrayList) {
-				if (bin.get_itemNumber().toUpperCase().contains(charText.toUpperCase())) {
+				String binAndLot = bin.get_itemNumber().toUpperCase() + bin.get_lotNumber().toUpperCase();
+				if (binAndLot.contains(charText.toUpperCase())) {
 					binList.add(bin);
 				}
 			}

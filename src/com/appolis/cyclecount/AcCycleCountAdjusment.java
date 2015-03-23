@@ -239,6 +239,14 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 			if(isUpdateCycleCount) {
 				txtCycleAdjustmentLot.setEnabled(false);
 			}
+			//Fix Bug #13273:	
+		} else if(objCurrentPre.is_lotTrackingInd() && StringUtils.isBlank(objCurrentPre.get_lotNumber())) {
+			linLot.setVisibility(View.VISIBLE);
+			txtCycleAdjustmentLot.setText(objCurrentPre.get_lotNumber());
+			
+			if(isUpdateCycleCount) {
+				txtCycleAdjustmentLot.setEnabled(true);
+			}
 		}
 	}
 	
@@ -618,6 +626,7 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 					} else {
 						if(AcCycleCount.isPhysicalInventoryCycleCount) {
 							data = HttpNetServices.Instance.updateCycleCountItem(netParameters);
+							Log.e("AcCycleCountAdjustment", data);
 						}
 					}
 				} catch (Exception e) {
@@ -699,14 +708,12 @@ public class AcCycleCountAdjusment extends Activity implements OnClickListener, 
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		isActivityRunning = false;
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		isActivityRunning = true;
 	}

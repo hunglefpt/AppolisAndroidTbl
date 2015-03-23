@@ -504,6 +504,7 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 			if (!isCancelled()) {
 				if(result == 0) {
 					if(StringUtils.isNotBlank(itemDetail.get_itemNumber())) {
+						
 						if(itemDetail.is_LotTrackingInd()) {
 							String lotNumber = itemDetail.get_LotNumber();
 							
@@ -523,11 +524,15 @@ public class AcCycleAdjustmentOptionDetail extends Activity implements OnClickLi
 							} else {
 								//Scan lot number
 								//message base on Message key on multi languages file
-								isScanLot = true;
+								
+								//Fix Bug #13273:
+								/*isScanLot = true;
 								txtCycleAdjustmentItem.setText(itemDetail.get_itemNumber());
 								String mss = languagePrefs.getPreferencesString(GlobalParams.USER_SCAN_LOTNUMBER_KEY,
 													GlobalParams.USER_SCAN_LOTNUMBER_VALUE);
-								dialogShowMessage(mss, AcCycleAdjustmentOptionDetail.this);
+								dialogShowMessage(mss, AcCycleAdjustmentOptionDetail.this);*/
+								ObjectCountCycleCurrent current = convertFromDetailToCycleCurrent();
+								startActivityCycleAdjustment(current, true);
 							}
 						} else {
 							ObjectCountCycleCurrent current = getCountCycleCurrent();

@@ -745,7 +745,7 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 			String []barcodes = new String[1];
 			barcodes[0] = barcode;
 			if(!isCancelled()){
-				if(checkBarcodeInList()) {
+				if(checkBarcodeInList(barcode)) {
 					switch (result) {
 					case 0: //if LP
 						new LoadLPAsyn(AcCycleCountBinPath.this).execute(barcodes);
@@ -794,11 +794,19 @@ public class AcCycleCountBinPath extends Activity implements OnClickListener,
 		}
 		
 		//check barcode is in list data ?
-		private boolean checkBarcodeInList() {
-			if(binList != null && binList.size() > 0) {
-				for(ObjectCountCycleCurrent objectCountCycleCurrent : binList) {
-					if(objectCountCycleCurrent.get_itemNumber().equalsIgnoreCase(barcode)) 
-						return true;
+		private boolean checkBarcodeInList(String barcode) {
+			if(bin != null && binList.size() > 0) {
+				for (ObjectCountCycleCurrent objectCountCycleCurrent : binList) {
+					if (objectCountCycleCurrent.get_itemNumber().equalsIgnoreCase(
+							barcode)) {
+						return true; 
+					} else if (barcode.indexOf(objectCountCycleCurrent.get_itemNumber()) > -1) {
+						String lot = barcode.substring(objectCountCycleCurrent.get_itemNumber().length());
+						
+						if(lot.equalsIgnoreCase(objectCountCycleCurrent.get_lotNumber())) {
+							return true;
+						}
+					}
 				}
 			}
 			return false;
