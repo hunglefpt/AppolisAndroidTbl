@@ -159,7 +159,7 @@ public class PutAwayAdapter extends BaseAdapter{
 		@SuppressWarnings("unchecked")
 		@Override
 		protected void publishResults(CharSequence text, FilterResults results) {
-			_data = (ArrayList<EnPutAway>) results.values;			
+			_data = (ArrayList<EnPutAway>) results.values;	
 			notifyDataSetChanged();
 		}		
 	}

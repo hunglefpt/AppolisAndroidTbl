@@ -143,7 +143,7 @@ public class AcRecevingList extends Activity implements OnClickListener, OnItemC
 		imgClearTextSearch.setVisibility(View.GONE);
 		imgClearTextSearch.setOnClickListener(this);
 		
-		lvReceiveList = (PullToRefreshListView) findViewById(R.id.lvReceiveList);
+		lvReceiveList = (PullToRefreshListView) findViewById(R.id.lvPickOrderList);
 		lvReceiveList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
 		lvReceiveList.setOnItemClickListener(this);
 		lvReceiveList.setOnRefreshListener(new OnRefreshListener<ListView>() {

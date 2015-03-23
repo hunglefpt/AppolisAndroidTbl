@@ -368,6 +368,54 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 	}
 	
 	/**
+	 * 
+	 * @param l
+	 */
+	public ArrayList<EnPutAway> removeDuplicates(ArrayList<EnPutAway> list) {
+		Logger.error("list size before:" + list.size());
+		// Store unique items in result.
+		ArrayList<EnPutAway> result = new ArrayList<>();
+		
+		// Loop over argument list.
+		for (int i=0;  i < list.size(); i++) {
+			EnPutAway item = list.get(i);
+			Logger.error("list result size:" + result.size() + "**:" + item.get_lotNumber());
+			
+			if(!checObjectExitsInList(result, item)){
+				result.add(item);
+			}
+		}
+		
+		Logger.error("list size after:" + result.size());
+		return result;
+	}
+	
+	private boolean checObjectExitsInList(ArrayList<EnPutAway> list, EnPutAway enPutAway){
+		boolean check = false;
+		if(null == list || list.size() == 0){
+			return false;
+		}
+		
+		for (int i = 0; i < list.size(); i++) {
+			EnPutAway item = list.get(i);
+			if((item.get_itemID() == enPutAway.get_itemID()) && 
+					(item.get_itemNumber().equalsIgnoreCase(item.get_itemNumber())) &&
+					(item.get_itemDesc().equalsIgnoreCase(enPutAway.get_itemDesc())) &&
+					(StringUtils.isBlank(enPutAway.get_lotNumber()) ||item.get_lotNumber().equalsIgnoreCase(enPutAway.get_lotNumber())) &&
+					(item.get_lotTrackingInd() == enPutAway.get_lotTrackingInd()) &&
+					(item.get_qty() == enPutAway.get_qty()) &&
+					(StringUtils.isBlank(enPutAway.get_qtyDisplay()) || item.get_qtyDisplay().equalsIgnoreCase(enPutAway.get_qtyDisplay())) &&
+					(item.is_forcedPutAwayInd() == enPutAway.is_forcedPutAwayInd()) &&
+					(StringUtils.isBlank(enPutAway.get_binNumber()) || item.get_binNumber().equalsIgnoreCase(enPutAway.get_binNumber()))){
+				check = true;
+				break;
+			}
+		}
+		
+		return check;
+	}
+	
+	/**
 	 * Check Item or License Plate
 	 * @author hoangnh11
 	 */
@@ -391,8 +439,9 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 			if (!isCancelled()) {
 				try {
 					data = HttpNetServices.Instance.getPutAway();
-					enPutAway = DataParser.getPutAway(data);
-					Logger.error(data);
+					ArrayList<EnPutAway> listPaser = new ArrayList<EnPutAway>();
+					listPaser = DataParser.getPutAway(data);
+					enPutAway = removeDuplicates(listPaser);
 					result = GlobalParams.TRUE;
 				} catch (AppolisException e) {
 					result = GlobalParams.FALSE;
