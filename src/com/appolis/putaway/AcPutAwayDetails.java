@@ -452,118 +452,121 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		}
 
 		@Override
-		protected void onPostExecute(String result) {						
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enLPNumber != null) {
-						edt_move_from.setEnabled(false);
-						edt_move_from.setBackgroundResource(R.color.transparent);
-						ArrayList<String> listUom = new ArrayList<String>();
-						spn_Move_UOM.setEnabled(false);
-						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
-						et_move_qty.setEnabled(true);
+		protected void onPostExecute(String result) {
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (enLPNumber != null) {
+							edt_move_from.setEnabled(false);
+							edt_move_from.setBackgroundResource(R.color.transparent);
+							ArrayList<String> listUom = new ArrayList<String>();
+							spn_Move_UOM.setEnabled(false);
+							spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
+							et_move_qty.setEnabled(true);
 
-						tvTransfer.setText(passPutAway.get_itemNumber());
-						tvItemDescription.setText(passPutAway.get_itemDesc());
-						edt_move_from.setText(passPutAway.get_binNumber());
-						_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
-						df = new DecimalFormat(_significantDigits);
-						tvmaxQty.setText(df.format(passPutAway.get_qty()));
-						listUom.add(passPutAway.get_uomDescription());
-						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
-							linLot.setVisibility(View.VISIBLE);
-							edtLotValue.setEnabled(false);
-							edtLotValue.setBackgroundResource(R.color.transparent);
-							edtLotValue.setText(passPutAway.get_lotNumber());
-						} else {
-							linLot.setVisibility(View.INVISIBLE);
-						}
-						et_move_qty.setText(df.format(passPutAway.get_qty()));
+							tvTransfer.setText(passPutAway.get_itemNumber());
+							tvItemDescription.setText(passPutAway.get_itemDesc());
+							edt_move_from.setText(passPutAway.get_binNumber());
+							_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
+							df = new DecimalFormat(_significantDigits);
+							tvmaxQty.setText(df.format(passPutAway.get_qty()));
+							listUom.add(passPutAway.get_uomDescription());
+							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(passPutAway.get_lotNumber());
+							} else {
+								linLot.setVisibility(View.INVISIBLE);
+							}
+							et_move_qty.setText(df.format(passPutAway.get_qty()));
 
-						try {
-							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
-									R.layout.custom_spinner_false, listUom);
-							spn_Move_UOM.setAdapter(uomAdapter);
-							spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+							try {
+								ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
+										R.layout.custom_spinner_false, listUom);
+								spn_Move_UOM.setAdapter(uomAdapter);
+								spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+									
+									@Override
+									public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+										uom = spn_Move_UOM.getSelectedItem().toString();								
+									}
+
+									@Override
+									public void onNothingSelected(AdapterView<?> arg0) {
+									}
+								});
+							} catch (NullPointerException e) {
+								Logger.error(e);
+							} catch (Exception e) {
+								Logger.error(e);
+							}						
+							
+							et_move_qty.addTextChangedListener(new TextWatcher() {
 								
 								@Override
-								public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-									uom = spn_Move_UOM.getSelectedItem().toString();								
-								}
-
-								@Override
-								public void onNothingSelected(AdapterView<?> arg0) {
-								}
-							});
-						} catch (NullPointerException e) {
-							Logger.error(e);
-						} catch (Exception e) {
-							Logger.error(e);
-						}						
-						
-						et_move_qty.addTextChangedListener(new TextWatcher() {
-							
-							@Override
-							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
-									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
-								} else {
-									if (s.length() > 0 && Double.parseDouble(s.toString())
-											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null,
-												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
-														GlobalParams.MV_LIMITQTY_MSG_VALUE));
-										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												passPutAway.get_significantDigits())});
-									
+								public void onTextChanged(CharSequence s, int start, int before, int count) {
+									if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+										et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 									} else {
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												passPutAway.get_significantDigits())});
+										if (s.length() > 0 && Double.parseDouble(s.toString())
+												> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+											Utilities.showPopUp(AcPutAwayDetails.this, null,
+													getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+															GlobalParams.MV_LIMITQTY_MSG_VALUE));
+											et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										}
+									}
+									
+									if (et_move_qty.getText().toString().equals("0") 
+											|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+										btnOK.setEnabled(false);
 									}
 								}
 								
-								if (et_move_qty.getText().toString().equals("0") 
-										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
-									btnOK.setEnabled(false);
+								@Override
+								public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
 								}
-							}
+								
+								@Override
+								public void afterTextChanged(Editable s) {
+								}
+							});
 							
-							@Override
-							public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
-							}
-							
-							@Override
-							public void afterTextChanged(Editable s) {
-							}
-						});
-						
-						btnOK.setEnabled(true);
-						et_move_to.setText(barCode);
-						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
-							
-							@Override
-							public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-								if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
-										|| (actionId == EditorInfo.IME_ACTION_DONE)) {
-									BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
-						            barcodeAsyncTask.execute();
-					            }
-								return false;
-							}
-						});
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+							btnOK.setEnabled(true);
+							et_move_to.setText(barCode);
+							et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
+								
+								@Override
+								public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+									if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
+											|| (actionId == EditorInfo.IME_ACTION_DONE)) {
+										BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+							            barcodeAsyncTask.execute();
+						            }
+									return false;
+								}
+							});
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						}
 					} else {
 						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
-					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {		
+			}			
 		}
 	}
 	
@@ -608,47 +611,50 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 		}
 
 		@Override
-		protected void onPostExecute(String result) {						
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enLPNumber != null) {
-						linMaxQty.setVisibility(View.INVISIBLE);
-						linUOM.setVisibility(View.INVISIBLE);
-						linLot.setVisibility(View.INVISIBLE);
-						edt_move_from.setEnabled(false);
-						edt_move_from.setBackgroundResource(R.color.transparent);
-						et_move_qty.setEnabled(false);
-						et_move_qty.setBackgroundResource(R.color.transparent);
+		protected void onPostExecute(String result) {
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (enLPNumber != null) {
+							linMaxQty.setVisibility(View.INVISIBLE);
+							linUOM.setVisibility(View.INVISIBLE);
+							linLot.setVisibility(View.INVISIBLE);
+							edt_move_from.setEnabled(false);
+							edt_move_from.setBackgroundResource(R.color.transparent);
+							et_move_qty.setEnabled(false);
+							et_move_qty.setBackgroundResource(R.color.transparent);
 
-						tvTransfer.setText(enLPNumber.get_binNumber());
-						tvItemDescription.setText(GlobalParams.LICENSE_PLATE);
-						edt_move_from.setText(enLPNumber.get_parentBinNumber());
-						et_move_qty.setText("1");
-						et_move_to.setText(GlobalParams.BLANK_CHARACTER);
-						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
-							
-							@Override
-							public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-								if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
-										|| (actionId == EditorInfo.IME_ACTION_DONE)) {
-									BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
-						            barcodeAsyncTask.execute();
-					            }
-								return false;
-							}
-						});
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+							tvTransfer.setText(enLPNumber.get_binNumber());
+							tvItemDescription.setText(GlobalParams.LICENSE_PLATE);
+							edt_move_from.setText(enLPNumber.get_parentBinNumber());
+							et_move_qty.setText("1");
+							et_move_to.setText(GlobalParams.BLANK_CHARACTER);
+							et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
+								
+								@Override
+								public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+									if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
+											|| (actionId == EditorInfo.IME_ACTION_DONE)) {
+										BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+							            barcodeAsyncTask.execute();
+						            }
+									return false;
+								}
+							});
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						}
 					} else {
 						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
-					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {		
+			}			
 		}
 	}
 	
@@ -694,117 +700,120 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {					
-					if (enLPNumber != null && passPutAway != null) {					
-						edt_move_from.setEnabled(false);
-						edt_move_from.setBackgroundResource(R.color.transparent);
-						ArrayList<String> listUom = new ArrayList<String>();
-						spn_Move_UOM.setEnabled(false);
-						spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
-						et_move_qty.setEnabled(true);
-						
-						tvTransfer.setText(passPutAway.get_itemNumber());
-						tvItemDescription.setText(passPutAway.get_itemDesc());
-						edt_move_from.setText(passPutAway.get_binNumber());
-						
-						_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
-						df = new DecimalFormat(_significantDigits);
-						
-						tvmaxQty.setText(df.format(passPutAway.get_qty()));
-						listUom.add(passPutAway.get_uomDescription());
-						if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
-							linLot.setVisibility(View.VISIBLE);
-							edtLotValue.setEnabled(false);
-							edtLotValue.setBackgroundResource(R.color.transparent);
-							edtLotValue.setText(passPutAway.get_lotNumber());
-						} else {
-							linLot.setVisibility(View.INVISIBLE);
-						}
-						et_move_qty.setText(df.format(passPutAway.get_qty()));
-
-						ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
-								R.layout.custom_spinner_false, listUom);
-						spn_Move_UOM.setAdapter(uomAdapter);
-						spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {					
+						if (enLPNumber != null && passPutAway != null) {					
+							edt_move_from.setEnabled(false);
+							edt_move_from.setBackgroundResource(R.color.transparent);
+							ArrayList<String> listUom = new ArrayList<String>();
+							spn_Move_UOM.setEnabled(false);
+							spn_Move_UOM.setBackgroundColor(getResources().getColor(R.color.transparent));
+							et_move_qty.setEnabled(true);
 							
-							@Override
-							public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-								try {
-									uom = spn_Move_UOM.getSelectedItem().toString();
-								} catch (NullPointerException e) {
-									Logger.error(e);
-								} catch (Exception e) {
-									Logger.error(e);
+							tvTransfer.setText(passPutAway.get_itemNumber());
+							tvItemDescription.setText(passPutAway.get_itemDesc());
+							edt_move_from.setText(passPutAway.get_binNumber());
+							
+							_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
+							df = new DecimalFormat(_significantDigits);
+							
+							tvmaxQty.setText(df.format(passPutAway.get_qty()));
+							listUom.add(passPutAway.get_uomDescription());
+							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(passPutAway.get_lotNumber());
+							} else {
+								linLot.setVisibility(View.INVISIBLE);
+							}
+							et_move_qty.setText(df.format(passPutAway.get_qty()));
+
+							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
+									R.layout.custom_spinner_false, listUom);
+							spn_Move_UOM.setAdapter(uomAdapter);
+							spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+								
+								@Override
+								public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+									try {
+										uom = spn_Move_UOM.getSelectedItem().toString();
+									} catch (NullPointerException e) {
+										Logger.error(e);
+									} catch (Exception e) {
+										Logger.error(e);
+									}
 								}
-							}
 
-							@Override
-							public void onNothingSelected(AdapterView<?> arg0) {
-							}
-						});							
-						
-						et_move_qty.addTextChangedListener(new TextWatcher() {
+								@Override
+								public void onNothingSelected(AdapterView<?> arg0) {
+								}
+							});							
 							
-							@Override
-							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
-									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
-								} else {
-									if (s.length() > 0 && Double.parseDouble(s.toString())
-											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null,
-												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
-														GlobalParams.MV_LIMITQTY_MSG_VALUE));
-										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												passPutAway.get_significantDigits())});
+							et_move_qty.addTextChangedListener(new TextWatcher() {
+								
+								@Override
+								public void onTextChanged(CharSequence s, int start, int before, int count) {
+									if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+										et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 									} else {
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												passPutAway.get_significantDigits())});
+										if (s.length() > 0 && Double.parseDouble(s.toString())
+												> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+											Utilities.showPopUp(AcPutAwayDetails.this, null,
+													getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+															GlobalParams.MV_LIMITQTY_MSG_VALUE));
+											et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													passPutAway.get_significantDigits())});
+										}
+									}
+									
+									if (et_move_qty.getText().toString().equals("0") 
+											|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+										btnOK.setEnabled(false);
 									}
 								}
 								
-								if (et_move_qty.getText().toString().equals("0") 
-										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
-									btnOK.setEnabled(false);
+								@Override
+								public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
 								}
-							}
+								
+								@Override
+								public void afterTextChanged(Editable s) {
+								}
+							});
 							
-							@Override
-							public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
-							}
-							
-							@Override
-							public void afterTextChanged(Editable s) {
-							}
-						});
-						
-						btnOK.setEnabled(true);
-						et_move_to.setText(barCode);
-						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
-							
-							@Override
-							public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-								if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
-										|| (actionId == EditorInfo.IME_ACTION_DONE)) {
-									BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
-						            barcodeAsyncTask.execute();
-					            }
-								return false;
-							}
-						});
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+							btnOK.setEnabled(true);
+							et_move_to.setText(barCode);
+							et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
+								
+								@Override
+								public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+									if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
+											|| (actionId == EditorInfo.IME_ACTION_DONE)) {
+										BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+							            barcodeAsyncTask.execute();
+						            }
+									return false;
+								}
+							});
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						}
 					} else {
 						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
 				} else {
-					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
+			} catch (Exception e) {			
 			}
 		}
 	}
@@ -858,143 +867,146 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enPutaway != null) {						
-						tvTransfer.setText(enPutaway.getItemNumber());
-						tvItemDescription.setText(enPutaway.getItemDescription());
-						ArrayList<String> listUom = new ArrayList<String>();
-						for (int i = 0; i < enUom.size(); i++) {
-							listUom.add(enUom.get(i).getUomDescription());
-							_significantDigits = Utilities.getSignificantDigits(enUom.get(i).getSignificantDigits());
-						}
-						
-						try {
-							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
-									R.layout.custom_spinner_item, listUom);
-							spn_Move_UOM.setAdapter(uomAdapter);
-							spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (enPutaway != null) {						
+							tvTransfer.setText(enPutaway.getItemNumber());
+							tvItemDescription.setText(enPutaway.getItemDescription());
+							ArrayList<String> listUom = new ArrayList<String>();
+							for (int i = 0; i < enUom.size(); i++) {
+								listUom.add(enUom.get(i).getUomDescription());
+								_significantDigits = Utilities.getSignificantDigits(enUom.get(i).getSignificantDigits());
+							}
+							
+							try {
+								ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
+										R.layout.custom_spinner_item, listUom);
+								spn_Move_UOM.setAdapter(uomAdapter);
+								spn_Move_UOM.setOnItemSelectedListener(new OnItemSelectedListener() {
+									
+									@Override
+									public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+										uom = spn_Move_UOM.getSelectedItem().toString();
+										if (checkFirstUom) {
+											UpdateMaxQtyAsyncTask updateMaxQtyAsyncTask = new UpdateMaxQtyAsyncTask();
+											updateMaxQtyAsyncTask.execute();
+										}
+									}
+
+									@Override
+									public void onNothingSelected(AdapterView<?> arg0) {
+									}
+								});
+							} catch (NullPointerException e) {
+								Logger.error(e);
+							} catch (Exception e) {
+								Logger.error(e);
+							}
+							
+							et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
 								
 								@Override
-								public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-									uom = spn_Move_UOM.getSelectedItem().toString();
-									if (checkFirstUom) {
-										UpdateMaxQtyAsyncTask updateMaxQtyAsyncTask = new UpdateMaxQtyAsyncTask();
-										updateMaxQtyAsyncTask.execute();
-									}
-								}
-
-								@Override
-								public void onNothingSelected(AdapterView<?> arg0) {
+								public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+									if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
+											|| (actionId == EditorInfo.IME_ACTION_DONE)) {
+										BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+							            barcodeAsyncTask.execute();
+						            }
+									return false;
 								}
 							});
-						} catch (NullPointerException e) {
-							Logger.error(e);
-						} catch (Exception e) {
-							Logger.error(e);
-						}
-						
-						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
 							
-							@Override
-							public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-								if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
-										|| (actionId == EditorInfo.IME_ACTION_DONE)) {
-									BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
-						            barcodeAsyncTask.execute();
-					            }
-								return false;
+							if (!enPutaway.isIsLotTracked()) {
+								linLot.setVisibility(View.INVISIBLE);
+								edt_move_from.setEnabled(false);
+								edt_move_from.setBackgroundResource(R.color.transparent);
+								edt_move_from.setText(binNumber);
+								
+								df = new DecimalFormat(_significantDigits);
+								tvmaxQty.setText(df.format(qtyNumber));
+								et_move_qty.setEnabled(true);
+								et_move_qty.setText(df.format(qtyNumber));
+								
+							} else if (enPutaway.isIsLotTracked() && StringUtils.isNotBlank(enPutaway.getLotNumber())){
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(lotNumber);
+								edt_move_from.setEnabled(false);
+								edt_move_from.setBackgroundResource(R.color.transparent);
+								edt_move_from.setText(binNumber);
+								
+								df = new DecimalFormat(_significantDigits);
+								tvmaxQty.setText(df.format(qtyNumber));
+								et_move_qty.setEnabled(true);
+								et_move_qty.setText(df.format(qtyNumber));
+								
+							} else {
+								linLot.setVisibility(View.VISIBLE);
+								edtLotValue.setEnabled(false);
+								edtLotValue.setBackgroundResource(R.color.transparent);
+								edtLotValue.setText(lotNumber);
+								edt_move_from.setEnabled(false);
+								edt_move_from.setBackgroundResource(R.color.transparent);
+								edt_move_from.setText(binNumber);
+								
+								df = new DecimalFormat(_significantDigits);
+								tvmaxQty.setText(df.format(qtyNumber));
+								et_move_qty.setEnabled(true);
+								et_move_qty.setText(df.format(qtyNumber));
 							}
-						});
-						
-						if (!enPutaway.isIsLotTracked()) {
-							linLot.setVisibility(View.INVISIBLE);
-							edt_move_from.setEnabled(false);
-							edt_move_from.setBackgroundResource(R.color.transparent);
-							edt_move_from.setText(binNumber);
 							
-							df = new DecimalFormat(_significantDigits);
-							tvmaxQty.setText(df.format(qtyNumber));
-							et_move_qty.setEnabled(true);
-							et_move_qty.setText(df.format(qtyNumber));
-							
-						} else if (enPutaway.isIsLotTracked() && StringUtils.isNotBlank(enPutaway.getLotNumber())){
-							linLot.setVisibility(View.VISIBLE);
-							edtLotValue.setEnabled(false);
-							edtLotValue.setBackgroundResource(R.color.transparent);
-							edtLotValue.setText(lotNumber);
-							edt_move_from.setEnabled(false);
-							edt_move_from.setBackgroundResource(R.color.transparent);
-							edt_move_from.setText(binNumber);
-							
-							df = new DecimalFormat(_significantDigits);
-							tvmaxQty.setText(df.format(qtyNumber));
-							et_move_qty.setEnabled(true);
-							et_move_qty.setText(df.format(qtyNumber));
-							
-						} else {
-							linLot.setVisibility(View.VISIBLE);
-							edtLotValue.setEnabled(false);
-							edtLotValue.setBackgroundResource(R.color.transparent);
-							edtLotValue.setText(lotNumber);
-							edt_move_from.setEnabled(false);
-							edt_move_from.setBackgroundResource(R.color.transparent);
-							edt_move_from.setText(binNumber);
-							
-							df = new DecimalFormat(_significantDigits);
-							tvmaxQty.setText(df.format(qtyNumber));
-							et_move_qty.setEnabled(true);
-							et_move_qty.setText(df.format(qtyNumber));
-						}
-						
-						et_move_qty.addTextChangedListener(new TextWatcher() {
-							
-							@Override
-							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
-									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
-								} else {
-									if (s.length() > 0 && Double.parseDouble(s.toString())
-											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null,
-												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
-														GlobalParams.MV_LIMITQTY_MSG_VALUE));
-										et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												enUom.get(0).getSignificantDigits())});
+							et_move_qty.addTextChangedListener(new TextWatcher() {
+								
+								@Override
+								public void onTextChanged(CharSequence s, int start, int before, int count) {
+									if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+										et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
 									} else {
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												itemNumber.get_significantDigits())});
+										if (s.length() > 0 && Double.parseDouble(s.toString())
+												> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+											Utilities.showPopUp(AcPutAwayDetails.this, null,
+													getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+															GlobalParams.MV_LIMITQTY_MSG_VALUE));
+											et_move_qty.setText(""+Double.parseDouble(String.valueOf(tvmaxQty.getText())));
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													enUom.get(0).getSignificantDigits())});
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													itemNumber.get_significantDigits())});
+										}
+									}
+									
+									if (et_move_qty.getText().toString().equals("0") 
+											|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+										btnOK.setEnabled(false);
 									}
 								}
 								
-								if (et_move_qty.getText().toString().equals("0") 
-										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
-									btnOK.setEnabled(false);
+								@Override
+								public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
 								}
-							}
-							
-							@Override
-							public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
-							}
-							
-							@Override
-							public void afterTextChanged(Editable s) {
-							}
-						});
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+								
+								@Override
+								public void afterTextChanged(Editable s) {
+								}
+							});
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+						}
+						
 					} else {
 						showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
 					}
-					
 				} else {
-					showPopUp(AcPutAwayDetails.this, null, getResources().getString(R.string.LOADING_FAIL));
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {			
+			}			
 		}
 	}
 	
@@ -1041,38 +1053,41 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (itemNumber != null && StringUtils.isNotBlank(itemNumber.get_LotNumber())) {
-						edt_move_from.setOnEditorActionListener(new OnEditorActionListener() {
-							
-							@Override
-							public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-								if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
-										|| (actionId == EditorInfo.IME_ACTION_DONE)) {
-									CheckFromBinAsyncTask checkFromBinAsyncTask = new CheckFromBinAsyncTask();
-									checkFromBinAsyncTask.execute();
-					            }
-								return false;
-							}
-						});
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (itemNumber != null && StringUtils.isNotBlank(itemNumber.get_LotNumber())) {
+							edt_move_from.setOnEditorActionListener(new OnEditorActionListener() {
+								
+								@Override
+								public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+									if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
+											|| (actionId == EditorInfo.IME_ACTION_DONE)) {
+										CheckFromBinAsyncTask checkFromBinAsyncTask = new CheckFromBinAsyncTask();
+										checkFromBinAsyncTask.execute();
+						            }
+									return false;
+								}
+							});
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							showPopUp(AcPutAwayDetails.this, null,
+									getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
+											GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
+							edtLotValue.setText(GlobalParams.BLANK_CHARACTER);						
+						}
 					} else {
 						showPopUp(AcPutAwayDetails.this, null,
 								getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 										GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
-						edtLotValue.setText(GlobalParams.BLANK_CHARACTER);						
+						edtLotValue.setText(GlobalParams.BLANK_CHARACTER);				
 					}
 				} else {
-					showPopUp(AcPutAwayDetails.this, null,
-							getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
-									GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
-					edtLotValue.setText(GlobalParams.BLANK_CHARACTER);				
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
+			} catch (Exception e) {			
 			}
 		}
 	}
@@ -1123,78 +1138,81 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals("true")) {
-					if (itemNumber != null) {
-						_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
-						df = new DecimalFormat(_significantDigits);
-						tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
-						et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
-						et_move_qty.setEnabled(true);
-						et_move_qty.addTextChangedListener(new TextWatcher() {
-							
-							@Override
-							public void onTextChanged(CharSequence s, int start, int before, int count) {
-								if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
-									et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
-								} else {
-									if (s.length() > 0 && Double.parseDouble(s.toString()) 
-											> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
-										Utilities.showPopUp(AcPutAwayDetails.this, null,
-												getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
-														GlobalParams.MV_LIMITQTY_MSG_VALUE));
-										et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												itemNumber.get_significantDigits())});
-									} else {
-										et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
-												itemNumber.get_significantDigits())});
-									}									
-								}	
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals("true")) {
+						if (itemNumber != null) {
+							_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
+							df = new DecimalFormat(_significantDigits);
+							tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
+							et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
+							et_move_qty.setEnabled(true);
+							et_move_qty.addTextChangedListener(new TextWatcher() {
 								
-								if (et_move_qty.getText().toString().equals("0") 
-										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
-									btnOK.setEnabled(false);
+								@Override
+								public void onTextChanged(CharSequence s, int start, int before, int count) {
+									if (s.toString().contains(GlobalParams.DOT) &&  s.length() == 1) {
+										et_move_qty.setText(GlobalParams.BLANK_CHARACTER);
+									} else {
+										if (s.length() > 0 && Double.parseDouble(s.toString()) 
+												> Double.parseDouble(String.valueOf(tvmaxQty.getText()))) {
+											Utilities.showPopUp(AcPutAwayDetails.this, null,
+													getLanguage(GlobalParams.MV_LIMITQTY_MSG_VALUE,
+															GlobalParams.MV_LIMITQTY_MSG_VALUE));
+											et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													itemNumber.get_significantDigits())});
+										} else {
+											et_move_qty.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(
+													itemNumber.get_significantDigits())});
+										}									
+									}	
+									
+									if (et_move_qty.getText().toString().equals("0") 
+											|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+										btnOK.setEnabled(false);
+									}
 								}
-							}
+								
+								@Override
+								public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
+								}
+								
+								@Override
+								public void afterTextChanged(Editable s) {
+								}
+							});
+							et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
+								
+								@Override
+								public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+									if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
+											|| (actionId == EditorInfo.IME_ACTION_DONE)) {
+										BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
+							            barcodeAsyncTask.execute();
+						            }
+									return false;
+								}
+							});
 							
-							@Override
-							public void beforeTextChanged(CharSequence s, int start, int count,	int after) {
-							}
-							
-							@Override
-							public void afterTextChanged(Editable s) {
-							}
-						});
-						et_move_to.setOnEditorActionListener(new OnEditorActionListener() {
-							
-							@Override
-							public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-								if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) 
-										|| (actionId == EditorInfo.IME_ACTION_DONE)) {
-									BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask();
-						            barcodeAsyncTask.execute();
-					            }
-								return false;
-							}
-						});
-						
-						checkFirstUom = true;
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+							checkFirstUom = true;
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							showPopUp(AcPutAwayDetails.this, null,
+									getLanguage(GlobalParams.ERRORINVALIDLOTNUMFORITEM,	GlobalParams.INVALID_LOT));
+							edt_move_from.setText(GlobalParams.BLANK_CHARACTER);						
+						}
 					} else {
 						showPopUp(AcPutAwayDetails.this, null,
 								getLanguage(GlobalParams.ERRORINVALIDLOTNUMFORITEM,	GlobalParams.INVALID_LOT));
-						edt_move_from.setText(GlobalParams.BLANK_CHARACTER);						
+						edt_move_from.setText(GlobalParams.BLANK_CHARACTER);
 					}
 				} else {
-					showPopUp(AcPutAwayDetails.this, null,
-							getLanguage(GlobalParams.ERRORINVALIDLOTNUMFORITEM,	GlobalParams.INVALID_LOT));
-					edt_move_from.setText(GlobalParams.BLANK_CHARACTER);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
+			} catch (Exception e) {				
 			}
 		}
 	}
@@ -1240,52 +1258,55 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (edt_move_from.getEditableText().toString().trim().equalsIgnoreCase
-							(et_move_to.getEditableText().toString().trim())) {
-						showPopUp(AcPutAwayDetails.this, null,
-								getLanguage(GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE,
-										GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE));
-					} else {
-						if (enBarcodeExistences != null) {				
-							if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
-								Logger.error(data + "==========");
-								try {
-									prepareJsonForm();
-								} catch (JSONException e) {		
-									Logger.error(e);
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (edt_move_from.getEditableText().toString().trim().equalsIgnoreCase
+								(et_move_to.getEditableText().toString().trim())) {
+							showPopUp(AcPutAwayDetails.this, null,
+									getLanguage(GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE,
+											GlobalParams.BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE));
+						} else {
+							if (enBarcodeExistences != null) {				
+								if (enBarcodeExistences.getBinOnlyCount() != 0 || enBarcodeExistences.getLPCount() != 0) {
+									Logger.error(data + "==========");
+									try {
+										prepareJsonForm();
+									} catch (JSONException e) {		
+										Logger.error(e);
+									}
+									
+									if (et_move_qty.getText().toString().equals("0") 
+											|| StringUtils.isBlank(et_move_qty.getText().toString())) {
+										btnOK.setEnabled(false);
+									} else {
+										btnOK.setEnabled(true);
+									}
+									scanFlag = GlobalParams.FLAG_ACTIVE;
+								} else {							
+									showPopUp(AcPutAwayDetails.this, null,
+											getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
+													GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 								}
-								
-								if (et_move_qty.getText().toString().equals("0") 
-										|| StringUtils.isBlank(et_move_qty.getText().toString())) {
-									btnOK.setEnabled(false);
-								} else {
-									btnOK.setEnabled(true);
-								}
-								scanFlag = GlobalParams.FLAG_ACTIVE;
-							} else {							
+							
+							} else {
 								showPopUp(AcPutAwayDetails.this, null,
 										getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
 												GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 							}
-						
-						} else {
-							showPopUp(AcPutAwayDetails.this, null,
-									getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
-											GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 						}
+						
+					} else {
+						showPopUp(AcPutAwayDetails.this, null,
+								getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
+										GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
 					}
-					
 				} else {
-					showPopUp(AcPutAwayDetails.this, null,
-							getLanguage(GlobalParams.BIN_MESSAGEBOXINVALIDLOCATIONSCAN,
-									GlobalParams.INVALID_LOCATION_SCAN_PLEASE_SCAN_A_VALID_LOCATION));
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
+			} catch (Exception e) {				
 			}
 		}
 	}

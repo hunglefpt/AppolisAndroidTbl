@@ -407,40 +407,43 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				lsPutAway.onRefreshComplete();
-				
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enPutAway != null) {
-						DecimalFormat df = new DecimalFormat("#0.00");
-						
-						for (int i = 0; i < enPutAway.size(); i++) {
-							if (String.valueOf(df.format(enPutAway.get(i).get_qty())).equals("0.00")) {
-								enPutAway.remove(i);
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					lsPutAway.onRefreshComplete();
+					
+					if (result.equals(GlobalParams.TRUE)) {
+						if (enPutAway != null) {
+							DecimalFormat df = new DecimalFormat("#0.00");
+							
+							for (int i = 0; i < enPutAway.size(); i++) {
+								if (String.valueOf(df.format(enPutAway.get(i).get_qty())).equals("0.00")) {
+									enPutAway.remove(i);
+								}
 							}
+							
+							listPutAway = new ArrayList<EnPutAway>(enPutAway);
+							Collections.sort(listPutAway, new PutAwayComparator());						
+							adapterPutAway = new PutAwayAdapter(AcPutAway.this, listPutAway);
+							lsPutAway.setAdapter(adapterPutAway);						
+							edtItem.setText(GlobalParams.BLANK_CHARACTER);
+							adapterPutAway.getFilter().filter(GlobalParams.BLANK_CHARACTER);	
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							showPopUp(AcPutAway.this, null, getResources().getString(R.string.LOADING_FAIL));
 						}
 						
-						listPutAway = new ArrayList<EnPutAway>(enPutAway);
-						Collections.sort(listPutAway, new PutAwayComparator());						
-						adapterPutAway = new PutAwayAdapter(AcPutAway.this, listPutAway);
-						lsPutAway.setAdapter(adapterPutAway);						
-						edtItem.setText(GlobalParams.BLANK_CHARACTER);
-						adapterPutAway.getFilter().filter(GlobalParams.BLANK_CHARACTER);	
-						scanFlag = GlobalParams.FLAG_ACTIVE;
 					} else {
-						showPopUp(AcPutAway.this, null, getResources().getString(R.string.LOADING_FAIL));
+						String msg = languagePrefs.getPreferencesString
+								(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
+						showPopUp(AcPutAway.this, null, msg);
 					}
-					
 				} else {
-					String msg = languagePrefs.getPreferencesString
-							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					showPopUp(AcPutAway.this, null, msg);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {			
+			}			
 		}
 	}
 	
@@ -492,74 +495,77 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (enBarcodeExistences != null) {
-						if (enBarcodeExistences.getBinOnlyCount() == 0 
-								&& enBarcodeExistences.getGtinCount() == 0
-								&& enBarcodeExistences.getItemIdentificationCount() == 0 
-								&& enBarcodeExistences.getItemOnlyCount() == 0
-								&& enBarcodeExistences.getLotOnlyCount() == 0
-								&& enBarcodeExistences.getLPCount() == 0
-								&& enBarcodeExistences.getOrderCount() == 0
-								&& enBarcodeExistences.getPoCount() == 0
-								&& enBarcodeExistences.getUOMBarcodeCount() == 0) {
-							showPopUp(AcPutAway.this, null,
-									getLanguage(GlobalParams.SCAN_NOTFOUND_VALUE,
-											GlobalParams.SCAN_NOTFOUND_VALUE));
-						} else if (enBarcodeExistences.getOrderCount() != 0 || enBarcodeExistences.getLotOnlyCount() != 0
-								|| enBarcodeExistences.getPoCount() != 0) {
-							showPopUp(AcPutAway.this, null,
-									getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
-											GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
-						} else if ((enBarcodeExistences.getItemOnlyCount() != 0 && !LoginActivity.itemUser.is_showPutAwayBins())
-								|| (enBarcodeExistences.getItemIdentificationCount() != 0 && !LoginActivity.itemUser.is_showPutAwayBins())
-								|| (enBarcodeExistences.getUOMBarcodeCount() != 0 && !LoginActivity.itemUser.is_showPutAwayBins())) {						
-							intent = new Intent(AcPutAway.this, AcPutAwayDetails.class);
-							intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
-							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
-							intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.FALSE);
-							
-							if (_pos == -1) {
-								intent.putExtra(GlobalParams.LOT_NUMBER, GlobalParams.BLANK_CHARACTER);
-								intent.putExtra(GlobalParams.BIN_NUMBER, GlobalParams.BLANK_CHARACTER);
-								intent.putExtra(GlobalParams.QTY_NUMBER, GlobalParams.BLANK_CHARACTER);
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (enBarcodeExistences != null) {
+							if (enBarcodeExistences.getBinOnlyCount() == 0 
+									&& enBarcodeExistences.getGtinCount() == 0
+									&& enBarcodeExistences.getItemIdentificationCount() == 0 
+									&& enBarcodeExistences.getItemOnlyCount() == 0
+									&& enBarcodeExistences.getLotOnlyCount() == 0
+									&& enBarcodeExistences.getLPCount() == 0
+									&& enBarcodeExistences.getOrderCount() == 0
+									&& enBarcodeExistences.getPoCount() == 0
+									&& enBarcodeExistences.getUOMBarcodeCount() == 0) {
+								showPopUp(AcPutAway.this, null,
+										getLanguage(GlobalParams.SCAN_NOTFOUND_VALUE,
+												GlobalParams.SCAN_NOTFOUND_VALUE));
+							} else if (enBarcodeExistences.getOrderCount() != 0 || enBarcodeExistences.getLotOnlyCount() != 0
+									|| enBarcodeExistences.getPoCount() != 0) {
+								showPopUp(AcPutAway.this, null,
+										getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
+												GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
+							} else if ((enBarcodeExistences.getItemOnlyCount() != 0 && !LoginActivity.itemUser.is_showPutAwayBins())
+									|| (enBarcodeExistences.getItemIdentificationCount() != 0 && !LoginActivity.itemUser.is_showPutAwayBins())
+									|| (enBarcodeExistences.getUOMBarcodeCount() != 0 && !LoginActivity.itemUser.is_showPutAwayBins())) {						
+								intent = new Intent(AcPutAway.this, AcPutAwayDetails.class);
+								intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
+								intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.FALSE);
+								intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.FALSE);
+								
+								if (_pos == -1) {
+									intent.putExtra(GlobalParams.LOT_NUMBER, GlobalParams.BLANK_CHARACTER);
+									intent.putExtra(GlobalParams.BIN_NUMBER, GlobalParams.BLANK_CHARACTER);
+									intent.putExtra(GlobalParams.QTY_NUMBER, GlobalParams.BLANK_CHARACTER);
+								} else {
+									intent.putExtra(GlobalParams.LOT_NUMBER, enPutAway.get(_pos).get_lotNumber());
+									intent.putExtra(GlobalParams.BIN_NUMBER, enPutAway.get(_pos).get_binNumber());
+									intent.putExtra(GlobalParams.QTY_NUMBER, String.valueOf(enPutAway.get(_pos).get_qty()));
+								}
+								
+								startActivity(intent);
+								scanFlag = GlobalParams.FLAG_ACTIVE;
+							} else if ((enBarcodeExistences.getItemOnlyCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())								
+									|| (enBarcodeExistences.getUOMBarcodeCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())) {					
+								GetNotLPDataAsyncTask getNotLPDataAsyncTask = new GetNotLPDataAsyncTask(_barCode, _bin);
+								getNotLPDataAsyncTask.execute();
+							} else if (enBarcodeExistences.getItemIdentificationCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins()) {
+								CheckItemLotNumberAsyncTask checkItemLotNumberAsyncTask = new CheckItemLotNumberAsyncTask(_barCode);
+								checkItemLotNumberAsyncTask.execute();
+							} else if (enBarcodeExistences.getLPCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins()) {		
+								GetLPDataAsyncTask getLPDataAsyncTask = new GetLPDataAsyncTask(_barCode, _bin);
+								getLPDataAsyncTask.execute();
+							} else if (enBarcodeExistences.getBinOnlyCount() != 0) {
+								showPopUp(AcPutAway.this, null,
+										getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
+												GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
 							} else {
-								intent.putExtra(GlobalParams.LOT_NUMBER, enPutAway.get(_pos).get_lotNumber());
-								intent.putExtra(GlobalParams.BIN_NUMBER, enPutAway.get(_pos).get_binNumber());
-								intent.putExtra(GlobalParams.QTY_NUMBER, String.valueOf(enPutAway.get(_pos).get_qty()));
+								Logger.error(data);
 							}
 							
-							startActivity(intent);
-							scanFlag = GlobalParams.FLAG_ACTIVE;
-						} else if ((enBarcodeExistences.getItemOnlyCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())								
-								|| (enBarcodeExistences.getUOMBarcodeCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins())) {					
-							GetNotLPDataAsyncTask getNotLPDataAsyncTask = new GetNotLPDataAsyncTask(_barCode, _bin);
-							getNotLPDataAsyncTask.execute();
-						} else if (enBarcodeExistences.getItemIdentificationCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins()) {
-							CheckItemLotNumberAsyncTask checkItemLotNumberAsyncTask = new CheckItemLotNumberAsyncTask(_barCode);
-							checkItemLotNumberAsyncTask.execute();
-						} else if (enBarcodeExistences.getLPCount() != 0 && LoginActivity.itemUser.is_showPutAwayBins()) {		
-							GetLPDataAsyncTask getLPDataAsyncTask = new GetLPDataAsyncTask(_barCode, _bin);
-							getLPDataAsyncTask.execute();
-						} else if (enBarcodeExistences.getBinOnlyCount() != 0) {
-							showPopUp(AcPutAway.this, null,
-									getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
-											GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
 						} else {
-							Logger.error(data);
+							showPopUp(AcPutAway.this, null, GlobalParams.INVALID_SCAN);
 						}
-						
 					} else {
 						showPopUp(AcPutAway.this, null, GlobalParams.INVALID_SCAN);
 					}
 				} else {
-					showPopUp(AcPutAway.this, null, GlobalParams.INVALID_SCAN);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
+			} catch (Exception e) {				
 			}
 		}
 	}
@@ -699,33 +705,36 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {
-						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(data.replace("\"", ""), _bin);
-						getPutAwayBinAsyncTask.execute();
-					} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {
-						intent = new Intent(AcPutAway.this, AcPutAwayDetails.class);
-						intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
-						intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.TRUE);
-						intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.FALSE);	
-						intent.putExtra(GlobalParams.CHECK_LP_BLANK, GlobalParams.TRUE);
-						startActivity(intent);
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {
+							GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(data.replace("\"", ""), _bin);
+							getPutAwayBinAsyncTask.execute();
+						} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {
+							intent = new Intent(AcPutAway.this, AcPutAwayDetails.class);
+							intent.putExtra(GlobalParams.BARCODE_MOVE, _barCode);
+							intent.putExtra(GlobalParams.CHECK_LP_OR_NOT_LP, GlobalParams.TRUE);
+							intent.putExtra(GlobalParams.CHECK_BIN_OR_NOT_BIN, GlobalParams.FALSE);	
+							intent.putExtra(GlobalParams.CHECK_LP_BLANK, GlobalParams.TRUE);
+							startActivity(intent);
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						} else {
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						}
+						
 					} else {
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+						String msg = languagePrefs.getPreferencesString
+								(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
+						showPopUp(AcPutAway.this, null, msg);
 					}
-					
 				} else {
-					String msg = languagePrefs.getPreferencesString
-							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					showPopUp(AcPutAway.this, null, msg);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {		
+			}			
 		}
 	}
 	
@@ -779,27 +788,30 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {
-						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(data.replace("\"", ""), _bin);
-						getPutAwayBinAsyncTask.execute();
-					} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {
-						GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(_barCode, _bin);
-						getPutAwayBinAsyncTask.execute();
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						if (data != null && StringUtils.isNotBlank(data.replace("\"", ""))) {
+							GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(data.replace("\"", ""), _bin);
+							getPutAwayBinAsyncTask.execute();
+						} else if (data != null && StringUtils.isBlank(data.replace("\"", ""))) {
+							GetPutAwayBinAsyncTask getPutAwayBinAsyncTask = new GetPutAwayBinAsyncTask(_barCode, _bin);
+							getPutAwayBinAsyncTask.execute();
+						} else {
+							scanFlag = GlobalParams.FLAG_ACTIVE;
+						}
+						
 					} else {
-						scanFlag = GlobalParams.FLAG_ACTIVE;
+						String msg = languagePrefs.getPreferencesString
+								(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
+						showPopUp(AcPutAway.this, null, msg);
 					}
-					
 				} else {
-					String msg = languagePrefs.getPreferencesString
-							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					showPopUp(AcPutAway.this, null, msg);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
+			} catch (Exception e) {			
 			}
 		}
 	}
@@ -863,25 +875,28 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 
 		@Override
 		protected void onPostExecute(String result) {
-			dialog.dismiss();
-			// If not cancel by user
-			if (!isCancelled()) {
-				if (result.equals(GlobalParams.TRUE)) {
-					
-					intent = new Intent(AcPutAway.this, AcPutAwayBin.class);
-					intent.putExtra(GlobalParams.PUT_AWAY_BIN, enPutAwayBin);
-					intent.putExtra(GlobalParams.PUT_AWAY_BIN_DATA, passPutAway);
-					intent.putExtra(GlobalParams.PUT_PASS_AWAY_BIN_DATA, enPassPutAway);
-					startActivity(intent);	
-					scanFlag = GlobalParams.FLAG_ACTIVE;
+			try {
+				dialog.dismiss();
+				// If not cancel by user
+				if (!isCancelled()) {
+					if (result.equals(GlobalParams.TRUE)) {
+						
+						intent = new Intent(AcPutAway.this, AcPutAwayBin.class);
+						intent.putExtra(GlobalParams.PUT_AWAY_BIN, enPutAwayBin);
+						intent.putExtra(GlobalParams.PUT_AWAY_BIN_DATA, passPutAway);
+						intent.putExtra(GlobalParams.PUT_PASS_AWAY_BIN_DATA, enPassPutAway);
+						startActivity(intent);	
+						scanFlag = GlobalParams.FLAG_ACTIVE;
+					} else {
+						String msg = languagePrefs.getPreferencesString
+								(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
+						showPopUp(AcPutAway.this, null, msg);
+					}
 				} else {
-					String msg = languagePrefs.getPreferencesString
-							(GlobalParams.ERRORUNABLETOCONTACTSERVER, GlobalParams.ERROR_INVALID_NETWORK);				
-					showPopUp(AcPutAway.this, null, msg);
+					scanFlag = GlobalParams.FLAG_ACTIVE;
 				}
-			} else {
-				scanFlag = GlobalParams.FLAG_ACTIVE;
-			}
+			} catch (Exception e) {				
+			}			
 		}
 	}
 	
