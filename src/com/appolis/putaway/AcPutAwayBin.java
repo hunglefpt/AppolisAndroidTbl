@@ -78,6 +78,7 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 	
 	private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
 	long lastClickTime = 0;
+	long backClickTime = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -175,10 +176,8 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 		positonItem = position - 1;
 		long clickTime = System.currentTimeMillis();
 		
-        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
-        	Logger.error("clickTime:    " + clickTime);
-        } else {
-        	Logger.error("lastClickTime    " + lastClickTime);
+        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){       
+        } else {     
         	BarcodeAsyncTask barcodeAsyncTask = new BarcodeAsyncTask(enPutAwayBin.get(positonItem).get_binNumber());
 			barcodeAsyncTask.execute();			
         }
@@ -202,8 +201,15 @@ public class AcPutAwayBin extends Activity implements OnClickListener, OnItemCli
 		switch (v.getId()) {
 		
 		case R.id.imgHome:
-			Utilities.hideKeyboard(this);
-			finish();
+			long clickTime = System.currentTimeMillis();
+			
+	        if (clickTime - backClickTime < DOUBLE_CLICK_TIME_DELTA){	       
+	        } else {	        
+	        	Utilities.hideKeyboard(this);
+				finish();
+	        }
+	        
+	        backClickTime = clickTime;			
 			break;
 			
 		case R.id.btnCancel:
