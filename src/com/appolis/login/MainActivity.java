@@ -632,8 +632,8 @@ public class MainActivity extends Activity implements OnClickListener, Animation
 				startActivity(intent);
     			break;
     		case 2: //Pick
-    			intent = new Intent(MainActivity.this, AcPick.class);
-    			startActivity(intent);
+    			//intent = new Intent(MainActivity.this, AcPick.class);
+    			//startActivity(intent);
     			break;
     			
     		case 3: // Move
