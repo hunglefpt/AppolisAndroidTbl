@@ -142,6 +142,7 @@
     <string name="ENTER_YOUR_NEW_DIGIT_NUMERIC_PASSWORD_HERE">Enter your new digit numeric password here.</string>
     <string name="VERIFY_YOUR_NEW_FOUR_DIGIT">Verify your new 4 digit numeric password by re-entering it here.</string>
     <string name="TAP_ON_THE_OK_BUTTON">Tap on the OK button to confirm your new password.</string>
+    <string name="AMBIGUOUS_BARCODE_SCAN">Ambiguous Barcode Scan, this scan returns multiple results for items or license plates.</string>
     
     <!-- //=========================================================== Receive Inventory ============================ -->
     <string name="SCAN_LP_TO_BEGIN">Scan LP to Begin</string>

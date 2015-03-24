@@ -308,8 +308,8 @@ public class AcMove extends Activity implements OnClickListener{
 								scanFlag = GlobalParams.FLAG_ACTIVE;
 							} else {
 								showPopUp(AcMove.this, null,
-										getLanguage(GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE,
-												GlobalParams.JOBPART_VALIDATE_ITEM_OR_LP_VALUE));
+										getLanguage(GlobalParams.AMBIGUOUS_BARCODE_SCAN,
+												GlobalParams.AMBIGUOUS_BARCODE_SCAN));
 							}
 							
 						} else {

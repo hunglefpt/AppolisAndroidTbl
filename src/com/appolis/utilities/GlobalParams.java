@@ -289,6 +289,7 @@ public final class GlobalParams {
 	public static final String RD_RETRIEVEPO_MSG_VALUE = "Fail to retrieve PO Data";
 	public static final String RD_LBL_LOTS_VALUE = "Lots";
 	public static final String SCAN_NOTFOUND_VALUE = "Ambiguous Scan. Currently unimplemented.";
+	public static final String AMBIGUOUS_BARCODE_SCAN ="Ambiguous Barcode Scan, this scan returns multiple results for items or license plates.";
 	public static final String RE_SCANPO_MSG_VALUE = "You must scan a valid PO Number to continue. Please try again.";
 	public static final String BINTRANSFER_MSGLPMOVETOSELFERROR_VALUE = "Cannot move an LP onto itself.";
 	public static final String MV_MOVEFAILED_VALUE = "Move action failed. Please try again.";

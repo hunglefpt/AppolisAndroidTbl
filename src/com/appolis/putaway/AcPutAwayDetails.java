@@ -471,7 +471,13 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							edt_move_from.setText(passPutAway.get_binNumber());
 							_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
 							df = new DecimalFormat(_significantDigits);
-							tvmaxQty.setText(df.format(passPutAway.get_qty()));
+							
+							if (df.format(passPutAway.get_qty()).equals("1.")) {
+								tvmaxQty.setText("1");
+							} else {
+								tvmaxQty.setText(df.format(passPutAway.get_qty()));		
+							}							
+												
 							listUom.add(passPutAway.get_uomDescription());
 							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
 								linLot.setVisibility(View.VISIBLE);
@@ -481,7 +487,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							} else {
 								linLot.setVisibility(View.INVISIBLE);
 							}
-							et_move_qty.setText(df.format(passPutAway.get_qty()));
+							
+							et_move_qty.setText(tvmaxQty.getText());
 
 							try {
 								ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
@@ -720,7 +727,12 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							_significantDigits = Utilities.getSignificantDigits(passPutAway.get_significantDigits());
 							df = new DecimalFormat(_significantDigits);
 							
-							tvmaxQty.setText(df.format(passPutAway.get_qty()));
+							if (df.format(passPutAway.get_qty()).equals("1.")) {
+								tvmaxQty.setText("1");
+							} else {
+								tvmaxQty.setText(df.format(passPutAway.get_qty()));		
+							}
+							
 							listUom.add(passPutAway.get_uomDescription());
 							if (passPutAway.get_lotNumber() != null && StringUtils.isNotBlank(passPutAway.get_lotNumber())) {
 								linLot.setVisibility(View.VISIBLE);
@@ -730,7 +742,8 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 							} else {
 								linLot.setVisibility(View.INVISIBLE);
 							}
-							et_move_qty.setText(df.format(passPutAway.get_qty()));
+							
+							et_move_qty.setText(tvmaxQty.getText());
 
 							ArrayAdapter<String> uomAdapter = new ArrayAdapter<String>(AcPutAwayDetails.this,
 									R.layout.custom_spinner_false, listUom);
@@ -926,9 +939,15 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								edt_move_from.setText(binNumber);
 								
 								df = new DecimalFormat(_significantDigits);
-								tvmaxQty.setText(df.format(qtyNumber));
+								
+								if (df.format(passPutAway.get_qty()).equals("1.")) {
+									tvmaxQty.setText("1");
+								} else {
+									tvmaxQty.setText(df.format(qtyNumber));
+								}
+								
 								et_move_qty.setEnabled(true);
-								et_move_qty.setText(df.format(qtyNumber));
+								et_move_qty.setText(tvmaxQty.getText());
 								
 							} else if (enPutaway.isIsLotTracked() && StringUtils.isNotBlank(enPutaway.getLotNumber())){
 								linLot.setVisibility(View.VISIBLE);
@@ -940,9 +959,15 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								edt_move_from.setText(binNumber);
 								
 								df = new DecimalFormat(_significantDigits);
-								tvmaxQty.setText(df.format(qtyNumber));
+								
+								if (df.format(passPutAway.get_qty()).equals("1.")) {
+									tvmaxQty.setText("1");
+								} else {
+									tvmaxQty.setText(df.format(qtyNumber));
+								}
+								
 								et_move_qty.setEnabled(true);
-								et_move_qty.setText(df.format(qtyNumber));
+								et_move_qty.setText(tvmaxQty.getText());
 								
 							} else {
 								linLot.setVisibility(View.VISIBLE);
@@ -954,9 +979,15 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 								edt_move_from.setText(binNumber);
 								
 								df = new DecimalFormat(_significantDigits);
-								tvmaxQty.setText(df.format(qtyNumber));
+								
+								if (df.format(passPutAway.get_qty()).equals("1.")) {
+									tvmaxQty.setText("1");
+								} else {
+									tvmaxQty.setText(df.format(qtyNumber));
+								}
+								
 								et_move_qty.setEnabled(true);
-								et_move_qty.setText(df.format(qtyNumber));
+								et_move_qty.setText(tvmaxQty.getText());
 							}
 							
 							et_move_qty.addTextChangedListener(new TextWatcher() {
@@ -1146,7 +1177,13 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						if (itemNumber != null) {
 							_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
 							df = new DecimalFormat(_significantDigits);
-							tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
+														
+							if (df.format(passPutAway.get_qty()).equals("1.")) {
+								tvmaxQty.setText("1");
+							} else {
+								tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
+							}
+							
 							et_move_qty.setText(String.valueOf(tvmaxQty.getText()));
 							et_move_qty.setEnabled(true);
 							et_move_qty.addTextChangedListener(new TextWatcher() {
@@ -1425,7 +1462,13 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 						if (itemNumber != null) {
 							_significantDigits = Utilities.getSignificantDigits(itemNumber.get_significantDigits());
 							df = new DecimalFormat(_significantDigits);
-							tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
+							
+							if (df.format(passPutAway.get_qty()).equals("1.")) {
+								tvmaxQty.setText("1");
+							} else {
+								tvmaxQty.setText(df.format(itemNumber.get_quantityOnHand()));
+							}
+							
 							et_move_qty.setText(GlobalParams.BLANK_CHARACTER);					
 						} else {
 							Utilities.showPopUp(AcPutAwayDetails.this, null, GlobalParams.NETWORK_ERROR);										
