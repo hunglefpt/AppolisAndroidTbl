@@ -1081,9 +1081,19 @@ public class AcCycleCountLocation extends Activity implements OnClickListener,
 			
 			if(binList != null && binList.size() > 0) {
 				for (ObjectCountCycleCurrent countCycleCurrent : binList) {
-					if (countCycleCurrent.get_itemNumber().equalsIgnoreCase(
-							objectCycleItem.get_itemNumber())) {
-						cycleCurrents.add(countCycleCurrent);
+					
+					if(StringUtils.isNotBlank(objectCycleItem.get_LotNumber())) {
+						String barcodeAndLotScan = objectCycleItem.get_itemNumber() + objectCycleItem.get_LotNumber();
+						String barCodeAndLot = countCycleCurrent.get_itemNumber() + countCycleCurrent.get_lotNumber();
+						
+						if(barcodeAndLotScan.trim().equalsIgnoreCase(barCodeAndLot.trim())) {
+							cycleCurrents.add(countCycleCurrent);
+						}
+					} else {
+						if (countCycleCurrent.get_itemNumber().equalsIgnoreCase(
+								objectCycleItem.get_itemNumber())) {
+							cycleCurrents.add(countCycleCurrent);
+						}
 					}
 				}
 			}
