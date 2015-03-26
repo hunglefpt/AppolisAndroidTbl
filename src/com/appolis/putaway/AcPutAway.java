@@ -562,15 +562,10 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 								showPopUp(AcPutAway.this, null,
 										getLanguage(GlobalParams.SCAN_NOTFOUND_VALUE,
 												GlobalParams.SCAN_NOTFOUND_VALUE));
-							} else if (enBarcodeExistences.getLPCount() != 0 
-									&& (enBarcodeExistences.getItemIdentificationCount() != 0)
+							} else if (enBarcodeExistences.getLPCount() != 0
+									&& ((enBarcodeExistences.getItemIdentificationCount() != 0)
 									|| (enBarcodeExistences.getLotOnlyCount() != 0)
-									|| (enBarcodeExistences.getItemOnlyCount() != 0)
-									|| (enBarcodeExistences.getBinOnlyCount() != 0)
-									|| (enBarcodeExistences.getUOMBarcodeCount() != 0)
-									|| (enBarcodeExistences.getPoCount() != 0)
-									|| (enBarcodeExistences.getOrderCount() != 0)
-									|| (enBarcodeExistences.getGtinCount() != 0)) {
+									|| (enBarcodeExistences.getItemOnlyCount() != 0))) {
 								showPopUp(AcPutAway.this, null,
 										getLanguage(GlobalParams.AMBIGUOUS_BARCODE_SCAN,
 												GlobalParams.AMBIGUOUS_BARCODE_SCAN));
