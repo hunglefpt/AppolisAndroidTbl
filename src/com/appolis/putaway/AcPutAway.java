@@ -613,8 +613,7 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 								showPopUp(AcPutAway.this, null,
 										getLanguage(GlobalParams.AMBIGUOUS_BARCODE_SCAN,
 												GlobalParams.AMBIGUOUS_BARCODE_SCAN));
-							}
-							
+							}							
 						} else {
 							showPopUp(AcPutAway.this, null, GlobalParams.INVALID_SCAN);
 						}
