@@ -85,6 +85,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		itemUser = new ObjectUser();
 		dialog = new ProgressDialog(this);
 		initLayout();		
+	
 		showPopUpLogin(LoginActivity.this, getIntent().getStringExtra(GlobalParams.PARAM_MESSAGES_LOGIN));
 	}
 	

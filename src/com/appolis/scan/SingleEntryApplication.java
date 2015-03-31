@@ -7,6 +7,11 @@
  */
 package com.appolis.scan;
 
+import org.acra.ACRA;
+import org.acra.ReportField;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
+
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,6 +45,27 @@ import com.appolis.utilities.Logger;
  * @author EricG
  *
  */
+@ReportsCrashes(
+		reportType = org.acra.sender.HttpSender.Type.JSON,
+		formUri = "https://collector.tracepot.com/9034dc1f",
+		formUriBasicAuthLogin = "bu9.ss5@gmail.com",
+		formUriBasicAuthPassword = "bu9@12345",
+		mode = ReportingInteractionMode.SILENT,
+		customReportContent = { 
+				ReportField.REPORT_ID,
+				ReportField.APP_VERSION_CODE,
+				ReportField.APP_VERSION_NAME,
+				ReportField.PACKAGE_NAME,
+				ReportField.STACK_TRACE,
+				ReportField.USER_APP_START_DATE,
+				ReportField.USER_CRASH_DATE,
+				ReportField.FILE_PATH,
+				ReportField.PHONE_MODEL,
+				ReportField.BRAND,
+				ReportField.PRODUCT,
+				ReportField.ANDROID_VERSION,
+				ReportField.LOGCAT
+		})//doximitydroid@gmail.com
 public class SingleEntryApplication extends Application {
 
 	/**
@@ -190,6 +216,16 @@ public class SingleEntryApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		// The following line triggers the initialization of ACRA
+        try {
+            // The following line triggers the initialization of ACRA
+            ACRA.init(this);
+        } catch (Exception e) {
+        	Logger.error("ACRA: initial exception");
+            e.printStackTrace();
+        }  
+        
 		_singleton=this;
 		_viewCount=0;// there is no view created for this application yet
 		_forceCloseUI=false;

@@ -4,7 +4,7 @@
  * Date: $Date: 2015/01/06 11:23:49 $
  *
  * Copyright (C) 2015 FPT Software. All rights reserved.
- */
+ *//*
 
 package com.appolis.login;
 
@@ -14,10 +14,10 @@ import org.acra.annotation.ReportsCrashes;
 import android.app.Application;
 import android.util.Log;
 
-/**
+*//**
  * @author hoangnh11
  * is an application class of project, some initiation will be written here 
- */
+ *//*
 @ReportsCrashes(formKey = "dHZMbHRtVWd5amZ4VWZQNUsxRDNhUmc6MQ")//doximitydroid@gmail.com
 public final class AppolisApp extends Application {
     
@@ -34,3 +34,4 @@ public final class AppolisApp extends Application {
         super.onCreate();
     }
 }
+*/
