@@ -122,11 +122,11 @@ public class EzPairActivity extends Activity {
 				try {
 					dismissDialog(PROGRESS_DIALOG);
 				} catch (Exception e) {
-					
+
 				}
 				
 				String text=intent.getStringExtra(SingleEntryApplication.EXTRA_ERROR_MESSAGE);
-				Logger.error(text);
+				Logger.error("EXTRA_ERROR_MESSAGE: " + text);
 			} else if (intent.getAction().contains(SingleEntryApplication.NOTIFY_EZ_PAIR_COMPLETED)){
 				
 				try {
@@ -148,7 +148,7 @@ public class EzPairActivity extends Activity {
 	 * If a scanner has been previously selected this will
 	 * display the Progress Dialog that will start the EZ Pair process
 	 */
-	private OnClickListener _onStartPairing=new OnClickListener() {
+	private OnClickListener _onStartPairing = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
@@ -181,7 +181,7 @@ public class EzPairActivity extends Activity {
 						_previousSelection.setChecked(false);
 						_previousSelection = ctv;
 					}
-				}				
+				}
 			}
 		}
 	};
@@ -210,11 +210,29 @@ public class EzPairActivity extends Activity {
 		// select the broadcast this activity should receive
 		// from the Application
 		IntentFilter filter;
-		filter=new IntentFilter(SingleEntryApplication.NOTIFY_ERROR_MESSAGE);
-		registerReceiver(_broadcastReveiver,filter);
-		filter=new IntentFilter(SingleEntryApplication.NOTIFY_EZ_PAIR_COMPLETED);
+		
+		filter = new IntentFilter(SingleEntryApplication.NOTIFY_SCANPI_INITIALIZED);   
+        registerReceiver(_broadcastReveiver, filter); 
+		
+        filter = new IntentFilter(SingleEntryApplication.NOTIFY_SCANNER_ARRIVAL);
+        registerReceiver(_broadcastReveiver, filter);
+
+        filter = new IntentFilter(SingleEntryApplication.NOTIFY_SCANNER_REMOVAL);   
+        registerReceiver(_broadcastReveiver, filter);
+        
+		filter = new IntentFilter(SingleEntryApplication.NOTIFY_ERROR_MESSAGE);
 		registerReceiver(_broadcastReveiver,filter);
 		
+		filter = new IntentFilter(SingleEntryApplication.NOTIFY_CLOSE_ACTIVITY);   
+        registerReceiver(_broadcastReveiver, filter);
+		
+		filter = new IntentFilter(SingleEntryApplication.NOTIFY_EZ_PAIR_COMPLETED);
+		registerReceiver(_broadcastReveiver,filter);
+		
+		// increasing the Application View count from 0 to 1 will
+    	// cause the application to open and initialize ScanAPI
+    	SingleEntryApplication.getApplicationInstance().increaseViewCount();
+    	
 		// create an adapter for the ListView of the Paired Bluetooth device
 		// in this particular case we would like a single choice line
 		_adapterDevices = new ArrayAdapter<String>(getApplicationContext(), 
@@ -240,8 +258,8 @@ public class EzPairActivity extends Activity {
 		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if(bluetoothAdapter!=null){        	
-        	_hostBluetoothAddress=bluetoothAdapter.getAddress().replace(":","");
-			Set<BluetoothDevice> pairedDevices=bluetoothAdapter.getBondedDevices();
+        	_hostBluetoothAddress = bluetoothAdapter.getAddress().replace(":","");
+			Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 				
 	        // If there are paired devices, add each one to the ArrayAdapter
 	        if (pairedDevices.size() > 0) {	        	
@@ -278,12 +296,12 @@ public class EzPairActivity extends Activity {
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog;
 		if(id == PROGRESS_DIALOG){
-			_progress=new Progress(_context);
+			_progress = new Progress(_context);
 			_progress.setTitle("EZ Pair");
 			_progress.setMessage("Please wait while configuring the scanner");
 			_progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			//_progress.show();
-			dialog=_progress;
+			dialog = _progress;
 		}
 		else
 			dialog=super.onCreateDialog(id);
