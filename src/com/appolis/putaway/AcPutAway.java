@@ -378,8 +378,7 @@ public class AcPutAway extends Activity implements OnClickListener, OnItemClickL
 		
 		// Loop over argument list.
 		for (int i=0;  i < list.size(); i++) {
-			EnPutAway item = list.get(i);
-			Logger.error("list result size:" + result.size() + "**:" + item.get_lotNumber());
+			EnPutAway item = list.get(i);		
 			
 			if(!checObjectExitsInList(result, item)){
 				result.add(item);

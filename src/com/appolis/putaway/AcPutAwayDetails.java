@@ -5,6 +5,8 @@
  */
 package com.appolis.putaway;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -1149,7 +1151,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 					NetParameter[] netParameter = new NetParameter[4];
 					netParameter[0] = new NetParameter("itemNumber", barCode);
 					netParameter[1] = new NetParameter("lotnumber", edtLotValue.getEditableText().toString());
-					netParameter[2] = new NetParameter("uom", uom);
+					netParameter[2] = new NetParameter("uom", URLEncoder.encode(uom, GlobalParams.UTF_8));
 					netParameter[3] = new NetParameter("binNumber", edt_move_from.getEditableText().toString());
 					data = HttpNetServices.Instance.getBins(netParameter);
 					itemNumber = DataParser.getItemNumber(data);					
@@ -1436,7 +1438,7 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 					NetParameter[] netParameter = new NetParameter[4];
 					netParameter[0] = new NetParameter("itemNumber", barCode);
 					netParameter[1] = new NetParameter("lotnumber", edtLotValue.getEditableText().toString());
-					netParameter[2] = new NetParameter("uom", uom);
+					netParameter[2] = new NetParameter("uom", URLEncoder.encode(uom, GlobalParams.UTF_8));
 					netParameter[3] = new NetParameter("binNumber", edt_move_from.getEditableText().toString());
 					data = HttpNetServices.Instance.getBins(netParameter);
 					itemNumber = DataParser.getItemNumber(data);
@@ -1486,21 +1488,31 @@ public class AcPutAwayDetails extends Activity implements OnClickListener{
 	 * Set value to Object EnBinTransfer
 	 * @throws JSONException
 	 */
-	private void prepareJsonForm() throws JSONException {	
+	private void prepareJsonForm() throws JSONException {
+		String encodeUom = uom;
+		
+		try {
+			encodeUom = URLEncoder.encode(uom, GlobalParams.UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
 		enBinTransfer = new EnBinTransfer();	
 		enBinTransfer.setFromBinNumber(edt_move_from.getEditableText().toString());
 		enBinTransfer.setIsLicensePlate(itemNumber.is_licensePlateInd());
 		enBinTransfer.setItemNumber(tvTransfer.getText().toString());
-		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());		
+		enBinTransfer.setLotNumber(edtLotValue.getEditableText().toString());
+		
 		if (StringUtils.isNotBlank(et_move_qty.getEditableText().toString())) {
 			enBinTransfer.setQuantity(Double.parseDouble(et_move_qty.getEditableText().toString()));			
 		} else {
 			et_move_qty.setText("0");
 			enBinTransfer.setQuantity(0);
 		}
+		
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");
-		enBinTransfer.setUomDescription(uom);
+		enBinTransfer.setUomDescription(encodeUom);
 		listBinTransfer = new ArrayList<EnBinTransfer>();
 		listBinTransfer.add(enBinTransfer);
 		binTransfer = DataParser.convertObjectToString(listBinTransfer);

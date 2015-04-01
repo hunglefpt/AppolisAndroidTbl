@@ -7,6 +7,7 @@
  */
 package com.appolis.move;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -810,7 +811,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 					}
 					
 					netParameter[1] = new NetParameter("lotnumber", URLEncoder.encode(edtLotValue.getEditableText().toString(), GlobalParams.UTF_8));
-					netParameter[2] = new NetParameter("uom", uom);
+					netParameter[2] = new NetParameter("uom", URLEncoder.encode(uom, GlobalParams.UTF_8));
 					netParameter[3] = new NetParameter("binNumber", edt_move_from.getEditableText().toString());
 					data = HttpNetServices.Instance.getBins(netParameter);
 					itemNumber = DataParser.getItemNumber(data);
@@ -1084,7 +1085,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 			dialog.show();
 			dialog.setCancelable(false); 
 			dialog.setCanceledOnTouchOutside(false);
-			scanFlag = GlobalParams.FLAG_INACTIVE;
+			scanFlag = GlobalParams.FLAG_INACTIVE;			
 		}
 		
 		@Override
@@ -1095,7 +1096,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 					NetParameter[] netParameter = new NetParameter[4];
 					netParameter[0] = new NetParameter("itemNumber", URLEncoder.encode(barCode, GlobalParams.UTF_8));
 					netParameter[1] = new NetParameter("lotnumber", URLEncoder.encode(edtLotValue.getEditableText().toString().trim(), GlobalParams.UTF_8));
-					netParameter[2] = new NetParameter("uom", uom);
+					netParameter[2] = new NetParameter("uom", URLEncoder.encode(uom, GlobalParams.UTF_8));
 					netParameter[3] = new NetParameter("binNumber", edt_move_from.getEditableText().toString());
 					data = HttpNetServices.Instance.getBins(netParameter);
 					itemNumber = DataParser.getItemNumber(data);
@@ -1141,7 +1142,15 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 	 * Set value to Object EnBinTransfer
 	 * @throws JSONException
 	 */
-	private void prepareJsonForm() throws JSONException {	
+	private void prepareJsonForm() throws JSONException {
+		String encodeUom = uom;
+		
+		try {
+			encodeUom = URLEncoder.encode(uom, GlobalParams.UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
 		enBinTransfer = new EnBinTransfer();	
 		enBinTransfer.setFromBinNumber(edt_move_from.getEditableText().toString());
 		enBinTransfer.setIsLicensePlate(itemNumber.is_licensePlateInd());
@@ -1155,7 +1164,7 @@ public class AcMoveDetails extends Activity implements OnClickListener {
 		}
 		enBinTransfer.setToBinNumber(et_move_to.getEditableText().toString());
 		enBinTransfer.setTransactionType("Bin Transfer");
-		enBinTransfer.setUomDescription(uom);
+		enBinTransfer.setUomDescription(encodeUom);
 		listBinTransfer = new ArrayList<EnBinTransfer>();
 		listBinTransfer.add(enBinTransfer);
 		binTransfer = DataParser.convertObjectToString(listBinTransfer);
